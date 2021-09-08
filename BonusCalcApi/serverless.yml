@@ -1,4 +1,4 @@
-service: your-api-name
+service: bonuscalc-api
 provider:
   name: aws
   runtime: dotnetcore3.1
@@ -21,8 +21,7 @@ provider:
           rateLimit: 100
 
 package:
-# TODO: Rename zipfile in build.sh and build.cmd to match this
-  artifact: ./bin/release/netcoreapp3.1/your-api-name.zip
+  artifact: ./bin/release/netcoreapp3.1/bonuscalc-api.zip
 
 functions:
   BonusCalcApi:
