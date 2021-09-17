@@ -4,8 +4,8 @@ services:
   bonuscalc-api:
     image: bonuscalc-api
     build:
-      context: BonusCalcApi/
-      dockerfile: ./Dockerfile
+      context: .
+      dockerfile: BonusCalcApi/Dockerfile
     ports:
       - 3000:3000
     environment:
