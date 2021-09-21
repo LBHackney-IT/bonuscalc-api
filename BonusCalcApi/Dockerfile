@@ -3,8 +3,10 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY *.csproj ./
-RUN dotnet restore
+COPY ./BonusCalcApi.sln ./
+COPY ./BonusCalcApi/BonusCalcApi.csproj ./BonusCalcApi/
+
+RUN dotnet restore ./BonusCalcApi/BonusCalcApi.csproj
 
 # Copy everything else and build
 COPY . ./
