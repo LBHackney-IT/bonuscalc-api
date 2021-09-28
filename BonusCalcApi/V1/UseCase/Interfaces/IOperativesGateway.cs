@@ -2,8 +2,8 @@ using BonusCalcApi.V1.Boundary.Response;
 
 namespace BonusCalcApi.V1.UseCase.Interfaces
 {
-    public interface IGetByIdUseCase
+    public interface IOperativesGateway
     {
-        ResponseObject Execute(int id);
+        OperativeResponse Execute(string payrollNumber);
     }
 }
