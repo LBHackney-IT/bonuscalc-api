@@ -155,7 +155,7 @@ namespace BonusCalcApi
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddScoped<IGetAllUseCase, GetAllUseCase>();
-            services.AddScoped<IGetByIdUseCase, GetByIdUseCase>();
+            services.AddScoped<IOperativesGateway, OperativesGateway>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
