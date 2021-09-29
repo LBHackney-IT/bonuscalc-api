@@ -5,20 +5,20 @@ using NUnit.Framework;
 namespace BonusCalcApi.Tests.V1.Infrastructure
 {
     //TODO: Remove this file if Postgres is not being used
-    [TestFixture]
-    public class DatabaseContextTest : DatabaseTests
-    {
-        [Test]
-        public void CanGetADatabaseEntity()
-        {
-            var databaseEntity = DatabaseEntityHelper.CreateDatabaseEntity();
+    //[TestFixture]
+    //public class DatabaseContextTest : DatabaseTests
+    //{
+    //    [Test]
+    //    public void CanGetADatabaseEntity()
+    //    {
+    //        //var databaseEntity = DatabaseEntityHelper.CreateDatabaseEntity();
 
-            DatabaseContext.Add(databaseEntity);
-            DatabaseContext.SaveChanges();
+    //        //DatabaseContext.Add(databaseEntity);
+    //        //DatabaseContext.SaveChanges();
 
-            var result = DatabaseContext.DatabaseEntities.ToList().FirstOrDefault();
+    //        //var result = DatabaseContext.DatabaseEntities.ToList().FirstOrDefault();
 
-            Assert.AreEqual(result, databaseEntity);
-        }
-    }
+    //        //Assert.AreEqual(result, databaseEntity);
+    //    }
+    //}
 }
