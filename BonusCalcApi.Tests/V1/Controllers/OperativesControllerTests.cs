@@ -6,6 +6,7 @@ using Moq;
 using BonusCalcApi.V1.UseCase.Interfaces;
 using BonusCalcApi.V1.Boundary.Response;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Threading.Tasks;
 
 namespace BonusCalcApi.Tests.V1.Controllers
 {
@@ -30,7 +31,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         {
             // Arrange
             _operativeGateway.Setup(og => og.Execute(Moq.It.IsAny<string>()))
-                .Returns(new OperativeResponse());
+                .Returns(Task.FromResult(new OperativeResponse()));
 
             // Act
             var response = _sut.GetOperative(testPayrollStr);
@@ -43,7 +44,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         {
             // Arrange
             _operativeGateway.Setup(og => og.Execute(Moq.It.IsAny<string>()))
-                .Returns((OperativeResponse) null);
+                .Returns(Task.FromResult((OperativeResponse) null));
 
             // Act
             var response = _sut.GetOperative("H-249387");
@@ -58,7 +59,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _validOperative = GenerateValidOperative();
 
             _operativeGateway.Setup(og => og.Execute(Moq.It.IsAny<string>()))
-                .Returns(_validOperative);
+                .Returns(Task.FromResult(_validOperative));
 
             // Act
             var response = _sut.GetOperative("H-8345344");
