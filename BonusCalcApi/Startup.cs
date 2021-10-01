@@ -117,6 +117,8 @@ namespace BonusCalcApi
 
             RegisterGateways(services);
             RegisterUseCases(services);
+
+            services.Configure<OperativesGatewayOptions>(Configuration.GetSection(OperativesGatewayOptions.OpGatewayOptionsName));
         }
 
         private static void ConfigureDbContext(IServiceCollection services)

@@ -45,7 +45,7 @@ namespace BonusCalcApi.V1.Controllers
         [Route("{yourId}")]
         public IActionResult ViewRecord(int yourId)
         {
-            return Ok(_getByIdUseCase.Execute(yourId));
+            return Ok(yourId);
         }
     }
 }
