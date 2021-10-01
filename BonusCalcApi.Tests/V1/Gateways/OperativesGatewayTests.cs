@@ -36,7 +36,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 .Returns(new OperativesGatewayOptions
                 {
                     RepairsHubBaseAddr = "http://null/",
-                    RepairsHubApiKey = "a23c98n3rh32qo3hqi4h"
+                    RepairsHubApiKey = "-"
                 });
 
             _sut = new OperativesGateway(_apiGatewayMock.Object, _loggerMock.Object, _gatewayOptionsMock.Object);
