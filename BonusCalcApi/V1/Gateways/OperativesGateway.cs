@@ -11,7 +11,7 @@ using BonusCalcApi.V1.Exceptions;
 
 namespace BonusCalcApi.V1.Gateways
 {
-    
+
     public class OperativesGateway : IOperativesGateway
     {
         private readonly IApiGateway _apiGateway;

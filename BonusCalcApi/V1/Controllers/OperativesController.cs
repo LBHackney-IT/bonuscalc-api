@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BonusCalcApi.V1.Controllers
 {
     [ApiController]
-    
+
     [Route("api/v1/operatives")]
     [Produces("application/json")]
     [ApiVersion("1.0")]

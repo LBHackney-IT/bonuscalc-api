@@ -45,7 +45,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         [Test]
         public async Task ShouldLogWarningAndReturnNullIfNoOperativeFound()
         {
-            
+
             //Arrange
             _apiGatewayMock.Setup(api => api.ExecuteRequest<OperativeResponse>(Moq.It.IsAny<string>(), Moq.It.IsAny<Uri>()))
                 .Returns(Task.FromResult(new ApiResponse<OperativeResponse>(false, System.Net.HttpStatusCode.NotFound, null)));
