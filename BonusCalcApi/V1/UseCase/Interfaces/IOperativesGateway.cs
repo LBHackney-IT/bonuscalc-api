@@ -1,9 +1,10 @@
 using BonusCalcApi.V1.Boundary.Response;
+using System.Threading.Tasks;
 
 namespace BonusCalcApi.V1.UseCase.Interfaces
 {
     public interface IOperativesGateway
     {
-        OperativeResponse Execute(string payrollNumber);
+        Task<OperativeResponse> Execute(string payrollNumber);
     }
 }
