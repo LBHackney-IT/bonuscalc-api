@@ -9,12 +9,12 @@ namespace BonusCalcApi.V1.Factories
     {
         //TODO: Map the fields in the domain object(s) to fields in the response object(s).
         // More information on this can be found here https://github.com/LBHackney-IT/lbh-bonuscalc-api/wiki/Factory-object-mappings
-        public static ResponseObject ToResponse(this Entity domain)
+        public static OperativeResponse ToResponse(this Entity domain)
         {
-            return new ResponseObject();
+            return new OperativeResponse();
         }
 
-        public static List<ResponseObject> ToResponse(this IEnumerable<Entity> domainList)
+        public static List<OperativeResponse> ToResponse(this IEnumerable<Entity> domainList)
         {
             return domainList.Select(domain => domain.ToResponse()).ToList();
         }

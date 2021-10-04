@@ -14,8 +14,8 @@ namespace BonusCalcApi.V1.Controllers
     public class BonusCalcApiController : BaseController
     {
         private readonly IGetAllUseCase _getAllUseCase;
-        private readonly IGetByIdUseCase _getByIdUseCase;
-        public BonusCalcApiController(IGetAllUseCase getAllUseCase, IGetByIdUseCase getByIdUseCase)
+        private readonly IOperativesGateway _getByIdUseCase;
+        public BonusCalcApiController(IGetAllUseCase getAllUseCase, IOperativesGateway getByIdUseCase)
         {
             _getAllUseCase = getAllUseCase;
             _getByIdUseCase = getByIdUseCase;
@@ -39,13 +39,13 @@ namespace BonusCalcApi.V1.Controllers
         /// </summary>
         /// <response code="200">...</response>
         /// <response code="404">No ? found for the specified ID</response>
-        [ProducesResponseType(typeof(ResponseObject), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(OperativeResponse), StatusCodes.Status200OK)]
         [HttpGet]
         //TODO: rename to match the identifier that will be used
         [Route("{yourId}")]
         public IActionResult ViewRecord(int yourId)
         {
-            return Ok(_getByIdUseCase.Execute(yourId));
+            return Ok(yourId);
         }
     }
 }

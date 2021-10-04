@@ -117,6 +117,8 @@ namespace BonusCalcApi
 
             RegisterGateways(services);
             RegisterUseCases(services);
+
+            services.Configure<OperativesGatewayOptions>(Configuration.GetSection(OperativesGatewayOptions.OpGatewayOptionsName));
         }
 
         private static void ConfigureDbContext(IServiceCollection services)
@@ -155,7 +157,7 @@ namespace BonusCalcApi
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddScoped<IGetAllUseCase, GetAllUseCase>();
-            services.AddScoped<IGetByIdUseCase, GetByIdUseCase>();
+            services.AddScoped<IOperativesGateway, OperativesGateway>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
