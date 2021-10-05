@@ -30,7 +30,7 @@ namespace BonusCalcApi.V1.Controllers
         [ProducesResponseType(typeof(OperativeResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(OperativeResponse), StatusCodes.Status500InternalServerError)]
         [HttpGet]
-        [Route("{payrollId}")]
+        [Route("{operativePayrollNumber}")]
         public IActionResult GetOperative([FromRoute] string operativePayrollNumber)
         {
             if (string.IsNullOrWhiteSpace(operativePayrollNumber))
