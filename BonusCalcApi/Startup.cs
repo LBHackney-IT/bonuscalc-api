@@ -23,6 +23,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using RepairsApi.V2.Gateways;
+using BonusCalcApi.V1.Constants;
 
 namespace BonusCalcApi
 {
@@ -116,10 +117,36 @@ namespace BonusCalcApi
 
             ConfigureDbContext(services);
 
+            AddHttpClients(services);
+
             RegisterGateways(services);
             RegisterUseCases(services);
 
             services.Configure<OperativesGatewayOptions>(Configuration.GetSection(OperativesGatewayOptions.OpGatewayOptionsName));
+        }
+
+        private void AddHttpClients(IServiceCollection services)
+        {
+            var ogo = ConfigureOptions();
+
+            AddClient(services, HttpClientNames.Repairs, new Uri(ogo.RepairsHubBaseAddr, UriKind.Absolute), ogo.RepairsHubApiKey);
+        }
+
+        private static void AddClient(IServiceCollection services, string clientName, Uri uri, string key)
+        {
+            services.AddHttpClient(clientName, c =>
+            {
+                c.BaseAddress = uri;
+                c.DefaultRequestHeaders.Add("Authorization", key);
+            });
+        }
+
+        private OperativesGatewayOptions ConfigureOptions()
+        {
+            OperativesGatewayOptions ogo = new OperativesGatewayOptions();
+            Configuration.Bind(nameof(OperativesGatewayOptions), ogo);
+
+            return ogo;
         }
 
         private static void ConfigureDbContext(IServiceCollection services)
