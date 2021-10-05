@@ -22,6 +22,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using RepairsApi.V2.Gateways;
 
 namespace BonusCalcApi
 {
@@ -152,12 +153,13 @@ namespace BonusCalcApi
         private static void RegisterGateways(IServiceCollection services)
         {
             services.AddScoped<IExampleGateway, ExampleGateway>();
+            services.AddScoped<IApiGateway, ApiGateway>();
+            services.AddScoped<IOperativesGateway, OperativesGateway>();
         }
 
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddScoped<IGetAllUseCase, GetAllUseCase>();
-            services.AddScoped<IOperativesGateway, OperativesGateway>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
