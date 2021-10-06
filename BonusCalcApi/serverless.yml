@@ -29,6 +29,8 @@ functions:
     environment:
 # TODO: Create ssm variables for this API's postgres mirror then rename bonuscalc-api below to match api name
       CONNECTION_STRING: Host=${ssm:/bonuscalc-api/${self:provider.stage}/postgres-hostname};Port=${ssm:/bonuscalc-api/${self:provider.stage}/postgres-port};Database=bonuscalc-api-mirror;Username=${ssm:/bonuscalc-api/${self:provider.stage}/postgres-username};Password=${ssm:/bonuscalc-api/${self:provider.stage}/postgres-password}
+      OperativeGatewayOptions__RepairsHubBaseAddr: ${ssm:/bonuscalc-api/${self:provider.stage}/repairs-hub-base-api}
+      OperativeGatewayOptions__RepairsHubApiKey: ${ssm:/bonuscalc-api/${self:provider.stage}/repairs-hub-api-key}
     events:
       - http:
           path: /{proxy+}
