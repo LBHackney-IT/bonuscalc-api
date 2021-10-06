@@ -13,11 +13,11 @@ services:
     links:
       - dev-database
   dev-database:
+    image: postgres:12
+    ports:
+      - 5432:5432
     env_file:
       - database.env
-    image: postgres:12
-    volumes:
-      - ./database:/docker-entrypoint-initdb.d
 
   bonuscalc-api-test:
     image: bonuscalc-api-test
@@ -34,10 +34,7 @@ services:
       - test-database
 
   test-database:
-    image: test-database
-    build:
-      context: .
-      dockerfile: database/Dockerfile
+    image: postgres:12
     ports:
       - 5432:5432
     env_file:
