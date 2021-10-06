@@ -38,7 +38,11 @@ namespace BonusCalcApi.V1.Gateways
                 return null;
             }
 
-            if (!response.IsSuccess) throw new ApiException((int) response.Status, "Unable to find operative");
+            if (!response.IsSuccess)
+            {
+                _logger.LogError($"Call to RepairsHub failed for [{payrollNumber}]", response.Status);
+                throw new ApiException((int) response.Status, "Unable to find operative");
+            }
 
             return response.Content;
         }
