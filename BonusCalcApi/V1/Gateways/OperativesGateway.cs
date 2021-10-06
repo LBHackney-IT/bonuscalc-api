@@ -1,7 +1,5 @@
 using BonusCalcApi.V1.Boundary.Response;
 using Microsoft.Extensions.Logging;
-using BonusCalcApi.V1.Factories;
-using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.UseCase.Interfaces;
 using System;
 using System.Net;
@@ -30,7 +28,7 @@ namespace BonusCalcApi.V1.Gateways
             _logger.LogInformation($"Starting call to RepairsHub for operative [{payrollNumber}]");
 
             Uri url = new Uri(_gatewayOptions.RepairsHubBaseAddr, UriKind.Absolute);
-            var response = await _apiGateway.ExecuteRequest<OperativeResponse>("Repairs", url).ConfigureAwait(false);
+            var response = await _apiGateway.ExecuteRequest<OperativeResponse>(HttpClientNames.Repairs, url).ConfigureAwait(false);
 
             if (response.Status == HttpStatusCode.NotFound)
             {

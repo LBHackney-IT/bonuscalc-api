@@ -22,6 +22,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using RepairsApi.V2.Gateways;
 
 namespace BonusCalcApi
 {
@@ -115,10 +116,36 @@ namespace BonusCalcApi
 
             ConfigureDbContext(services);
 
+            AddHttpClients(services);
+
             RegisterGateways(services);
             RegisterUseCases(services);
 
             services.Configure<OperativesGatewayOptions>(Configuration.GetSection(OperativesGatewayOptions.OpGatewayOptionsName));
+        }
+
+        private void AddHttpClients(IServiceCollection services)
+        {
+            var ogo = ConfigureOptions();
+
+            AddClient(services, HttpClientNames.Repairs, new Uri(ogo.RepairsHubBaseAddr, UriKind.Absolute), ogo.RepairsHubApiKey);
+        }
+
+        private static void AddClient(IServiceCollection services, string clientName, Uri uri, string key)
+        {
+            services.AddHttpClient(clientName, c =>
+            {
+                c.BaseAddress = uri;
+                c.DefaultRequestHeaders.Add("Authorization", key);
+            });
+        }
+
+        private OperativesGatewayOptions ConfigureOptions()
+        {
+            OperativesGatewayOptions ogo = new OperativesGatewayOptions();
+            Configuration.Bind(nameof(OperativesGatewayOptions), ogo);
+
+            return ogo;
         }
 
         private static void ConfigureDbContext(IServiceCollection services)
@@ -152,12 +179,13 @@ namespace BonusCalcApi
         private static void RegisterGateways(IServiceCollection services)
         {
             services.AddScoped<IExampleGateway, ExampleGateway>();
+            services.AddScoped<IApiGateway, ApiGateway>();
+            services.AddScoped<IOperativesGateway, OperativesGateway>();
         }
 
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddScoped<IGetAllUseCase, GetAllUseCase>();
-            services.AddScoped<IOperativesGateway, OperativesGateway>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
