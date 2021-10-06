@@ -23,7 +23,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using RepairsApi.V2.Gateways;
-using BonusCalcApi.V1.Constants;
 
 namespace BonusCalcApi
 {

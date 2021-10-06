@@ -1,14 +1,11 @@
 using BonusCalcApi.V1.Boundary.Response;
 using Microsoft.Extensions.Logging;
-using BonusCalcApi.V1.Factories;
-using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.UseCase.Interfaces;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using BonusCalcApi.V1.Exceptions;
-using BonusCalcApi.V1.Constants;
 
 namespace BonusCalcApi.V1.Gateways
 {
