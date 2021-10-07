@@ -27,8 +27,7 @@ namespace BonusCalcApi.V1.Gateways
         {
             _logger.LogInformation($"Starting call to RepairsHub for operative [{payrollNumber}]");
 
-            Uri url = new Uri(_gatewayOptions.RepairsHubBaseAddr, UriKind.Absolute);
-            var response = await _apiGateway.ExecuteRequest<OperativeResponse>(HttpClientNames.Repairs, url).ConfigureAwait(false);
+            var response = await _apiGateway.ExecuteRequest<OperativeResponse>(HttpClientNames.Repairs, _gatewayOptions.RepairsHubBaseUrl).ConfigureAwait(false);
 
             if (response.Status == HttpStatusCode.NotFound)
             {
