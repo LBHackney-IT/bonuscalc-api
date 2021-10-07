@@ -118,7 +118,7 @@ namespace BonusCalcApi
             AddHttpClients(services);
 
             RegisterGateways(services);
-            RegisterUseCases(services);
+            // RegisterUseCases(services);
 
             services.Configure<OperativesGatewayOptions>(Configuration.GetSection(OperativesGatewayOptions.OpGatewayOptionsName));
         }
@@ -177,15 +177,13 @@ namespace BonusCalcApi
 
         private static void RegisterGateways(IServiceCollection services)
         {
-            services.AddScoped<IExampleGateway, ExampleGateway>();
             services.AddScoped<IApiGateway, ApiGateway>();
             services.AddScoped<IOperativesGateway, OperativesGateway>();
         }
 
-        private static void RegisterUseCases(IServiceCollection services)
-        {
-            services.AddScoped<IGetAllUseCase, GetAllUseCase>();
-        }
+        // private static void RegisterUseCases(IServiceCollection services)
+        // {
+        // }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
