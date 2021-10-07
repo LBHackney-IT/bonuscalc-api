@@ -151,7 +151,7 @@ namespace BonusCalcApi
         {
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
-            services.AddDbContext<DatabaseContext>(
+            services.AddDbContext<BonusCalcContext>(
                 opt => opt.UseNpgsql(connectionString).AddXRayInterceptor(true));
         }
 

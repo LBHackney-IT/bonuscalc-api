@@ -19,7 +19,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
     //    [SetUp]
     //    public void Setup()
     //    {
-    //        _classUnderTest = new ExampleGateway(DatabaseContext);
+    //        _classUnderTest = new ExampleGateway(BonusCalcContext);
     //    }
 
     //    [Test]
@@ -36,8 +36,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
     //        var entity = _fixture.Create<Entity>();
     //        var databaseEntity = DatabaseEntityHelper.CreateDatabaseEntityFrom(entity);
 
-    //        DatabaseContext.DatabaseEntities.Add(databaseEntity);
-    //        DatabaseContext.SaveChanges();
+    //        BonusCalcContext.DatabaseEntities.Add(databaseEntity);
+    //        BonusCalcContext.SaveChanges();
 
     //        var response = _classUnderTest.GetEntityById(databaseEntity.Id);
 

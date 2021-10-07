@@ -9,17 +9,17 @@ namespace BonusCalcApi.Tests
     public class DatabaseTests
     {
         private IDbContextTransaction _transaction;
-        protected DatabaseContext DatabaseContext { get; private set; }
+        protected BonusCalcContext BonusCalcContext { get; private set; }
 
         [SetUp]
         public void RunBeforeAnyTests()
         {
             var builder = new DbContextOptionsBuilder();
             builder.UseNpgsql(ConnectionString.TestDatabase());
-            DatabaseContext = new DatabaseContext(builder.Options);
+            BonusCalcContext = new BonusCalcContext(builder.Options);
 
-            DatabaseContext.Database.EnsureCreated();
-            _transaction = DatabaseContext.Database.BeginTransaction();
+            BonusCalcContext.Database.EnsureCreated();
+            _transaction = BonusCalcContext.Database.BeginTransaction();
         }
 
         [TearDown]
