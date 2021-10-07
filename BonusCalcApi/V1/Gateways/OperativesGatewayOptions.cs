@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BonusCalcApi.V1.Gateways
@@ -6,7 +7,7 @@ namespace BonusCalcApi.V1.Gateways
     {
         public const string OpGatewayOptionsName = "OperativesGatewayOptions";
         [Required]
-        public string RepairsHubBaseAddr { get; set; }
+        public Uri RepairsHubBaseUrl { get; set; }
         [Required]
         public string RepairsHubApiKey { get; set; }
     }

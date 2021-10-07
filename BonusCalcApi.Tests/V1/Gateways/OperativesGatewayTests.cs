@@ -35,7 +35,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
             _gatewayOptionsMock.Setup(gwo => gwo.Value)
                 .Returns(new OperativesGatewayOptions
                 {
-                    RepairsHubBaseAddr = "http://null/",
+                    RepairsHubBaseUrl = new Uri("http://null/"),
                     RepairsHubApiKey = "-"
                 });
 

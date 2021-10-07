@@ -37,7 +37,6 @@ namespace BonusCalcApi
 
         public IConfiguration Configuration { get; }
         private static List<ApiVersionDescription> _apiVersions { get; set; }
-        //TODO update the below to the name of your API
         private const string ApiName = "BonusCalc";
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -128,7 +127,7 @@ namespace BonusCalcApi
         {
             var ogo = ConfigureOptions();
 
-            AddClient(services, HttpClientNames.Repairs, new Uri(ogo.RepairsHubBaseAddr, UriKind.Absolute), ogo.RepairsHubApiKey);
+            AddClient(services, HttpClientNames.Repairs, ogo.RepairsHubBaseUrl, ogo.RepairsHubApiKey);
         }
 
         private static void AddClient(IServiceCollection services, string clientName, Uri uri, string key)
