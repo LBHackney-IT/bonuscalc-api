@@ -1,4 +1,3 @@
-using BonusCalcApi.V1.Domain;
 using BonusCalcApi.V1.Factories;
 using NUnit.Framework;
 
