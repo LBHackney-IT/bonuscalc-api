@@ -147,12 +147,16 @@ namespace BonusCalcApi
             return ogo;
         }
 
-        private static void ConfigureDbContext(IServiceCollection services)
+        private void ConfigureDbContext(IServiceCollection services)
         {
-            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+            var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
+                                ?? Configuration.GetValue<string>("DatabaseConnectionString");
 
-            services.AddDbContext<DatabaseContext>(
-                opt => opt.UseNpgsql(connectionString).AddXRayInterceptor(true));
+            services.AddDbContext<BonusCalcContext>(
+                opt => opt
+                    .UseNpgsql(connectionString)
+                    .UseSnakeCaseNamingConvention()
+            );
         }
 
         private static void ConfigureLogging(IServiceCollection services, IConfiguration configuration)
@@ -177,14 +181,14 @@ namespace BonusCalcApi
 
         private static void RegisterGateways(IServiceCollection services)
         {
-            services.AddScoped<IExampleGateway, ExampleGateway>();
             services.AddScoped<IApiGateway, ApiGateway>();
+            services.AddScoped<IOperativeGateway, OperativeGateway>();
             services.AddScoped<IOperativesGateway, OperativesGateway>();
         }
 
         private static void RegisterUseCases(IServiceCollection services)
         {
-            services.AddScoped<IGetAllUseCase, GetAllUseCase>();
+            services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

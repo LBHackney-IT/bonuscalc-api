@@ -1,22 +1,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using BonusCalcApi.V1.Boundary.Response;
-using BonusCalcApi.V1.Domain;
+using BonusCalcApi.V1.Infrastructure;
 
 namespace BonusCalcApi.V1.Factories
 {
     public static class ResponseFactory
     {
-        //TODO: Map the fields in the domain object(s) to fields in the response object(s).
-        // More information on this can be found here https://github.com/LBHackney-IT/lbh-bonuscalc-api/wiki/Factory-object-mappings
-        public static OperativeResponse ToResponse(this Entity domain)
+        public static OperativeResponse ToResponse(this Operative operative)
         {
-            return new OperativeResponse();
-        }
-
-        public static List<OperativeResponse> ToResponse(this IEnumerable<Entity> domainList)
-        {
-            return domainList.Select(domain => domain.ToResponse()).ToList();
+            return new OperativeResponse
+            {
+                Id = operative.Id,
+                Name = operative.Name,
+                Trade = operative.Trade,
+                Section = operative.Section,
+                Scheme = operative.Scheme,
+                SalaryBand = operative.SalaryBand,
+                FixedBand = operative.FixedBand,
+                IsArchived = operative.IsArchived
+            };
         }
     }
 }

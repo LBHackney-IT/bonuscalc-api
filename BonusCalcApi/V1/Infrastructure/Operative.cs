@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace BonusCalcApi.V1.Boundary.Response
+namespace BonusCalcApi.V1.Infrastructure
 {
-    public class OperativeResponse
+    public class Operative
     {
-        public string Id { get; set; }
+        [Key] public string Id { get; set; }
         public string Name { get; set; }
         public string Trade { get; set; }
         public string Section { get; set; }

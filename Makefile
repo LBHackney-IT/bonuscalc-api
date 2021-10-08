@@ -32,6 +32,10 @@ lint:
 stop:
 	docker-compose down
 
+.PHONY: dev-db
+dev-db:
+	docker-compose up -d dev-database
+
 .PHONY: test-db
 test-db:
 	docker-compose up -d test-database
