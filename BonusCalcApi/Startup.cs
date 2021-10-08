@@ -153,7 +153,11 @@ namespace BonusCalcApi
                                 ?? Configuration.GetValue<string>("DatabaseConnectionString");
 
             services.AddDbContext<BonusCalcContext>(
-                opt => opt.UseNpgsql(connectionString).AddXRayInterceptor(true));
+                opt => opt
+                    .UseNpgsql(connectionString)
+                    .UseSnakeCaseNamingConvention()
+                    .AddXRayInterceptor(true)
+            );
         }
 
         private static void ConfigureLogging(IServiceCollection services, IConfiguration configuration)

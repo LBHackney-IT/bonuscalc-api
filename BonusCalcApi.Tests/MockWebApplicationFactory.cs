@@ -25,7 +25,7 @@ namespace BonusCalcApi.Tests
             builder.ConfigureServices(services =>
             {
                 var dbBuilder = new DbContextOptionsBuilder();
-                dbBuilder.UseNpgsql(_connection);
+                dbBuilder.UseNpgsql(_connection).UseSnakeCaseNamingConvention();
                 var context = new BonusCalcContext(dbBuilder.Options);
                 services.AddSingleton(context);
 
