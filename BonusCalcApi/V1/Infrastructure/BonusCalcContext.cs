@@ -8,5 +8,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public BonusCalcContext(DbContextOptions options) : base(options)
         {
         }
+
+        public DbSet<Operative> Operatives { get; set; }
     }
 }

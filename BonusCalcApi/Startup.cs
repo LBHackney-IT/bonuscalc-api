@@ -118,7 +118,7 @@ namespace BonusCalcApi
             AddHttpClients(services);
 
             RegisterGateways(services);
-            // RegisterUseCases(services);
+            RegisterUseCases(services);
 
             services.Configure<OperativesGatewayOptions>(Configuration.GetSection(OperativesGatewayOptions.OpGatewayOptionsName));
         }
@@ -156,7 +156,6 @@ namespace BonusCalcApi
                 opt => opt
                     .UseNpgsql(connectionString)
                     .UseSnakeCaseNamingConvention()
-                    .AddXRayInterceptor(true)
             );
         }
 
@@ -183,12 +182,14 @@ namespace BonusCalcApi
         private static void RegisterGateways(IServiceCollection services)
         {
             services.AddScoped<IApiGateway, ApiGateway>();
+            services.AddScoped<IOperativeGateway, OperativeGateway>();
             services.AddScoped<IOperativesGateway, OperativesGateway>();
         }
 
-        // private static void RegisterUseCases(IServiceCollection services)
-        // {
-        // }
+        private static void RegisterUseCases(IServiceCollection services)
+        {
+            services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,87 +1,127 @@
-using BonusCalcApi.V1.Controllers;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using NUnit.Framework;
-using Moq;
-using BonusCalcApi.V1.UseCase.Interfaces;
-using BonusCalcApi.V1.Boundary.Response;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Net;
 using System.Threading.Tasks;
+using AutoFixture;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using BonusCalcApi.V1.Boundary.Response;
+using BonusCalcApi.V1.Controllers;
+using BonusCalcApi.V1.Infrastructure;
+using BonusCalcApi.V1.UseCase.Interfaces;
 
 namespace BonusCalcApi.Tests.V1.Controllers
 {
     [TestFixture]
-    public class OperativesControllerTests
+    public class OperativesControllerTests : ControllerTests
     {
-        private OperativesController _sut;
-        private Mock<IOperativesGateway> _operativeGateway;
-        private OperativeResponse _validOperative;
+        private readonly Fixture _fixture = new Fixture();
 
-        public OperativesControllerTests()
+        private Mock<IGetOperativeUseCase> _getOperativeUseCaseMock;
+        private Mock<ProblemDetailsFactory> _problemDetailsFactoryMock;
+
+        private OperativesController _classUnderTest;
+
+        [SetUp]
+        public void SetUp()
         {
-            _operativeGateway = new Mock<IOperativesGateway>();
-            _sut = new OperativesController(_operativeGateway.Object);
+            _getOperativeUseCaseMock = new Mock<IGetOperativeUseCase>();
+            _problemDetailsFactoryMock = new Mock<ProblemDetailsFactory>();
 
+            _classUnderTest = new OperativesController(
+                _getOperativeUseCaseMock.Object
+            );
+
+            // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
+            _classUnderTest.ProblemDetailsFactory = _problemDetailsFactoryMock.Object;
         }
 
-        [TestCase("")]
-        [TestCase("  ")]
-        [TestCase(null)]
-        public void ReturnsBadRequestIfRequestIsBad(string testPayrollStr)
+        [TestCase("123456")]
+        public async Task ReturnsOkIfPayrollNumberIsValid(string operativePayrollNumber)
         {
             // Arrange
-            _operativeGateway.Setup(og => og.Execute(Moq.It.IsAny<string>()))
-                .Returns(Task.FromResult(new OperativeResponse()));
+            var operative = _fixture.Create<Operative>();
+            _getOperativeUseCaseMock
+                .Setup(m => m.ExecuteAsync(It.IsAny<string>()))
+                .ReturnsAsync(operative);
 
             // Act
-            var response = _sut.GetOperative(testPayrollStr);
+            var objectResult = await _classUnderTest.GetOperative(operativePayrollNumber);
+            var operativesResult = GetResultData<OperativeResponse>(objectResult);
+            var statusCode = GetStatusCode(objectResult);
 
             // Assert
-            GetStatusCode(response).Should().Be(400);
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            operativesResult.Should().BeEquivalentTo(operative);
         }
 
-        public void ReturnsNotFoundIfNoMatches()
+        [TestCase("000000")]
+        public async Task ReturnsNotFoundIfPayrollNumberIsNotFound(string operativePayrollNumber)
         {
             // Arrange
-            _operativeGateway.Setup(og => og.Execute(Moq.It.IsAny<string>()))
-                .Returns(Task.FromResult((OperativeResponse) null));
+            _getOperativeUseCaseMock
+                .Setup(m => m.ExecuteAsync(It.IsAny<string>()))
+                .ReturnsAsync((Operative) null);
 
-            // Act
-            var response = _sut.GetOperative("H-249387");
-
-            // Assert
-            GetStatusCode(response).Should().Be(404);
-        }
-
-        public void ReturnsCorrectDataFor()
-        {
-            // Arrange
-            _validOperative = GenerateValidOperative();
-
-            _operativeGateway.Setup(og => og.Execute(Moq.It.IsAny<string>()))
-                .Returns(Task.FromResult(_validOperative));
-
-            // Act
-            var response = _sut.GetOperative("H-8345344");
-
-            // Assert
-            response.As<OperativeResponse>().Name.Should().Be("Paul Casey");
-        }
-
-        //TODO: generative values
-        private static OperativeResponse GenerateValidOperative()
-        {
-            return new OperativeResponse
+            var problemDetails = new ProblemDetails()
             {
-                Id = 1000,
-                Name = "Paul Casey",
-                PayrollNumber = "H-8345344"
+                Status = StatusCodes.Status404NotFound
             };
+
+            _problemDetailsFactoryMock
+                .Setup(m => m.CreateProblemDetails(
+                    It.IsAny<HttpContext>(),
+                    It.IsAny<int?>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>())
+                )
+                .Returns(problemDetails)
+                .Verifiable();
+
+            // Act
+            var objectResult = await _classUnderTest.GetOperative(operativePayrollNumber);
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
         }
 
-        protected static int? GetStatusCode(IActionResult result)
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("123")]
+        [TestCase("1234567")]
+        [TestCase("ABCDEF")]
+        public async Task ReturnsBadRequestIfPayrollNumberIsInvalid(string operativePayrollNumber)
         {
-            return (result as IStatusCodeActionResult).StatusCode;
+            // Arrange
+            var problemDetails = new ProblemDetails()
+            {
+                Status = StatusCodes.Status400BadRequest
+            };
+
+            _problemDetailsFactoryMock
+                .Setup(m => m.CreateProblemDetails(
+                    It.IsAny<HttpContext>(),
+                    It.IsAny<int?>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>())
+                )
+                .Returns(problemDetails)
+                .Verifiable();
+
+            // Act
+            var objectResult = await _classUnderTest.GetOperative(operativePayrollNumber);
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
         }
     }
 }

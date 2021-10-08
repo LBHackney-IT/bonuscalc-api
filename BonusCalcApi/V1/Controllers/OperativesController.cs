@@ -1,7 +1,12 @@
-using BonusCalcApi.V1.Boundary.Response;
-using BonusCalcApi.V1.UseCase.Interfaces;
+using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using BonusCalcApi.V1.Boundary.Response;
+using BonusCalcApi.V1.Factories;
+using BonusCalcApi.V1.UseCase.Interfaces;
 
 namespace BonusCalcApi.V1.Controllers
 {
@@ -12,10 +17,14 @@ namespace BonusCalcApi.V1.Controllers
     [ApiVersion("1.0")]
     public class OperativesController : BaseController
     {
-        private readonly IOperativesGateway _operativesGateway;
-        public OperativesController(IOperativesGateway operativesGateway)
+        private readonly IGetOperativeUseCase _getOperativeUseCase;
+        private static readonly Regex _prnMatcher = new Regex("^[0-9]{6}$");
+
+        public OperativesController(
+            IGetOperativeUseCase getOperativeUseCase
+        )
         {
-            _operativesGateway = operativesGateway;
+            _getOperativeUseCase = getOperativeUseCase;
         }
 
         /// <summary>
@@ -26,19 +35,43 @@ namespace BonusCalcApi.V1.Controllers
         /// <response code="404">No operative found for the specified payroll ID</response>
         /// <response code="500">Server error searching for the operative</response>
         [ProducesResponseType(typeof(OperativeResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(OperativeResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(OperativeResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(OperativeResponse), StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [Route("{operativePayrollNumber}")]
-        public IActionResult GetOperative([FromRoute] string operativePayrollNumber)
+        public async Task<IActionResult> GetOperative([FromRoute][Required] string operativePayrollNumber)
         {
-            if (string.IsNullOrWhiteSpace(operativePayrollNumber))
+            if (IsValid(operativePayrollNumber))
             {
-                return BadRequest("The requested payroll number is invalid");
-            }
+                var operative = await _getOperativeUseCase.ExecuteAsync(operativePayrollNumber);
 
-            return Ok(_operativesGateway.Execute(operativePayrollNumber));
+                if (operative is null)
+                {
+                    return Problem(
+                        "The requested payroll number was not found",
+                        $"/api/v2/operatives/{operativePayrollNumber}",
+                        StatusCodes.Status404NotFound, "Not Found"
+                    );
+                }
+                else
+                {
+                    return Ok(operative.ToResponse());
+                }
+            }
+            else
+            {
+                return Problem(
+                    "The requested payroll number is invalid",
+                    $"/api/v2/operatives/{operativePayrollNumber}",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+            }
+        }
+
+        private static bool IsValid(string operativePayrollNumber)
+        {
+            return !string.IsNullOrWhiteSpace(operativePayrollNumber) && _prnMatcher.IsMatch(operativePayrollNumber);
         }
     }
 }
