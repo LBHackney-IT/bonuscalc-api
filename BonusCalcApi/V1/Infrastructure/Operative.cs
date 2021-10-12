@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BonusCalcApi.V1.Infrastructure
@@ -12,5 +13,6 @@ namespace BonusCalcApi.V1.Infrastructure
         public int SalaryBand { get; set; }
         public bool FixedBand { get; set; }
         public bool IsArchived { get; set; }
+        public virtual List<NonProductiveTime> NonProductiveTimeList { get; set; }
     }
 }

@@ -1,14 +1,14 @@
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
+using BonusCalcApi.Tests.V1.Controllers.Mocks;
+using BonusCalcApi.Tests.V1.Helpers.Mocks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Controllers;
+using BonusCalcApi.V1.Controllers.Helpers;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
 
@@ -20,17 +20,20 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private readonly Fixture _fixture = new Fixture();
 
         private Mock<IGetOperativeUseCase> _getOperativeUseCaseMock;
-        private Mock<ProblemDetailsFactory> _problemDetailsFactoryMock;
+        private MockProblemDetailsFactory _problemDetailsFactoryMock;
 
         private OperativesController _classUnderTest;
+        private MockOperativeHelpers _operativeHelpers;
 
         [SetUp]
         public void SetUp()
         {
             _getOperativeUseCaseMock = new Mock<IGetOperativeUseCase>();
-            _problemDetailsFactoryMock = new Mock<ProblemDetailsFactory>();
+            _operativeHelpers = new MockOperativeHelpers();
+            _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
             _classUnderTest = new OperativesController(
+                _operativeHelpers.Object,
                 _getOperativeUseCaseMock.Object
             );
 
@@ -38,17 +41,18 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _classUnderTest.ProblemDetailsFactory = _problemDetailsFactoryMock.Object;
         }
 
-        [TestCase("123456")]
-        public async Task ReturnsOkIfPayrollNumberIsValid(string operativePayrollNumber)
+        [Test]
+        public async Task ReturnsOkIfPayrollNumberIsValid()
         {
             // Arrange
             var operative = _fixture.Create<Operative>();
+            _operativeHelpers.ValidPrn(true);
             _getOperativeUseCaseMock
                 .Setup(m => m.ExecuteAsync(It.IsAny<string>()))
                 .ReturnsAsync(operative);
 
             // Act
-            var objectResult = await _classUnderTest.GetOperative(operativePayrollNumber);
+            var objectResult = await _classUnderTest.GetOperative("123456");
             var operativesResult = GetResultData<OperativeResponse>(objectResult);
             var statusCode = GetStatusCode(objectResult);
 
@@ -57,71 +61,52 @@ namespace BonusCalcApi.Tests.V1.Controllers
             operativesResult.Should().BeEquivalentTo(operative);
         }
 
-        [TestCase("000000")]
-        public async Task ReturnsNotFoundIfPayrollNumberIsNotFound(string operativePayrollNumber)
+        [Test]
+        public async Task ReturnsNotFoundIfPayrollNumberIsNotFound()
         {
             // Arrange
+            _operativeHelpers.ValidPrn(true);
             _getOperativeUseCaseMock
                 .Setup(m => m.ExecuteAsync(It.IsAny<string>()))
                 .ReturnsAsync((Operative) null);
 
-            var problemDetails = new ProblemDetails()
-            {
-                Status = StatusCodes.Status404NotFound
-            };
-
-            _problemDetailsFactoryMock
-                .Setup(m => m.CreateProblemDetails(
-                    It.IsAny<HttpContext>(),
-                    It.IsAny<int?>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>())
-                )
-                .Returns(problemDetails)
-                .Verifiable();
-
             // Act
-            var objectResult = await _classUnderTest.GetOperative(operativePayrollNumber);
+            var objectResult = await _classUnderTest.GetOperative("000000");
             var statusCode = GetStatusCode(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.NotFound);
         }
 
-        [TestCase(null)]
-        [TestCase("")]
-        [TestCase(" ")]
-        [TestCase("123")]
-        [TestCase("1234567")]
-        [TestCase("ABCDEF")]
-        public async Task ReturnsBadRequestIfPayrollNumberIsInvalid(string operativePayrollNumber)
+        [Test]
+        public async Task ReturnsBadRequestIfPayrollNumberIsInvalid()
         {
             // Arrange
-            var problemDetails = new ProblemDetails()
-            {
-                Status = StatusCodes.Status400BadRequest
-            };
-
-            _problemDetailsFactoryMock
-                .Setup(m => m.CreateProblemDetails(
-                    It.IsAny<HttpContext>(),
-                    It.IsAny<int?>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>(),
-                    It.IsAny<string>())
-                )
-                .Returns(problemDetails)
-                .Verifiable();
+            _operativeHelpers.ValidPrn(false);
 
             // Act
-            var objectResult = await _classUnderTest.GetOperative(operativePayrollNumber);
+            var objectResult = await _classUnderTest.GetOperative("000000");
             var statusCode = GetStatusCode(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task GetUnproductiveTimeReturnsBadRequestIfPayrollNumberIsInvalid()
+        {
+            // Arrange
+
+            // Act
+            var objectResult = await _classUnderTest.GetNonProductiveTime("bad");
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
         }
     }
+
 }
