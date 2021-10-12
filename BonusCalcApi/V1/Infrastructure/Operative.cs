@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BonusCalcApi.V1.Infrastructure
@@ -29,5 +30,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public bool FixedBand { get; set; }
 
         public bool IsArchived { get; set; }
+
+        public List<Timesheet> Timesheets { get; set; }
     }
 }
