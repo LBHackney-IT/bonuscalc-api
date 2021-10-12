@@ -4,11 +4,11 @@ namespace BonusCalcApi.V1.Infrastructure
 {
     public class Operative
     {
-        [Key] public string Id { get; set; }
-        public string Name { get; set; }
-        public string Trade { get; set; }
-        public string Section { get; set; }
-        public string Scheme { get; set; }
+        [Key] [StringLength(6)] public string Id { get; set; }
+        [Required] [StringLength(100)] public string Name { get; set; }
+        [Required] [StringLength(10)] public string Trade { get; set; }
+        [Required] [StringLength(10)] public string Section { get; set; }
+        [Required] [StringLength(10)] public string Scheme { get; set; }
         public int SalaryBand { get; set; }
         public bool FixedBand { get; set; }
         public bool IsArchived { get; set; }
