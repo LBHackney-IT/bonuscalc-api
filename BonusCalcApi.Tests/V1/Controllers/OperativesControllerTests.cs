@@ -27,6 +27,9 @@ namespace BonusCalcApi.Tests.V1.Controllers
         [SetUp]
         public void SetUp()
         {
+
+            _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+
             _getOperativeUseCaseMock = new Mock<IGetOperativeUseCase>();
             _problemDetailsFactoryMock = new Mock<ProblemDetailsFactory>();
 
