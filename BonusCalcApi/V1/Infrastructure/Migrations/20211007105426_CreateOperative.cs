@@ -15,9 +15,9 @@ namespace V1.Infrastructure.Migrations
                     trade = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                     section = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                     scheme = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
-                    salary_band = table.Column<int>(nullable: false),
-                    fixed_band = table.Column<bool>(nullable: false),
-                    is_archived = table.Column<bool>(nullable: false)
+                    salary_band = table.Column<int>(type: "integer", nullable: false),
+                    fixed_band = table.Column<bool>(type: "boolean", nullable: false),
+                    is_archived = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {

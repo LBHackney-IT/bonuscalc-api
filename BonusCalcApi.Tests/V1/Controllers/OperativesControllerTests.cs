@@ -27,6 +27,9 @@ namespace BonusCalcApi.Tests.V1.Controllers
         [SetUp]
         public void SetUp()
         {
+
+            _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+
             _getOperativeUseCaseMock = new Mock<IGetOperativeUseCase>();
             _problemDetailsFactoryMock = new Mock<ProblemDetailsFactory>();
 
@@ -54,7 +57,15 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.OK);
-            operativesResult.Should().BeEquivalentTo(operative);
+            operativesResult.Should().BeEquivalentTo(operative, options => options
+                .Including(o => o.Id)
+                .Including(o => o.Name)
+                .Including(o => o.Trade)
+                .Including(o => o.Section)
+                .Including(o => o.Scheme)
+                .Including(o => o.SalaryBand)
+                .Including(o => o.FixedBand)
+                .Including(o => o.IsArchived));
         }
 
         [TestCase("000000")]

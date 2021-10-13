@@ -3,15 +3,17 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211012121932_CreateWeek")]
+    partial class CreateWeek
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,65 +140,6 @@ namespace V1.Infrastructure.Migrations
                     b.ToTable("pay_bands");
                 });
 
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayElement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Address")
-                        .HasColumnType("text")
-                        .HasColumnName("address");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("text")
-                        .HasColumnName("comment");
-
-                    b.Property<decimal>("Duration")
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("duration");
-
-                    b.Property<int>("PayElementTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("pay_element_type_id");
-
-                    b.Property<bool>("Productive")
-                        .HasColumnType("boolean")
-                        .HasColumnName("productive");
-
-                    b.Property<int>("TimesheetId")
-                        .HasColumnType("integer")
-                        .HasColumnName("timesheet_id");
-
-                    b.Property<decimal>("Value")
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("value");
-
-                    b.Property<int>("WeekDay")
-                        .HasColumnType("integer")
-                        .HasColumnName("week_day");
-
-                    b.Property<string>("WorkOrder")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("work_order");
-
-                    b.HasKey("Id")
-                        .HasName("pk_pay_elements");
-
-                    b.HasIndex("PayElementTypeId")
-                        .HasDatabaseName("ix_pay_elements_pay_element_type_id");
-
-                    b.HasIndex("TimesheetId")
-                        .HasDatabaseName("ix_pay_elements_timesheet_id");
-
-                    b.ToTable("pay_elements");
-                });
-
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayElementType", b =>
                 {
                     b.Property<int>("Id")
@@ -227,37 +170,6 @@ namespace V1.Infrastructure.Migrations
                         .HasDatabaseName("ix_pay_element_types_description");
 
                     b.ToTable("pay_element_types");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Timesheet", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("OperativeId")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("character varying(6)")
-                        .HasColumnName("operative_id");
-
-                    b.Property<int>("WeekId")
-                        .HasColumnType("integer")
-                        .HasColumnName("week_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_timesheets");
-
-                    b.HasIndex("WeekId")
-                        .HasDatabaseName("ix_timesheets_week_id");
-
-                    b.HasIndex("OperativeId", "WeekId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_timesheets_operative_id_week_id");
-
-                    b.ToTable("timesheets");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Trade", b =>
@@ -329,48 +241,6 @@ namespace V1.Infrastructure.Migrations
                     b.Navigation("Trade");
                 });
 
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayElement", b =>
-                {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.PayElementType", "PayElementType")
-                        .WithMany("PayElements")
-                        .HasForeignKey("PayElementTypeId")
-                        .HasConstraintName("fk_pay_elements_pay_element_types_pay_element_type_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Timesheet", "Timesheet")
-                        .WithMany("PayElements")
-                        .HasForeignKey("TimesheetId")
-                        .HasConstraintName("fk_pay_elements_timesheets_timesheet_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PayElementType");
-
-                    b.Navigation("Timesheet");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Timesheet", b =>
-                {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Operative", "Operative")
-                        .WithMany("Timesheets")
-                        .HasForeignKey("OperativeId")
-                        .HasConstraintName("fk_timesheets_operatives_operative_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Week", "Week")
-                        .WithMany("Timesheets")
-                        .HasForeignKey("WeekId")
-                        .HasConstraintName("fk_timesheets_weeks_week_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Operative");
-
-                    b.Navigation("Week");
-                });
-
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Week", b =>
                 {
                     b.HasOne("BonusCalcApi.V1.Infrastructure.BonusPeriod", "BonusPeriod")
@@ -388,29 +258,9 @@ namespace V1.Infrastructure.Migrations
                     b.Navigation("Weeks");
                 });
 
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Operative", b =>
-                {
-                    b.Navigation("Timesheets");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayElementType", b =>
-                {
-                    b.Navigation("PayElements");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Timesheet", b =>
-                {
-                    b.Navigation("PayElements");
-                });
-
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Trade", b =>
                 {
                     b.Navigation("PayBands");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Week", b =>
-                {
-                    b.Navigation("Timesheets");
                 });
 #pragma warning restore 612, 618
         }
