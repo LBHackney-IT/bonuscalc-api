@@ -184,13 +184,11 @@ namespace BonusCalcApi
             services.AddScoped<IApiGateway, ApiGateway>();
             services.AddScoped<IOperativeGateway, OperativeGateway>();
             services.AddScoped<IOperativesGateway, OperativesGateway>();
-            services.AddScoped<INonProductiveTimeGateway, NonProductiveTimeGateway>();
         }
 
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
-            services.AddTransient<IListOperativeNonProductiveTime, ListOperativeNonProductiveTime>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
