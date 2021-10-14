@@ -1,4 +1,4 @@
-﻿using BonusCalcApi.V1.Controllers.Helpers;
+using BonusCalcApi.V1.Controllers.Helpers;
 using FluentAssertions;
 using NUnit.Framework;
 
