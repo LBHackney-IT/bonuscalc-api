@@ -14,7 +14,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public string OperativeId { get; set; }
         public Operative Operative { get; set; }
 
-        public int WeekId { get; set; }
+        public string WeekId { get; set; }
         public Week Week { get; set; }
 
         public List<PayElement> PayElements { get; set; }
