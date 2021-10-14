@@ -42,7 +42,7 @@ namespace BonusCalcApi.V1.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [HttpGet]
         [Route("{operativePayrollNumber}")]
-        public async Task<IActionResult> GetOperative([FromRoute] [Required] string operativePayrollNumber)
+        public async Task<IActionResult> GetOperative([FromRoute][Required] string operativePayrollNumber)
         {
             if (!IsValid(operativePayrollNumber))
                 return Problem(
@@ -66,7 +66,7 @@ namespace BonusCalcApi.V1.Controllers
 
         [HttpGet]
         [Route("{operativePayrollNumber}/time/unproductive")]
-        public async Task<IActionResult> GetNonProductiveTime([FromRoute] [Required] string operativePayrollNumber)
+        public async Task<IActionResult> GetNonProductiveTime([FromRoute][Required] string operativePayrollNumber)
         {
             if (!IsValid(operativePayrollNumber))
                 return Problem(

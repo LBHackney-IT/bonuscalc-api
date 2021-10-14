@@ -1,4 +1,4 @@
-﻿namespace BonusCalcApi.V1.Controllers.Helpers
+namespace BonusCalcApi.V1.Controllers.Helpers
 {
     public interface IOperativeHelpers
     {
