@@ -7,7 +7,7 @@ namespace BonusCalcApi.V1.Infrastructure
     public class BonusPeriod
     {
         [Key]
-        public int Id { get; set; }
+        public string BonusPeriodId { get; set; }
 
         public DateTime StartAt { get; set; }
 
