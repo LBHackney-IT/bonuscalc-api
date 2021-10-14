@@ -19,14 +19,17 @@ namespace BonusCalcApi.V1.Controllers
     {
         private readonly IOperativeHelpers _operativeHelpers;
         private readonly IGetOperativeUseCase _getOperativeUseCase;
+        private readonly IGetOperativeTimesheetUseCase _getOperativeTimesheetUseCase;
 
         public OperativesController(
             IOperativeHelpers operativeHelpers,
-            IGetOperativeUseCase getOperativeUseCase
+            IGetOperativeUseCase getOperativeUseCase,
+            IGetOperativeTimesheetUseCase getOperativeTimesheetUseCase
         )
         {
             _operativeHelpers = operativeHelpers;
             _getOperativeUseCase = getOperativeUseCase;
+            _getOperativeTimesheetUseCase = getOperativeTimesheetUseCase;
         }
 
         /// <summary>
@@ -65,17 +68,18 @@ namespace BonusCalcApi.V1.Controllers
         }
 
         [HttpGet]
-        [Route("{operativePayrollNumber}/time/unproductive")]
-        public async Task<IActionResult> GetNonProductiveTime([FromRoute][Required] string operativePayrollNumber)
+        [Route("{operativePayrollNumber}/timesheet")]
+        public async Task<IActionResult> GetTimesheet([FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
         {
             if (!IsValid(operativePayrollNumber))
                 return Problem(
                     "The requested payroll number is invalid",
-                    $"/api/v2/operatives/{operativePayrollNumber}",
+                    $"/api/v2/operatives/{operativePayrollNumber}?week?{week}",
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
 
-            return await Task.FromResult(BadRequest($"not implemented {operativePayrollNumber}"));
+            var timesheet = await _getOperativeTimesheetUseCase.Execute(week, operativePayrollNumber);
+            return Ok(timesheet.ToResponse());
 
         }
 
