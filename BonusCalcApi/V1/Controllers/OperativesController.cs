@@ -77,7 +77,7 @@ namespace BonusCalcApi.V1.Controllers
             if (!IsValid(operativePayrollNumber))
                 return Problem(
                     "The requested payroll number is invalid",
-                    $"/api/v2/operatives/{operativePayrollNumber}?week?{week}",
+                    $"/api/v2/operatives/{operativePayrollNumber}?week={week}",
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
 
