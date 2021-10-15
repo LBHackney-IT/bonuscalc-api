@@ -100,16 +100,16 @@ jobs:
           name: Run formatter check
           command: ./dotnet-format-local/dotnet-format --check
   build-and-test:
-    executor: docker-dotnet
+    executor: windows/default
     steps:
       - checkout
       - setup_remote_docker
       - run:
           name: build
-          command: docker compose build bonuscalc-api-test
+          command: docker-compose build bonuscalc-api-test
       - run:
           name: Run tests
-          command: docker compose run bonuscalc-api-test
+          command: docker-compose run bonuscalc-api-test
   assume-role-development:
     executor: docker-python
     steps:
