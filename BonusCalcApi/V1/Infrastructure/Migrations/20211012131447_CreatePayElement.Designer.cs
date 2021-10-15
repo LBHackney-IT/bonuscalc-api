@@ -3,15 +3,17 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211012131447_CreatePayElement")]
+    partial class CreatePayElement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,9 +23,11 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BonusPeriod", b =>
                 {
-                    b.Property<string>("BonusPeriodId")
-                        .HasColumnType("text")
-                        .HasColumnName("bonus_period_id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<DateTime?>("ClosedAt")
                         .HasColumnType("timestamp without time zone")
@@ -41,7 +45,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("year");
 
-                    b.HasKey("BonusPeriodId")
+                    b.HasKey("Id")
                         .HasName("pk_bonus_periods");
 
                     b.HasIndex("StartAt")
@@ -241,8 +245,8 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("character varying(6)")
                         .HasColumnName("operative_id");
 
-                    b.Property<string>("WeekId")
-                        .HasColumnType("text")
+                    b.Property<int>("WeekId")
+                        .HasColumnType("integer")
                         .HasColumnName("week_id");
 
                     b.HasKey("Id")
@@ -283,12 +287,14 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Week", b =>
                 {
-                    b.Property<string>("WeekId")
-                        .HasColumnType("text")
-                        .HasColumnName("week_id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("BonusPeriodId")
-                        .HasColumnType("text")
+                    b.Property<int>("BonusPeriodId")
+                        .HasColumnType("integer")
                         .HasColumnName("bonus_period_id");
 
                     b.Property<DateTime?>("ClosedAt")
@@ -303,7 +309,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("start_at");
 
-                    b.HasKey("WeekId")
+                    b.HasKey("Id")
                         .HasName("pk_weeks");
 
                     b.HasIndex("BonusPeriodId", "Number")
@@ -358,7 +364,9 @@ namespace V1.Infrastructure.Migrations
                     b.HasOne("BonusCalcApi.V1.Infrastructure.Week", "Week")
                         .WithMany("Timesheets")
                         .HasForeignKey("WeekId")
-                        .HasConstraintName("fk_timesheets_weeks_week_id");
+                        .HasConstraintName("fk_timesheets_weeks_week_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Operative");
 
@@ -370,7 +378,9 @@ namespace V1.Infrastructure.Migrations
                     b.HasOne("BonusCalcApi.V1.Infrastructure.BonusPeriod", "BonusPeriod")
                         .WithMany("Weeks")
                         .HasForeignKey("BonusPeriodId")
-                        .HasConstraintName("fk_weeks_bonus_periods_bonus_period_id");
+                        .HasConstraintName("fk_weeks_bonus_periods_bonus_period_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("BonusPeriod");
                 });
