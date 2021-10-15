@@ -2,6 +2,10 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
 WORKDIR /app
 
+# Install EF Core tool
+RUN dotnet tool install --global dotnet-ef --version 5.0.10
+ENV PATH "$PATH:/root/.dotnet/tools"
+
 # Copy csproj and restore as distinct layers
 COPY ./BonusCalcApi.sln ./
 COPY ./BonusCalcApi/BonusCalcApi.csproj ./BonusCalcApi/
