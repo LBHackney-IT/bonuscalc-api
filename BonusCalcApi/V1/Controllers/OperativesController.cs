@@ -68,6 +68,9 @@ namespace BonusCalcApi.V1.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(TimesheetResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [Route("{operativePayrollNumber}/timesheet")]
         public async Task<IActionResult> GetTimesheet([FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
         {
@@ -79,6 +82,16 @@ namespace BonusCalcApi.V1.Controllers
                 );
 
             var timesheet = await _getOperativeTimesheetUseCase.Execute(week, operativePayrollNumber);
+
+            if (timesheet is null)
+            {
+                return Problem(
+                    "The requested timesheet is not found",
+                    $"/api/v2/operatives/{operativePayrollNumber}?week?{week}",
+                    StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+
             return Ok(timesheet.ToResponse());
 
         }

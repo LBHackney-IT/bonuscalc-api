@@ -140,6 +140,24 @@ namespace BonusCalcApi.Tests.V1.Controllers
             statusCode.Should().Be((int) HttpStatusCode.OK);
             result.Should().BeEquivalentTo(expectedTimesheet.ToResponse());
         }
+
+        [Test]
+        public async Task Returns404WhenNoTimesheetFound()
+        {
+            // Arrange
+            var expectedTimesheet = _fixture.Create<Timesheet>();
+            _getOperativesTimesheetUseCaseMock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(null as Timesheet);
+            _operativeHelpers.ValidPrn(true);
+
+            // Act
+            var objectResult = await _classUnderTest.GetTimesheet(expectedTimesheet.OperativeId, expectedTimesheet.WeekId);
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.NotFound);
+        }
     }
 
 }

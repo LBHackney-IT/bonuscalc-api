@@ -7,7 +7,7 @@ namespace BonusCalcApi.V1.Infrastructure
     public class Week
     {
         [Key]
-        public string WeekId { get; set; }
+        public string Id { get; set; }
 
         public string BonusPeriodId { get; set; }
 

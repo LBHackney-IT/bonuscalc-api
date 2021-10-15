@@ -32,13 +32,13 @@ namespace BonusCalcApi.Tests.V1.Gateways
 
             var expectedTimesheet = new Timesheet
             {
-                WeekId = week.WeekId,
+                WeekId = week.Id,
                 OperativeId = operative.Id
             };
             await AddTimesheets(expectedTimesheet, week);
 
             // Act
-            var result = await _classUnderTest.GetOperativesTimesheetAsync(week.WeekId, operative.Id);
+            var result = await _classUnderTest.GetOperativesTimesheetAsync(week.Id, operative.Id);
 
             // Assert
             result.Should().BeEquivalentTo(expectedTimesheet);
@@ -62,7 +62,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 expectedTimesheet,
                 new Timesheet
                 {
-                    WeekId = week.WeekId, OperativeId = "4321"
+                    WeekId = week.Id, OperativeId = "4321"
                 }
             };
             await InMemoryDb.Instance.Timesheets.AddRangeAsync(timeSheets);
@@ -74,7 +74,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
 
             var week = new Week
             {
-                WeekId = "2000-01-31"
+                Id = "2000-01-31"
             };
             await InMemoryDb.Instance.Weeks.AddAsync(week);
             await InMemoryDb.Instance.SaveChangesAsync();

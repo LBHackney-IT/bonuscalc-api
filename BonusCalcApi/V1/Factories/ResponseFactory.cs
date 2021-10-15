@@ -26,7 +26,7 @@ namespace BonusCalcApi.V1.Factories
         {
             return new TimesheetResponse
             {
-                TimesheetId = timesheet.Id,
+                Id = timesheet.Id,
                 Week = timesheet.Week.ToResponse(),
                 PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).ToList()
             };
@@ -35,7 +35,7 @@ namespace BonusCalcApi.V1.Factories
         {
             return new WeekResponse
             {
-                WeekId = week.WeekId,
+                Id = week.Id,
                 Number = week.Number,
                 BonusPeriod = week.BonusPeriod.ToResponse(),
                 ClosedAt = week.ClosedAt,
@@ -46,7 +46,7 @@ namespace BonusCalcApi.V1.Factories
         {
             return new BonusPeriodResponse
             {
-                BonusPeriodId = bonusPeriod.BonusPeriodId,
+                Id = bonusPeriod.Id,
                 Period = bonusPeriod.Period,
                 Year = bonusPeriod.Year,
                 ClosedAt = bonusPeriod.ClosedAt,
@@ -57,7 +57,7 @@ namespace BonusCalcApi.V1.Factories
         {
             return new PayElementResponse
             {
-                PayElementId = payElement.Id,
+                Id = payElement.Id,
                 Address = payElement.Address,
                 Comment = payElement.Comment,
                 Duration = payElement.Duration,

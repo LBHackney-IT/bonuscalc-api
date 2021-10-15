@@ -26,18 +26,18 @@ namespace BonusCalcApi.Tests.V1.Factories
             var result = timesheet.ToResponse();
 
             // Assert
-            result.TimesheetId.Should().Be(timesheet.Id);
+            result.Id.Should().Be(timesheet.Id);
             ValidateWeek(result.Week, timesheet.Week);
             foreach (var payElement in timesheet.PayElements)
             {
-                var payElementResponse = result.PayElements.Single(pe => pe.PayElementId == payElement.Id);
+                var payElementResponse = result.PayElements.Single(pe => pe.Id == payElement.Id);
                 ValidatePayElement(payElementResponse, payElement);
             }
         }
 
         private static void ValidatePayElement(PayElementResponse payElementResponse, PayElement payElement)
         {
-            payElementResponse.PayElementId.Should().Be(payElement.Id);
+            payElementResponse.Id.Should().Be(payElement.Id);
             payElementResponse.Address.Should().Be(payElement.Address);
             payElementResponse.Comment.Should().Be(payElement.Comment);
             payElementResponse.Duration.Should().Be(payElement.Duration);
@@ -50,7 +50,7 @@ namespace BonusCalcApi.Tests.V1.Factories
 
         private static void ValidateWeek(WeekResponse weekResponse, Week week)
         {
-            weekResponse.WeekId.Should().Be(week.WeekId);
+            weekResponse.Id.Should().Be(week.Id);
             weekResponse.Number.Should().Be(week.Number);
             weekResponse.ClosedAt.Should().Be(week.ClosedAt);
             weekResponse.StartAt.Should().Be(week.StartAt);
