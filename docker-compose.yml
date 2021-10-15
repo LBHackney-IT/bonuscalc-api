@@ -26,8 +26,9 @@ services:
       context: .
       dockerfile: BonusCalcApi.Tests/Dockerfile
     environment:
+      - CONNECTION_STRING=Host=test-database;Port=5433;Database=testdb;Username=postgres;Password=mypassword
       - DB_HOST=test-database
-      - DB_PORT=5432
+      - DB_PORT=5433
       - DB_USERNAME=postgres
       - DB_PASSWORD=mypassword
       - DB_DATABASE=testdb
@@ -37,6 +38,7 @@ services:
   test-database:
     image: postgres:12
     ports:
-      - 5432:5432
+      - 5433:5433
     env_file:
       - database.env
+    command: -p 5433
