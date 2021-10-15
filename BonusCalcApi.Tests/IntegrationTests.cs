@@ -28,12 +28,12 @@ namespace BonusCalcApi.Tests
         public void OneTimeSetUp()
         {
             _connection = new NpgsqlConnection(ConnectionString.TestDatabase());
-            _builder = new DbContextOptionsBuilder();
             _connection.Open();
             var npgsqlCommand = _connection.CreateCommand();
             npgsqlCommand.CommandText = "SET deadlock_timeout TO 30";
             npgsqlCommand.ExecuteNonQuery();
 
+            _builder = new DbContextOptionsBuilder();
             _builder.UseNpgsql(_connection)
                 .UseSnakeCaseNamingConvention();
         }
