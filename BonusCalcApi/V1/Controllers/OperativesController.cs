@@ -87,7 +87,7 @@ namespace BonusCalcApi.V1.Controllers
             {
                 return Problem(
                     "The requested timesheet is not found",
-                    $"/api/v2/operatives/{operativePayrollNumber}?week?{week}",
+                    $"/api/v2/operatives/{operativePayrollNumber}?week={week}",
                     StatusCodes.Status404NotFound, "Not Found"
                 );
             }
