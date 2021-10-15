@@ -29,27 +29,13 @@ namespace BonusCalcApi.Tests
         {
             _connection = new NpgsqlConnection(ConnectionString.TestDatabase());
             _builder = new DbContextOptionsBuilder();
+            _connection.Open();
+            var npgsqlCommand = _connection.CreateCommand();
+            npgsqlCommand.CommandText = "SET deadlock_timeout TO 30";
+            npgsqlCommand.ExecuteNonQuery();
 
-            try
-            {
-                _connection.Open();
-                var npgsqlCommand = _connection.CreateCommand();
-                npgsqlCommand.CommandText = "SET deadlock_timeout TO 30";
-                npgsqlCommand.ExecuteNonQuery();
-
-                _builder.UseNpgsql(_connection)
-                    .UseSnakeCaseNamingConvention();
-            }
-            catch (NpgsqlException)
-            {
-                // No database fall back to in memory
-                _builder.UseInMemoryDatabase("integration")
-                    .UseSnakeCaseNamingConvention();
-                _builder.ConfigureWarnings(warningOptions =>
-                {
-                    warningOptions.Ignore(InMemoryEventId.TransactionIgnoredWarning);
-                });
-            }
+            _builder.UseNpgsql(_connection)
+                .UseSnakeCaseNamingConvention();
         }
 
         [SetUp]
