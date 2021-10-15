@@ -41,7 +41,7 @@ namespace BonusCalcApi.Tests
         [SetUp]
         public void BaseSetup()
         {
-            _factory = new MockWebApplicationFactory<TStartup>(_builder);
+            _factory = new MockWebApplicationFactory<TStartup>(_connection);
             Client = _factory.CreateClient();
             BonusCalcContext = new BonusCalcContext(_builder.Options);
             BonusCalcContext.Database.EnsureCreated();

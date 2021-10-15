@@ -5,24 +5,27 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 
 namespace BonusCalcApi.Tests
 {
     public class MockWebApplicationFactory<TStartup>
         : WebApplicationFactory<TStartup> where TStartup : class
     {
-        private readonly DbContextOptionsBuilder _builder;
+        private readonly DbConnection _connection;
 
-        public MockWebApplicationFactory(DbContextOptionsBuilder builder)
+        public MockWebApplicationFactory(DbConnection connection)
         {
-            _builder = builder;
+            _connection = connection;
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(services =>
             {
-                var context = new BonusCalcContext(_builder.Options);
+                var dbBuilder = new DbContextOptionsBuilder();
+                dbBuilder.UseNpgsql(_connection).UseSnakeCaseNamingConvention();
+                var context = new BonusCalcContext(dbBuilder.Options);
                 services.AddSingleton(context);
 
                 var serviceProvider = services.BuildServiceProvider();
