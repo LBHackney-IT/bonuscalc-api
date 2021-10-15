@@ -106,10 +106,10 @@ jobs:
       - setup_remote_docker
       - run:
           name: build
-          command: docker-compose build bonuscalc-api-test
+          command: docker compose build bonuscalc-api-test
       - run:
           name: Run tests
-          command: docker-compose run bonuscalc-api-test
+          command: docker compose run bonuscalc-api-test
   assume-role-development:
     executor: docker-python
     steps:
