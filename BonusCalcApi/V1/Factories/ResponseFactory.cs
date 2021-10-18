@@ -13,7 +13,7 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = operative.Id,
                 Name = operative.Name,
-                Trade = operative.Trade,
+                Trade = operative.Trade.ToResponse(),
                 Section = operative.Section,
                 Scheme = operative.Scheme,
                 SalaryBand = operative.SalaryBand,
@@ -66,6 +66,15 @@ namespace BonusCalcApi.V1.Factories
                 WeekDay = payElement.WeekDay,
                 WorkOrder = payElement.WorkOrder,
                 PayElementTypeId = payElement.PayElementTypeId
+            };
+        }
+
+        public static TradeResponse ToResponse(this Trade trade)
+        {
+            return new TradeResponse
+            {
+                Id = trade.Id,
+                Description = trade.Description
             };
         }
     }

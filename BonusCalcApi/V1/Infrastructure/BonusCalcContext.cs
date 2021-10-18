@@ -28,6 +28,11 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasIndex(bp => new { bp.Year, bp.Period })
                 .IsUnique();
 
+            modelBuilder.Entity<Operative>()
+                .HasOne(o => o.Trade)
+                .WithMany(t => t.Operatives)
+                .HasForeignKey(o => o.TradeId);
+
             modelBuilder.Entity<PayBand>()
                 .HasIndex(pb => new { pb.TradeId, pb.Band })
                 .IsUnique();

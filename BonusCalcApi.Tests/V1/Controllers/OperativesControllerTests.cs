@@ -64,15 +64,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.OK);
-            operativesResult.Should().BeEquivalentTo(operative, options => options
-                .Including(o => o.Id)
-                .Including(o => o.Name)
-                .Including(o => o.Trade)
-                .Including(o => o.Section)
-                .Including(o => o.Scheme)
-                .Including(o => o.SalaryBand)
-                .Including(o => o.FixedBand)
-                .Including(o => o.IsArchived));
+            operativesResult.Should().BeEquivalentTo(operative.ToResponse());
         }
 
         [Test]

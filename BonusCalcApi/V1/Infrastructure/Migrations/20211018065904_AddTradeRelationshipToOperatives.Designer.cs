@@ -3,15 +3,17 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211018065904_AddTradeRelationshipToOperatives")]
+    partial class AddTradeRelationshipToOperatives
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,9 +23,9 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BonusPeriod", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("BonusPeriodId")
                         .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnName("bonus_period_id");
 
                     b.Property<DateTime?>("ClosedAt")
                         .HasColumnType("timestamp without time zone")
@@ -41,7 +43,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("year");
 
-                    b.HasKey("Id")
+                    b.HasKey("BonusPeriodId")
                         .HasName("pk_bonus_periods");
 
                     b.HasIndex("StartAt")
@@ -286,9 +288,9 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Week", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("WeekId")
                         .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnName("week_id");
 
                     b.Property<string>("BonusPeriodId")
                         .HasColumnType("text")
@@ -306,7 +308,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("start_at");
 
-                    b.HasKey("Id")
+                    b.HasKey("WeekId")
                         .HasName("pk_weeks");
 
                     b.HasIndex("BonusPeriodId", "Number")

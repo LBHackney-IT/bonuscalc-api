@@ -19,7 +19,9 @@ namespace BonusCalcApi.V1.Gateways
 
         public async Task<Operative> GetAsync(string operativePayrollNumber)
         {
-            return await _context.Operatives.SingleOrDefaultAsync(o => o.Id == operativePayrollNumber);
+            return await _context.Operatives
+                .Include(o => o.Trade)
+                .SingleOrDefaultAsync(o => o.Id == operativePayrollNumber);
         }
     }
 }
