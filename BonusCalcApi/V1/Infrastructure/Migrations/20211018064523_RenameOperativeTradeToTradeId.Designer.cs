@@ -3,15 +3,17 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211018064523_RenameOperativeTradeToTradeId")]
+    partial class RenameOperativeTradeToTradeId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,9 +23,9 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BonusPeriod", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("BonusPeriodId")
                         .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnName("bonus_period_id");
 
                     b.Property<DateTime?>("ClosedAt")
                         .HasColumnType("timestamp without time zone")
@@ -41,7 +43,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("year");
 
-                    b.HasKey("Id")
+                    b.HasKey("BonusPeriodId")
                         .HasName("pk_bonus_periods");
 
                     b.HasIndex("StartAt")
@@ -94,15 +96,12 @@ namespace V1.Infrastructure.Migrations
 
                     b.Property<string>("TradeId")
                         .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
                         .HasColumnName("trade_id");
 
                     b.HasKey("Id")
                         .HasName("pk_operatives");
-
-                    b.HasIndex("TradeId")
-                        .HasDatabaseName("ix_operatives_trade_id");
 
                     b.ToTable("operatives");
                 });
@@ -286,9 +285,9 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Week", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("WeekId")
                         .HasColumnType("text")
-                        .HasColumnName("id");
+                        .HasColumnName("week_id");
 
                     b.Property<string>("BonusPeriodId")
                         .HasColumnType("text")
@@ -306,7 +305,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("start_at");
 
-                    b.HasKey("Id")
+                    b.HasKey("WeekId")
                         .HasName("pk_weeks");
 
                     b.HasIndex("BonusPeriodId", "Number")
@@ -314,18 +313,6 @@ namespace V1.Infrastructure.Migrations
                         .HasDatabaseName("ix_weeks_bonus_period_id_number");
 
                     b.ToTable("weeks");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Operative", b =>
-                {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Trade", "Trade")
-                        .WithMany("Operatives")
-                        .HasForeignKey("TradeId")
-                        .HasConstraintName("fk_operatives_trades_trade_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Trade");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayBand", b =>
@@ -412,8 +399,6 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Trade", b =>
                 {
-                    b.Navigation("Operatives");
-
                     b.Navigation("PayBands");
                 });
 
