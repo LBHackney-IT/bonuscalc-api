@@ -20,15 +20,4 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public decimal Value { get; set; }
     }
-
-    public class PayElementTypeResponse
-    {
-        public int Id { get; set; }
-
-        public string Description { get; set; }
-
-        public bool PayAtBand { get; set; }
-
-        public bool Paid { get; set; }
-    }
 }

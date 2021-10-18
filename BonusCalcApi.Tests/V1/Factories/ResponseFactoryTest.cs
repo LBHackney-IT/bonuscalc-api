@@ -41,7 +41,6 @@ namespace BonusCalcApi.Tests.V1.Factories
             payElementResponse.Address.Should().Be(payElement.Address);
             payElementResponse.Comment.Should().Be(payElement.Comment);
             payElementResponse.Duration.Should().Be(payElement.Duration);
-            payElementResponse.Productive.Should().Be(payElement.Productive);
             payElementResponse.Value.Should().Be(payElement.Value);
             payElementResponse.WeekDay.Should().Be(payElement.WeekDay);
             payElementResponse.WorkOrder.Should().Be(payElement.WorkOrder);
@@ -54,6 +53,8 @@ namespace BonusCalcApi.Tests.V1.Factories
             payElementTypeResponse.Description.Should().Be(payElementType.Description);
             payElementTypeResponse.PayAtBand.Should().Be(payElementType.PayAtBand);
             payElementTypeResponse.Paid.Should().Be(payElementType.Paid);
+            payElementTypeResponse.Productive.Should().Be(payElementType.Productive);
+            payElementTypeResponse.Adjustment.Should().Be(payElementType.Adjustment);
         }
 
         private static void ValidateWeek(WeekResponse weekResponse, Week week)

@@ -64,7 +64,6 @@ namespace BonusCalcApi.V1.Factories
                 Address = payElement.Address,
                 Comment = payElement.Comment,
                 Duration = payElement.Duration,
-                Productive = payElement.Productive,
                 Value = payElement.Value,
                 WeekDay = payElement.WeekDay,
                 WorkOrder = payElement.WorkOrder,
@@ -79,7 +78,9 @@ namespace BonusCalcApi.V1.Factories
                 Id = payElementType.Id,
                 Description = payElementType.Description,
                 PayAtBand = payElementType.PayAtBand,
-                Paid = payElementType.Paid
+                Paid = payElementType.Paid,
+                Productive = payElementType.Productive,
+                Adjustment = payElementType.Adjustment
             };
         }
 

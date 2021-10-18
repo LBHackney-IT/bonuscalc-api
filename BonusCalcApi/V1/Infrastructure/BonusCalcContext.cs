@@ -64,6 +64,14 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasIndex(pet => pet.Description)
                 .IsUnique();
 
+            modelBuilder.Entity<PayElementType>()
+                .Property(pet => pet.Productive)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<PayElementType>()
+                .Property(pet => pet.Adjustment)
+                .HasDefaultValue(false);
+
             modelBuilder.Entity<Timesheet>()
                 .HasIndex(t => new { t.OperativeId, t.WeekId })
                 .IsUnique();
