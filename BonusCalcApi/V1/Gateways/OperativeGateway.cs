@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Gateways.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using BonusCalcApi.V1.Infrastructure;
 

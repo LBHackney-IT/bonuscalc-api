@@ -19,6 +19,8 @@ services:
       - 5432:5432
     env_file:
       - database.env
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
 
   bonuscalc-api-test:
     image: bonuscalc-api-test
@@ -37,6 +39,8 @@ services:
   test-database:
     image: postgres:12
     ports:
-      - 5432:5432
+      - 5435:5432
     env_file:
       - database.env
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d

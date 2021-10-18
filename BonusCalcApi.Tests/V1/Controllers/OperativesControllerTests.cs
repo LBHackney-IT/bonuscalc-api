@@ -9,6 +9,7 @@ using NUnit.Framework;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Controllers;
 using BonusCalcApi.V1.Controllers.Helpers;
+using BonusCalcApi.V1.Factories;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
 
@@ -24,20 +25,22 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
         private OperativesController _classUnderTest;
         private MockOperativeHelpers _operativeHelpers;
+        private Mock<IGetOperativeTimesheetUseCase> _getOperativesTimesheetUseCaseMock;
 
         [SetUp]
         public void SetUp()
         {
-
             _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
             _getOperativeUseCaseMock = new Mock<IGetOperativeUseCase>();
+            _getOperativesTimesheetUseCaseMock = new Mock<IGetOperativeTimesheetUseCase>();
             _operativeHelpers = new MockOperativeHelpers();
             _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
             _classUnderTest = new OperativesController(
                 _operativeHelpers.Object,
-                _getOperativeUseCaseMock.Object
+                _getOperativeUseCaseMock.Object,
+                _getOperativesTimesheetUseCaseMock.Object
             );
 
             // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
@@ -111,12 +114,49 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Arrange
 
             // Act
-            var objectResult = await _classUnderTest.GetNonProductiveTime("bad");
+            var objectResult = await _classUnderTest.GetTimesheet("bad", "week");
             var statusCode = GetStatusCode(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.BadRequest);
             _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task GetsTimesheet()
+        {
+            // Arrange
+            var expectedTimesheet = _fixture.Create<Timesheet>();
+            _getOperativesTimesheetUseCaseMock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(expectedTimesheet);
+            _operativeHelpers.ValidPrn(true);
+
+            // Act
+            var objectResult = await _classUnderTest.GetTimesheet(expectedTimesheet.OperativeId, expectedTimesheet.WeekId);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<TimesheetResponse>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Should().BeEquivalentTo(expectedTimesheet.ToResponse());
+        }
+
+        [Test]
+        public async Task Returns404WhenNoTimesheetFound()
+        {
+            // Arrange
+            var expectedTimesheet = _fixture.Create<Timesheet>();
+            _getOperativesTimesheetUseCaseMock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(null as Timesheet);
+            _operativeHelpers.ValidPrn(true);
+
+            // Act
+            var objectResult = await _classUnderTest.GetTimesheet(expectedTimesheet.OperativeId, expectedTimesheet.WeekId);
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.NotFound);
         }
     }
 

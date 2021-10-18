@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace BonusCalcApi.V1.Infrastructure
+namespace BonusCalcApi.V1.Boundary.Response
 {
-    public class BonusPeriod
+    public class BonusPeriodResponse
     {
-        [Key]
         public string Id { get; set; }
 
         public DateTime StartAt { get; set; }
@@ -16,7 +13,5 @@ namespace BonusCalcApi.V1.Infrastructure
         public int Period { get; set; }
 
         public DateTime? ClosedAt { get; set; }
-
-        public List<Week> Weeks { get; set; }
     }
 }

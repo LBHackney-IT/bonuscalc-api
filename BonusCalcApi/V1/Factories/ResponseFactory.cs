@@ -21,5 +21,52 @@ namespace BonusCalcApi.V1.Factories
                 IsArchived = operative.IsArchived
             };
         }
+
+        public static TimesheetResponse ToResponse(this Timesheet timesheet)
+        {
+            return new TimesheetResponse
+            {
+                Id = timesheet.Id,
+                Week = timesheet.Week.ToResponse(),
+                PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).ToList()
+            };
+        }
+        public static WeekResponse ToResponse(this Week week)
+        {
+            return new WeekResponse
+            {
+                Id = week.Id,
+                Number = week.Number,
+                BonusPeriod = week.BonusPeriod.ToResponse(),
+                ClosedAt = week.ClosedAt,
+                StartAt = week.StartAt
+            };
+        }
+        public static BonusPeriodResponse ToResponse(this BonusPeriod bonusPeriod)
+        {
+            return new BonusPeriodResponse
+            {
+                Id = bonusPeriod.Id,
+                Period = bonusPeriod.Period,
+                Year = bonusPeriod.Year,
+                ClosedAt = bonusPeriod.ClosedAt,
+                StartAt = bonusPeriod.StartAt
+            };
+        }
+        public static PayElementResponse ToResponse(this PayElement payElement)
+        {
+            return new PayElementResponse
+            {
+                Id = payElement.Id,
+                Address = payElement.Address,
+                Comment = payElement.Comment,
+                Duration = payElement.Duration,
+                Productive = payElement.Productive,
+                Value = payElement.Value,
+                WeekDay = payElement.WeekDay,
+                WorkOrder = payElement.WorkOrder,
+                PayElementTypeId = payElement.PayElementTypeId
+            };
+        }
     }
 }

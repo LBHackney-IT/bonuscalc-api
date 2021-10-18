@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reflection;
 using BonusCalcApi.V1.Controllers;
 using Amazon.XRay.Recorder.Handlers.AwsSdk;
+using BonusCalcApi.V1.Controllers.Helpers;
 using BonusCalcApi.V1.Gateways;
+using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase;
 using BonusCalcApi.V1.UseCase.Interfaces;
@@ -119,6 +121,7 @@ namespace BonusCalcApi
 
             RegisterGateways(services);
             RegisterUseCases(services);
+            RegisterHelpers(services);
 
             services.Configure<OperativesGatewayOptions>(Configuration.GetSection(OperativesGatewayOptions.OpGatewayOptionsName));
         }
@@ -184,11 +187,18 @@ namespace BonusCalcApi
             services.AddScoped<IApiGateway, ApiGateway>();
             services.AddScoped<IOperativeGateway, OperativeGateway>();
             services.AddScoped<IOperativesGateway, OperativesGateway>();
+            services.AddScoped<ITimesheetGateway, TimesheetGateway>();
         }
 
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
+            services.AddTransient<IGetOperativeTimesheetUseCase, GetOperativeTimesheetUseCase>();
+        }
+
+        private static void RegisterHelpers(IServiceCollection services)
+        {
+            services.AddTransient<IOperativeHelpers, OperativeHelpers>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
