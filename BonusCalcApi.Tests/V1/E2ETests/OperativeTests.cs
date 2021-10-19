@@ -117,7 +117,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             var week = _fixture.Build<Week>()
                 .Without(w => w.Timesheets)
                 .Create();
-            await BonusCalcContext.Weeks.AddAsync(week);
+            await Context.Weeks.AddAsync(week);
 
             if (!(payElementsTypes is null))
             {
@@ -135,16 +135,16 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 .With(t => t.WeekId, week.Id)
                 .Without(t => t.Week)
                 .Create();
-            await BonusCalcContext.Timesheets.AddAsync(timesheet);
-            await BonusCalcContext.SaveChangesAsync();
+            await Context.Timesheets.AddAsync(timesheet);
+            await Context.SaveChangesAsync();
             return timesheet;
         }
 
         private async Task<Operative> SeedOperative()
         {
             var operative = FixtureHelpers.CreateOperative();
-            await BonusCalcContext.Operatives.AddAsync(operative);
-            await BonusCalcContext.SaveChangesAsync();
+            await Context.Operatives.AddAsync(operative);
+            await Context.SaveChangesAsync();
             return operative;
         }
 
@@ -153,8 +153,8 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             var types = _fixture.Build<PayElementType>()
                 .Without(pet => pet.PayElements)
                 .CreateMany();
-            await BonusCalcContext.PayElementTypes.AddRangeAsync(types);
-            await BonusCalcContext.SaveChangesAsync();
+            await Context.PayElementTypes.AddRangeAsync(types);
+            await Context.SaveChangesAsync();
             return types;
         }
     }

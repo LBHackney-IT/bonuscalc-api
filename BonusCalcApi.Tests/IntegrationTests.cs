@@ -17,12 +17,12 @@ namespace BonusCalcApi.Tests
     public class IntegrationTests<TStartup> where TStartup : class
     {
         protected HttpClient Client { get; private set; }
-        protected BonusCalcContext BonusCalcContext { get; private set; }
+        protected BonusCalcContext Context => _factory.Context;
 
         private MockWebApplicationFactory<TStartup> _factory;
         private IDbContextTransaction _transaction;
         private DbContextOptionsBuilder _builder;
-        private bool _usePostgres = Environment.GetEnvironmentVariable("DB_TYPE") == "postgres";
+        private readonly bool _usePostgres = Environment.GetEnvironmentVariable("DB_TYPE") == "postgres";
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -50,9 +50,9 @@ namespace BonusCalcApi.Tests
         {
             _factory = new MockWebApplicationFactory<TStartup>(_builder);
             Client = _factory.CreateClient();
-            BonusCalcContext = new BonusCalcContext(_builder.Options);
-            BonusCalcContext.Database.EnsureCreated();
-            _transaction = BonusCalcContext.Database.BeginTransaction();
+            // BonusCalcContext = new BonusCalcContext(_builder.Options);
+            _factory.Context.Database.EnsureCreated();
+            _transaction = _factory.Context.Database.BeginTransaction();
         }
 
         [TearDown]
@@ -62,7 +62,7 @@ namespace BonusCalcApi.Tests
             _factory.Dispose();
             _transaction.Rollback();
             _transaction.Dispose();
-            if (!_usePostgres) BonusCalcContext.Database.EnsureDeleted();
+            if (!_usePostgres) _factory.Context.Database.EnsureDeleted();
         }
 
         public async Task<(HttpStatusCode statusCode, TResponse response)> Get<TResponse>(string address)
