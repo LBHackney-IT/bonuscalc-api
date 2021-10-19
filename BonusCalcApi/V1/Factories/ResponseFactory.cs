@@ -49,7 +49,7 @@ namespace BonusCalcApi.V1.Factories
             return new BonusPeriodResponse
             {
                 Id = bonusPeriod.Id,
-                Period = bonusPeriod.Period,
+                Number = bonusPeriod.Number,
                 Year = bonusPeriod.Year,
                 ClosedAt = bonusPeriod.ClosedAt,
                 StartAt = bonusPeriod.StartAt

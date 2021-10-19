@@ -68,7 +68,7 @@ namespace BonusCalcApi.Tests.V1.Factories
 
         private static void ValidateBonusPeriod(BonusPeriodResponse bonusPeriodResponse, BonusPeriod bonusPeriod)
         {
-            bonusPeriodResponse.Period.Should().Be(bonusPeriod.Period);
+            bonusPeriodResponse.Number.Should().Be(bonusPeriod.Number);
             bonusPeriodResponse.Year.Should().Be(bonusPeriod.Year);
             bonusPeriodResponse.ClosedAt.Should().Be(bonusPeriod.ClosedAt);
             bonusPeriodResponse.StartAt.Should().Be(bonusPeriod.StartAt);

@@ -25,7 +25,7 @@ namespace BonusCalcApi.V1.Infrastructure
                 .IsUnique();
 
             modelBuilder.Entity<BonusPeriod>()
-                .HasIndex(bp => new { bp.Year, bp.Period })
+                .HasIndex(bp => new { bp.Year, bp.Number })
                 .IsUnique();
 
             modelBuilder.Entity<Operative>()
