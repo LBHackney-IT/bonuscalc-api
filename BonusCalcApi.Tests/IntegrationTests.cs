@@ -50,7 +50,6 @@ namespace BonusCalcApi.Tests
         {
             _factory = new MockWebApplicationFactory<TStartup>(_builder);
             Client = _factory.CreateClient();
-            // BonusCalcContext = new BonusCalcContext(_builder.Options);
             _factory.Context.Database.EnsureCreated();
             _transaction = _factory.Context.Database.BeginTransaction();
         }
