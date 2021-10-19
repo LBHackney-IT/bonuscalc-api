@@ -32,7 +32,6 @@ namespace BonusCalcApi.V1.Infrastructure
             Address = payElement.Address;
             Comment = payElement.Comment;
             Duration = payElement.Duration;
-            Productive = payElement.Productive;
             Value = payElement.Value;
             WeekDay = payElement.WeekDay;
             WorkOrder = payElement.WorkOrder;

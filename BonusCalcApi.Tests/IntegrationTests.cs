@@ -22,15 +22,14 @@ namespace BonusCalcApi.Tests
         private MockWebApplicationFactory<TStartup> _factory;
         private IDbContextTransaction _transaction;
         private DbContextOptionsBuilder _builder;
+        private bool _usePostgres = Environment.GetEnvironmentVariable("DB_TYPE") == "postgres";
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            var usePostgres = Environment.GetEnvironmentVariable("DB_TYPE") == "postgres";
-
             _builder = new DbContextOptionsBuilder();
 
-            if (usePostgres)
+            if (_usePostgres)
             {
                 _builder.UseNpgsql(ConnectionString.TestDatabase())
                     .UseSnakeCaseNamingConvention();
@@ -63,6 +62,7 @@ namespace BonusCalcApi.Tests
             _factory.Dispose();
             _transaction.Rollback();
             _transaction.Dispose();
+            if (!_usePostgres) BonusCalcContext.Database.EnsureDeleted();
         }
 
         public async Task<(HttpStatusCode statusCode, TResponse response)> Get<TResponse>(string address)

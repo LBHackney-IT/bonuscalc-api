@@ -94,12 +94,12 @@ namespace BonusCalcApi.Tests.V1.E2ETests
         }
         private static void ValidatePayElement(PayElementResponse payElement, PayElementUpdate expectedPayElement)
         {
-            payElement.Should().BeEquivalentTo(expectedPayElement.ToDb(), options => options
-                .Excluding(pe => pe.Id)
-                .Excluding(pe => pe.Timesheet)
-                .Excluding(pe => pe.PayElementType)
-                .Excluding(pe => pe.TimesheetId)
-            );
+            payElement.Address.Should().Be(expectedPayElement.Address);
+            payElement.Comment.Should().Be(expectedPayElement.Comment);
+            payElement.Duration.Should().Be(expectedPayElement.Duration);
+            payElement.Value.Should().Be(expectedPayElement.Value);
+            payElement.WeekDay.Should().Be(expectedPayElement.WeekDay);
+            payElement.WorkOrder.Should().Be(expectedPayElement.WorkOrder);
         }
         private PayElementUpdate CreatePayElementUpdate(IEnumerable<PayElementType> payElementsTypes)
         {

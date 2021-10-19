@@ -13,7 +13,6 @@ namespace BonusCalcApi.V1.Factories
                 Address = payElementUpdate.Address,
                 Comment = payElementUpdate.Comment,
                 Duration = payElementUpdate.Duration,
-                Productive = payElementUpdate.Productive,
                 Value = payElementUpdate.Value,
                 WeekDay = payElementUpdate.WeekDay,
                 WorkOrder = payElementUpdate.WorkOrder,

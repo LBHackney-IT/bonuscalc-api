@@ -31,7 +31,6 @@ namespace BonusCalcApi.Tests.V1.Factories
             result.Address.Should().Be(payElementUpdate.Address);
             result.Comment.Should().Be(payElementUpdate.Comment);
             result.Duration.Should().Be(payElementUpdate.Duration);
-            result.Productive.Should().Be(payElementUpdate.Productive);
             result.Value.Should().Be(payElementUpdate.Value);
             result.WeekDay.Should().Be(payElementUpdate.WeekDay);
             result.WorkOrder.Should().Be(payElementUpdate.WorkOrder);
