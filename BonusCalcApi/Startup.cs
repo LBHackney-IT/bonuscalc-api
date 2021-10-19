@@ -124,6 +124,7 @@ namespace BonusCalcApi
             RegisterHelpers(services);
 
             services.Configure<OperativesGatewayOptions>(Configuration.GetSection(OperativesGatewayOptions.OpGatewayOptionsName));
+            services.AddTransient<IDbSaver, DbSaver>();
         }
 
         private void AddHttpClients(IServiceCollection services)
@@ -194,11 +195,13 @@ namespace BonusCalcApi
         {
             services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
             services.AddTransient<IGetOperativeTimesheetUseCase, GetOperativeTimesheetUseCase>();
+            services.AddTransient<IUpdateTimesheetUseCase, UpdateTimesheetUseCase>();
         }
 
         private static void RegisterHelpers(IServiceCollection services)
         {
             services.AddTransient<IOperativeHelpers, OperativeHelpers>();
+            services.AddTransient<IDbSaver, DbSaver>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,7 +6,7 @@ namespace BonusCalcApi.Tests.V1.Helpers
 {
     public static class FixtureHelpers
     {
-        public static Fixture Fixture { get; set; } = CreateFixture();
+        public static Fixture Fixture => CreateFixture();
         private static Fixture CreateFixture()
         {
             var fixture = new Fixture();

@@ -1,8 +1,10 @@
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using BonusCalcApi.Tests.V1.Controllers.Mocks;
 using BonusCalcApi.Tests.V1.Helpers.Mocks;
+using BonusCalcApi.V1.Boundary.Request;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -26,6 +28,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private OperativesController _classUnderTest;
         private MockOperativeHelpers _operativeHelpers;
         private Mock<IGetOperativeTimesheetUseCase> _getOperativesTimesheetUseCaseMock;
+        private Mock<IUpdateTimesheetUseCase> _updateTimesheetUseCaseMock;
 
         [SetUp]
         public void SetUp()
@@ -34,13 +37,15 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             _getOperativeUseCaseMock = new Mock<IGetOperativeUseCase>();
             _getOperativesTimesheetUseCaseMock = new Mock<IGetOperativeTimesheetUseCase>();
+            _updateTimesheetUseCaseMock = new Mock<IUpdateTimesheetUseCase>();
             _operativeHelpers = new MockOperativeHelpers();
             _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
             _classUnderTest = new OperativesController(
                 _operativeHelpers.Object,
                 _getOperativeUseCaseMock.Object,
-                _getOperativesTimesheetUseCaseMock.Object
+                _getOperativesTimesheetUseCaseMock.Object,
+                _updateTimesheetUseCaseMock.Object
             );
 
             // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
@@ -101,12 +106,26 @@ namespace BonusCalcApi.Tests.V1.Controllers
         }
 
         [Test]
-        public async Task GetUnproductiveTimeReturnsBadRequestIfPayrollNumberIsInvalid()
+        public async Task GetTimesheetReturnsBadRequestIfPayrollNumberIsInvalid()
         {
             // Arrange
 
             // Act
             var objectResult = await _classUnderTest.GetTimesheet("bad", "week");
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task UpdateTimesheetReturnsBadRequestIfPayrollNumberIsInvalid()
+        {
+            // Arrange
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateTimesheet(new TimesheetUpdateRequest(), "bad", "week");
             var statusCode = GetStatusCode(objectResult);
 
             // Assert
@@ -149,6 +168,24 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.NotFound);
             _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task UpdatesTimesheet()
+        {
+            // Arrange
+            const string expectedOperativeId = "operative_id";
+            const string expectedWeekId = "week_id";
+            _operativeHelpers.ValidPrn(true);
+            var updateRequest = _fixture.Create<TimesheetUpdateRequest>();
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateTimesheet(updateRequest, expectedOperativeId, expectedWeekId);
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            _updateTimesheetUseCaseMock.Verify(x => x.Execute(updateRequest, expectedOperativeId, expectedWeekId));
         }
     }
 

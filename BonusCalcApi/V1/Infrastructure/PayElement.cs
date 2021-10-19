@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using BonusCalcApi.V1.Boundary.Request;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
@@ -25,5 +26,16 @@ namespace BonusCalcApi.V1.Infrastructure
         public decimal Duration { get; set; }
 
         public decimal Value { get; set; }
+
+        public void UpdateFrom(PayElementUpdate payElement)
+        {
+            Address = payElement.Address;
+            Comment = payElement.Comment;
+            Duration = payElement.Duration;
+            Value = payElement.Value;
+            WeekDay = payElement.WeekDay;
+            WorkOrder = payElement.WorkOrder;
+            PayElementTypeId = payElement.PayElementTypeId;
+        }
     }
 }
