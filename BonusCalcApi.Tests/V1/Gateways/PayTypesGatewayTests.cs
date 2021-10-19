@@ -1,11 +1,9 @@
 using AutoFixture;
+using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
 using FluentAssertions;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BonusCalcApi.Tests.V1.Gateways
@@ -18,8 +16,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         [SetUp]
         public void Setup()
         {
-            _fixture = new Fixture();// FixtureHelpers.Fixture;
-            _fixture.Behaviors.Add(new OmitOnRecursionBehavior()); // remove when line above is replaced
+            _fixture = FixtureHelpers.Fixture;
 
             _classUnderTest = new PayElementTypeGateway(InMemoryDb.Instance);
         }

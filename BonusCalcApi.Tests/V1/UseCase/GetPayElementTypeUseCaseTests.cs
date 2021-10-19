@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using AutoFixture;
+using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase;
@@ -19,9 +20,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
         [SetUp]
         public void Setup()
         {
-            _fixture = new Fixture();
-            _fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
-            _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+            _fixture = FixtureHelpers.Fixture;
             _mockPayElementTypeGateway = new Mock<IPayElementTypesGateway>();
             _classUnderTest = new GetPayElementTypeUseCase(_mockPayElementTypeGateway.Object);
         }
