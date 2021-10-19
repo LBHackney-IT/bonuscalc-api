@@ -22,8 +22,6 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public string Comment { get; set; }
 
-        public bool Productive { get; set; }
-
         public decimal Duration { get; set; }
 
         public decimal Value { get; set; }

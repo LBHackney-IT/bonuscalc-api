@@ -25,8 +25,13 @@ namespace BonusCalcApi.V1.Infrastructure
                 .IsUnique();
 
             modelBuilder.Entity<BonusPeriod>()
-                .HasIndex(bp => new { bp.Year, bp.Period })
+                .HasIndex(bp => new { bp.Year, bp.Number })
                 .IsUnique();
+
+            modelBuilder.Entity<Operative>()
+                .HasOne(o => o.Trade)
+                .WithMany(t => t.Operatives)
+                .HasForeignKey(o => o.TradeId);
 
             modelBuilder.Entity<PayBand>()
                 .HasIndex(pb => new { pb.TradeId, pb.Band })
@@ -58,6 +63,14 @@ namespace BonusCalcApi.V1.Infrastructure
             modelBuilder.Entity<PayElementType>()
                 .HasIndex(pet => pet.Description)
                 .IsUnique();
+
+            modelBuilder.Entity<PayElementType>()
+                .Property(pet => pet.Productive)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<PayElementType>()
+                .Property(pet => pet.Adjustment)
+                .HasDefaultValue(false);
 
             modelBuilder.Entity<Timesheet>()
                 .HasIndex(t => new { t.OperativeId, t.WeekId })

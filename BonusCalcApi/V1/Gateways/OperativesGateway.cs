@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using BonusCalcApi.V1.Exceptions;
+using BonusCalcApi.V1.Gateways.Interfaces;
 
 namespace BonusCalcApi.V1.Gateways
 {

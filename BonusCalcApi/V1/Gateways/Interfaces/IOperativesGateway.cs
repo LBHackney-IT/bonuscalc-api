@@ -1,7 +1,7 @@
-using BonusCalcApi.V1.Boundary.Response;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Boundary.Response;
 
-namespace BonusCalcApi.V1.UseCase.Interfaces
+namespace BonusCalcApi.V1.Gateways.Interfaces
 {
     public interface IOperativesGateway
     {

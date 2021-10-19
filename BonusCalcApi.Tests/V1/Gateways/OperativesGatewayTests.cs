@@ -6,6 +6,7 @@ using AutoFixture;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Exceptions;
 using BonusCalcApi.V1.Gateways;
+using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.UseCase;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;

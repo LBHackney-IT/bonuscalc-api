@@ -3,15 +3,17 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211015092020_RenameIds")]
+    partial class RenameIds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +31,9 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("closed_at");
 
-                    b.Property<int>("Number")
+                    b.Property<int>("Period")
                         .HasColumnType("integer")
-                        .HasColumnName("number");
+                        .HasColumnName("period");
 
                     b.Property<DateTime>("StartAt")
                         .HasColumnType("timestamp without time zone")
@@ -48,9 +50,9 @@ namespace V1.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("ix_bonus_periods_start_at");
 
-                    b.HasIndex("Year", "Number")
+                    b.HasIndex("Year", "Period")
                         .IsUnique()
-                        .HasDatabaseName("ix_bonus_periods_year_number");
+                        .HasDatabaseName("ix_bonus_periods_year_period");
 
                     b.ToTable("bonus_periods");
                 });
@@ -92,17 +94,14 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("character varying(10)")
                         .HasColumnName("section");
 
-                    b.Property<string>("TradeId")
+                    b.Property<string>("Trade")
                         .IsRequired()
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)")
-                        .HasColumnName("trade_id");
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("trade");
 
                     b.HasKey("Id")
                         .HasName("pk_operatives");
-
-                    b.HasIndex("TradeId")
-                        .HasDatabaseName("ix_operatives_trade_id");
 
                     b.ToTable("operatives");
                 });
@@ -164,6 +163,10 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("pay_element_type_id");
 
+                    b.Property<bool>("Productive")
+                        .HasColumnType("boolean")
+                        .HasColumnName("productive");
+
                     b.Property<int>("TimesheetId")
                         .HasColumnType("integer")
                         .HasColumnName("timesheet_id");
@@ -202,12 +205,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnName("id")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<bool>("Adjustment")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("adjustment");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -221,12 +218,6 @@ namespace V1.Infrastructure.Migrations
                     b.Property<bool>("PayAtBand")
                         .HasColumnType("boolean")
                         .HasColumnName("pay_at_band");
-
-                    b.Property<bool>("Productive")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("productive");
 
                     b.HasKey("Id")
                         .HasName("pk_pay_element_types");
@@ -324,18 +315,6 @@ namespace V1.Infrastructure.Migrations
                     b.ToTable("weeks");
                 });
 
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Operative", b =>
-                {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Trade", "Trade")
-                        .WithMany("Operatives")
-                        .HasForeignKey("TradeId")
-                        .HasConstraintName("fk_operatives_trades_trade_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Trade");
-                });
-
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayBand", b =>
                 {
                     b.HasOne("BonusCalcApi.V1.Infrastructure.Trade", "Trade")
@@ -420,8 +399,6 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Trade", b =>
                 {
-                    b.Navigation("Operatives");
-
                     b.Navigation("PayBands");
                 });
 
