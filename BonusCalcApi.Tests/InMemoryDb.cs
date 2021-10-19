@@ -2,12 +2,14 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Moq;
 
 namespace BonusCalcApi.Tests
 {
     public static class InMemoryDb
     {
         private static BonusCalcContext _context;
+        private static MockDbSaver _dbSaver;
 
         public static BonusCalcContext Instance
         {
@@ -31,9 +33,13 @@ namespace BonusCalcApi.Tests
             }
         }
 
+        public static MockDbSaver DbSaver => _dbSaver ??= new MockDbSaver();
+
         public static void Teardown()
         {
             _context = null;
+            _dbSaver = null;
         }
     }
+
 }

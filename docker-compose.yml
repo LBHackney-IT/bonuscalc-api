@@ -33,6 +33,7 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=mypassword
       - DB_DATABASE=testdb
+      - DB_TYPE=postgres
     depends_on:
       - test-database
 

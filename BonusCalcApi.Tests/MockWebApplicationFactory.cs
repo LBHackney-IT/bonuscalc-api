@@ -1,10 +1,15 @@
+using System;
 using System.Data.Common;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.TestPlatform.CoreUtilities.Helpers;
 using Npgsql;
 
 namespace BonusCalcApi.Tests
@@ -12,21 +17,19 @@ namespace BonusCalcApi.Tests
     public class MockWebApplicationFactory<TStartup>
         : WebApplicationFactory<TStartup> where TStartup : class
     {
-        private readonly DbConnection _connection;
+        private readonly DbContextOptionsBuilder _builder;
 
-        public MockWebApplicationFactory(DbConnection connection)
+        public MockWebApplicationFactory(DbContextOptionsBuilder builder)
         {
-            _connection = connection;
+            _builder = builder;
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(services =>
             {
-                var dbBuilder = new DbContextOptionsBuilder();
-                dbBuilder.UseNpgsql(_connection).UseSnakeCaseNamingConvention();
-                var context = new BonusCalcContext(dbBuilder.Options);
-                services.AddSingleton(context);
+                Context = new BonusCalcContext(_builder.Options);
+                services.AddSingleton(Context);
 
                 var serviceProvider = services.BuildServiceProvider();
                 var dbContext = serviceProvider.GetRequiredService<BonusCalcContext>();
@@ -34,5 +37,6 @@ namespace BonusCalcApi.Tests
                 dbContext.Database.EnsureCreated();
             });
         }
+        public BonusCalcContext Context { get; set; }
     }
 }

@@ -20,28 +20,36 @@ namespace BonusCalcApi.Tests
         protected BonusCalcContext BonusCalcContext { get; private set; }
 
         private MockWebApplicationFactory<TStartup> _factory;
-        private NpgsqlConnection _connection;
         private IDbContextTransaction _transaction;
         private DbContextOptionsBuilder _builder;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _connection = new NpgsqlConnection(ConnectionString.TestDatabase());
-            _connection.Open();
-            var npgsqlCommand = _connection.CreateCommand();
-            npgsqlCommand.CommandText = "SET deadlock_timeout TO 30";
-            npgsqlCommand.ExecuteNonQuery();
+            var usePostgres = Environment.GetEnvironmentVariable("DB_TYPE") == "postgres";
 
             _builder = new DbContextOptionsBuilder();
-            _builder.UseNpgsql(_connection)
-                .UseSnakeCaseNamingConvention();
+
+            if (usePostgres)
+            {
+                _builder.UseNpgsql(ConnectionString.TestDatabase())
+                    .UseSnakeCaseNamingConvention();
+            }
+            else
+            {
+                _builder.UseInMemoryDatabase("integration")
+                    .UseSnakeCaseNamingConvention();
+                _builder.ConfigureWarnings(warningOptions =>
+                {
+                    warningOptions.Ignore(InMemoryEventId.TransactionIgnoredWarning);
+                });
+            }
         }
 
         [SetUp]
         public void BaseSetup()
         {
-            _factory = new MockWebApplicationFactory<TStartup>(_connection);
+            _factory = new MockWebApplicationFactory<TStartup>(_builder);
             Client = _factory.CreateClient();
             BonusCalcContext = new BonusCalcContext(_builder.Options);
             BonusCalcContext.Database.EnsureCreated();
@@ -115,7 +123,7 @@ namespace BonusCalcApi.Tests
             }
             catch (Exception e) when (e is JsonSerializationException || e is JsonReaderException)
             {
-                throw new Exception($"Result Serialisation Failed. Response Had Code {result.StatusCode}", e);
+                throw new Exception($"Result Serialisation Failed. Response Had Code {result.StatusCode}, Response: {responseContent}", e);
             }
         }
     }
