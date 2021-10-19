@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BonusCalcApi.Tests.V1.Controllers
 {
     [TestFixture]
-    public class PaymentElementTypeController
+    public class PayElementTypeController
     {
         private readonly Fixture _fixture = new Fixture();
         private Mock<IGetPayElementTypeUseCase> _getPaymentUseCaseMock;
@@ -26,10 +26,10 @@ namespace BonusCalcApi.Tests.V1.Controllers
         public void Returns404IfPaymentIsNotFound()
         {
             // Arrange
-            var expectedPayment = _fixture.Create<Timesheet>();
+           /* var expectedPayment = _fixture.Create<Timesheet>();
             _getPaymentUseCaseMock
                 .Setup(m => m.ExecuteAsync(It.IsAny<string>()))
-                .ReturnsAsync((PayElement) null);
+                .ReturnsAsync((PayElement) null);*/
 
             // Act
             //var objectResult = await .GetOperative("000000");

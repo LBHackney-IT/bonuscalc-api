@@ -10,15 +10,16 @@ namespace BonusCalcApi.V1.UseCase
 {
     public class GetPayElementTypeUseCase : IGetPayElementTypeUseCase
     {
-        /*public GetPaymentUseCase(IPaymentGateway payment)
+        private IPayElementTypesGateway _payElementType;
+
+        public GetPayElementTypeUseCase(IPayElementTypesGateway payElementType)
         {
-            Object = @object;
+            _payElementType = payElementType;
         }
 
-        public IPaymentGateway Object { get; }*/
-        public Task<PayElementType> ExecuteAsync(string operativePayrollNumber)
+        public async Task<IEnumerable<PayElementType>> ExecuteAsync()
         {
-            throw new NotImplementedException();
+            return await _payElementType.GetPayElementTypesAsync();
         }
     }
 }

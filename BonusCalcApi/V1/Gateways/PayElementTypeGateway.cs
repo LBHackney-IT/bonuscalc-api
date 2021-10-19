@@ -15,12 +15,9 @@ namespace BonusCalcApi.V1.Gateways
             _context = context;
         }
 
-        public async Task<PayElementType> GetPayTypesAsync(string weekId)
+        public async Task<IEnumerable<PayElementType>> GetPayElementTypesAsync()
         {
-            var d = weekId;
-            return await _context.PayElementTypes
-                //.Where(x => x. == weekId)
-                .SingleOrDefaultAsync();
+            return await _context.PayElementTypes.ToListAsync();
         }
     }
 }

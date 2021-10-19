@@ -1,10 +1,11 @@
 using BonusCalcApi.V1.Infrastructure;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BonusCalcApi.V1.UseCase.Interfaces
 {
     public interface IGetPayElementTypeUseCase
     {
-        Task<PayElementType> ExecuteAsync(string operativePayrollNumber);
+        Task<IEnumerable<PayElementType>> ExecuteAsync();
     }
 }

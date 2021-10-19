@@ -29,7 +29,7 @@ namespace BonusCalcApi.V1.Controllers
         public async Task<IActionResult> GetPaymentType([FromRoute][Required] string payElementTypeId)
         
         {
-            var payment = await _getPaymentUseCase.ExecuteAsync(payElementTypeId);
+            var payment = await _getPaymentUseCase.ExecuteAsync();
             if (payment is null)
             {
                 return Problem(
