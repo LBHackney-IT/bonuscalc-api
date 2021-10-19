@@ -10,7 +10,7 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public int Year { get; set; }
 
-        public int Period { get; set; }
+        public int Number { get; set; }
 
         public DateTime? ClosedAt { get; set; }
     }
