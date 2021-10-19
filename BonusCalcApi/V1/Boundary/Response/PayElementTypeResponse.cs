@@ -1,15 +1,9 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace BonusCalcApi.V1.Infrastructure
+namespace BonusCalcApi.V1.Boundary.Response
 {
-    public class PayElementType
+    public class PayElementTypeResponse
     {
-        [Key]
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(100)]
         public string Description { get; set; }
 
         public bool PayAtBand { get; set; }
@@ -19,7 +13,5 @@ namespace BonusCalcApi.V1.Infrastructure
         public bool Productive { get; set; }
 
         public bool Adjustment { get; set; }
-
-        public List<PayElement> PayElements { get; set; }
     }
 }
