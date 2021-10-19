@@ -13,6 +13,8 @@ namespace BonusCalcApi.V1.Infrastructure
         [StringLength(100)]
         public string Description { get; set; }
 
+        public List<Operative> Operatives { get; set; }
+
         public List<PayBand> PayBands { get; set; }
     }
 }

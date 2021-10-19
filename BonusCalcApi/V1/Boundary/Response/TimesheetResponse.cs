@@ -8,5 +8,4 @@ namespace BonusCalcApi.V1.Boundary.Response
         public WeekResponse Week { get; set; }
         public List<PayElementResponse> PayElements { get; set; }
     }
-
 }

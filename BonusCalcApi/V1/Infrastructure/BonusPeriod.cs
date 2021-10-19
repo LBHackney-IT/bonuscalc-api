@@ -13,7 +13,7 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public int Year { get; set; }
 
-        public int Period { get; set; }
+        public int Number { get; set; }
 
         public DateTime? ClosedAt { get; set; }
 

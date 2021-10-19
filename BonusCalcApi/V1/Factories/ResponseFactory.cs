@@ -13,7 +13,7 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = operative.Id,
                 Name = operative.Name,
-                Trade = operative.Trade,
+                Trade = operative.Trade.ToResponse(),
                 Section = operative.Section,
                 Scheme = operative.Scheme,
                 SalaryBand = operative.SalaryBand,
@@ -31,6 +31,7 @@ namespace BonusCalcApi.V1.Factories
                 PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).ToList()
             };
         }
+
         public static WeekResponse ToResponse(this Week week)
         {
             return new WeekResponse
@@ -42,17 +43,19 @@ namespace BonusCalcApi.V1.Factories
                 StartAt = week.StartAt
             };
         }
+
         public static BonusPeriodResponse ToResponse(this BonusPeriod bonusPeriod)
         {
             return new BonusPeriodResponse
             {
                 Id = bonusPeriod.Id,
-                Period = bonusPeriod.Period,
+                Number = bonusPeriod.Number,
                 Year = bonusPeriod.Year,
                 ClosedAt = bonusPeriod.ClosedAt,
                 StartAt = bonusPeriod.StartAt
             };
         }
+
         public static PayElementResponse ToResponse(this PayElement payElement)
         {
             return new PayElementResponse
@@ -61,11 +64,32 @@ namespace BonusCalcApi.V1.Factories
                 Address = payElement.Address,
                 Comment = payElement.Comment,
                 Duration = payElement.Duration,
-                Productive = payElement.Productive,
                 Value = payElement.Value,
                 WeekDay = payElement.WeekDay,
                 WorkOrder = payElement.WorkOrder,
-                PayElementTypeId = payElement.PayElementTypeId
+                PayElementType = payElement.PayElementType.ToResponse()
+            };
+        }
+
+        public static PayElementTypeResponse ToResponse(this PayElementType payElementType)
+        {
+            return new PayElementTypeResponse
+            {
+                Id = payElementType.Id,
+                Description = payElementType.Description,
+                PayAtBand = payElementType.PayAtBand,
+                Paid = payElementType.Paid,
+                Productive = payElementType.Productive,
+                Adjustment = payElementType.Adjustment
+            };
+        }
+
+        public static TradeResponse ToResponse(this Trade trade)
+        {
+            return new TradeResponse
+            {
+                Id = trade.Id,
+                Description = trade.Description
             };
         }
     }

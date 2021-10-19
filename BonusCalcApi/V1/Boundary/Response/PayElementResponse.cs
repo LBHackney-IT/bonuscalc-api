@@ -4,7 +4,7 @@ namespace BonusCalcApi.V1.Boundary.Response
     {
         public int Id { get; set; }
 
-        public int PayElementTypeId { get; set; }
+        public PayElementTypeResponse PayElementType { get; set; }
 
         public int WeekDay { get; set; }
 
