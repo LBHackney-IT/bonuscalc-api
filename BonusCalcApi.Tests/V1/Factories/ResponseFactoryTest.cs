@@ -1,5 +1,6 @@
 using System.Linq;
 using AutoFixture;
+using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Factories;
 using BonusCalcApi.V1.Infrastructure;
@@ -13,9 +14,9 @@ namespace BonusCalcApi.Tests.V1.Factories
         private readonly Fixture _fixture;
         public ResponseFactoryTest()
         {
-            _fixture = new Fixture();
-            _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+            _fixture = FixtureHelpers.Fixture;
         }
+
         [Test]
         public void TimesheetResponseMapsCorrectly()
         {

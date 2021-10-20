@@ -23,6 +23,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using RepairsApi.V2.Gateways;
 
@@ -46,6 +47,7 @@ namespace BonusCalcApi
         {
             services
                 .AddMvc()
+                .AddNewtonsoftJson(o => o.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc)
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddApiVersioning(o =>
             {
@@ -124,6 +126,7 @@ namespace BonusCalcApi
             RegisterHelpers(services);
 
             services.Configure<OperativesGatewayOptions>(Configuration.GetSection(OperativesGatewayOptions.OpGatewayOptionsName));
+            services.AddTransient<IDbSaver, DbSaver>();
         }
 
         private void AddHttpClients(IServiceCollection services)
@@ -196,11 +199,13 @@ namespace BonusCalcApi
             services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
             services.AddTransient<IGetOperativeTimesheetUseCase, GetOperativeTimesheetUseCase>();
             services.AddTransient<IGetPayElementTypeUseCase, GetPayElementTypeUseCase>();
+            services.AddTransient<IUpdateTimesheetUseCase, UpdateTimesheetUseCase>();
         }
 
         private static void RegisterHelpers(IServiceCollection services)
         {
             services.AddTransient<IOperativeHelpers, OperativeHelpers>();
+            services.AddTransient<IDbSaver, DbSaver>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
