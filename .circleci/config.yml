@@ -127,7 +127,7 @@ commands:
             DATABASE=$(aws ssm get-parameter --name /bonuscalc-api/<<parameters.stage>>/postgres-database --query Parameter.Value)
             CONN_STR="Host=localhost;Password=${PASSWORD};Port=${PORT};Username=${USERNAME};Database=${DATABASE}"
             cd ./BonusCalcApi/
-            CONNECTION_STRING=${CONN_STR} ./../dotnet-ef-local/dotnet-ef database update -c BonusCalcApi.V2.Infrastructure.RepairsContext
+            CONNECTION_STRING=${CONN_STR} ./../dotnet-ef-local/dotnet-ef database update -c BonusCalcApi.V2.Infrastructure.BonusCalcContext
 jobs:
   check-code-formatting:
     executor: docker-dotnet
