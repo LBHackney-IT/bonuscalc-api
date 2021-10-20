@@ -12,7 +12,6 @@ namespace BonusCalcApi.Tests.V1.UseCase
 {
     public class GetPayElementTypeUseCaseTests
     {
-        //private GetPaymentUseCase _classUnderTest;
         private Mock<IPayElementTypesGateway> _mockPayElementTypeGateway;
         private GetPayElementTypeUseCase _classUnderTest;
         private Fixture _fixture;
@@ -25,7 +24,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             _classUnderTest = new GetPayElementTypeUseCase(_mockPayElementTypeGateway.Object);
         }
         [Test]
-        public async Task GetOperativeTimesheet()
+        public async Task GetPayElementType()
         {
             // Arrange
             var expectedPayElementType = _fixture.CreateMany<PayElementType>();
