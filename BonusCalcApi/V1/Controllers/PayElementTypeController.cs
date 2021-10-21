@@ -1,6 +1,8 @@
+using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BonusCalcApi.V1.Controllers
@@ -19,8 +21,10 @@ namespace BonusCalcApi.V1.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<PayElementType>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [Route("type")]
         public async Task<IActionResult> GetPayElementType()
 
@@ -29,7 +33,7 @@ namespace BonusCalcApi.V1.Controllers
             if (payment is null)
             {
                 return Problem(
-                    "The requested timesheet is not found",
+                    "The requested pay element type is not found",
                     $"/api/v2/payElementTypes",
                     StatusCodes.Status404NotFound, "Not Found"
                     );
