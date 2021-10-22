@@ -45,9 +45,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             // Arrange
             var existingTimesheet = CreateExistingTimesheet();
 
-            var newPayElement = _fixture.Build<PayElementUpdate>()
-                .Without(x => x.Id)
-                .Create();
+            var newPayElement = CreateNewPayElement();
             var request = CreateRequest(newPayElement);
 
             // Act
@@ -62,6 +60,28 @@ namespace BonusCalcApi.Tests.V1.UseCase
         }
 
         [Test]
+        public async Task RemovesAllPayElements()
+        {
+            // Arrange
+            var existingPayElement = _fixture.Create<PayElement>();
+            existingPayElement.ReadOnly = false;
+            var existingTimesheet = CreateExistingTimesheet();
+            existingTimesheet.PayElements = new List<PayElement>()
+            {
+                existingPayElement
+            };
+
+            var request = new TimesheetUpdateRequest();
+
+            // Act
+            await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+
+            // Assert
+            existingTimesheet.PayElements.Should().BeEmpty();
+            InMemoryDb.DbSaver.VerifySaveCalled();
+        }
+
+        [Test]
         public async Task UpdatesExistingPayElements()
         {
             // Arrange
@@ -72,9 +92,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
                 existingPayElement
             };
 
-            var updatedPayElement = _fixture.Build<PayElementUpdate>()
-                .With(pe => pe.Id, existingPayElement.Id)
-                .Create();
+            var updatedPayElement = CreateUpdatePayElement(existingPayElement.Id);
             var request = CreateRequest(updatedPayElement);
 
             // Act
@@ -87,22 +105,81 @@ namespace BonusCalcApi.Tests.V1.UseCase
                 .Excluding(pe => pe.Timesheet)
                 .Excluding(pe => pe.TimesheetId)
                 .Excluding(pe => pe.PayElementType)
+                .Excluding(pe => pe.ReadOnly)
             );
             InMemoryDb.DbSaver.VerifySaveCalled();
+        }
+
+        [Test]
+        public async Task ThrowsWhenUpdateNonExistingPayElements()
+        {
+            // Arrange
+            var existingTimesheet = CreateExistingTimesheet();
+
+            var updatedPayElement = CreateUpdatePayElement(1);
+            var request = CreateRequest(updatedPayElement);
+
+            // Act
+            Func<Task> act = async () => await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+
+            // Assert
+            await act.Should().ThrowAsync<ResourceNotFoundException>();
+            InMemoryDb.DbSaver.VerifySaveNotCalled();
         }
 
         [Test]
         public async Task RemovesExistingPayElements()
         {
             // Arrange
-            var existingPayElement = _fixture.Create<PayElementUpdate>();
+            var existingPayElement = CreateUpdatePayElement(1);
             var existingTimesheet = CreateExistingTimesheet();
             existingTimesheet.PayElements = new List<PayElement>()
             {
                 existingPayElement.ToDb()
             };
 
-            var updatedPayElement = _fixture.Create<PayElementUpdate>();
+            var newPayElement = CreateNewPayElement();
+            var request = CreateRequest(newPayElement);
+
+            // Act
+            await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+
+            // Assert
+            var payElement = existingTimesheet.PayElements.Single();
+            payElement.Should().BeEquivalentTo(newPayElement.ToDb());
+            InMemoryDb.DbSaver.VerifySaveCalled();
+        }
+
+        [Test]
+        public async Task DoesNotRemovePayElementsIfReadOnly()
+        {
+            // Arrange
+            var existingPayElement = _fixture.Create<PayElement>();
+            existingPayElement.ReadOnly = true;
+            var existingTimesheet = CreateExistingTimesheet();
+            existingTimesheet.PayElements = new List<PayElement>()
+            {
+                existingPayElement
+            };
+
+            var request = new TimesheetUpdateRequest();
+
+            // Act
+            await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+
+            // Assert
+            var payElement = existingTimesheet.PayElements.Single();
+            payElement.Should().BeEquivalentTo(existingPayElement);
+            InMemoryDb.DbSaver.VerifySaveCalled();
+        }
+
+        [Test]
+        public async Task ReadOnlyIsFalseForNewPayElements()
+        {
+            // Arrange
+            var existingTimesheet = CreateExistingTimesheet();
+
+            var updatedPayElement = CreateNewPayElement();
             var request = CreateRequest(updatedPayElement);
 
             // Act
@@ -110,7 +187,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
 
             // Assert
             var payElement = existingTimesheet.PayElements.Single();
-            payElement.Should().BeEquivalentTo(updatedPayElement.ToDb());
+            payElement.ReadOnly.Should().BeFalse();
             InMemoryDb.DbSaver.VerifySaveCalled();
         }
 
@@ -149,6 +226,20 @@ namespace BonusCalcApi.Tests.V1.UseCase
             _timesheetGatewayMock.Setup(x => x.GetOperativesTimesheetAsync(existingTimesheet.WeekId, existingTimesheet.OperativeId))
                 .ReturnsAsync(existingTimesheet);
             return existingTimesheet;
+        }
+
+        private PayElementUpdate CreateNewPayElement()
+        {
+            return _fixture.Build<PayElementUpdate>()
+                .Without(peu => peu.Id)
+                .Create();
+        }
+
+        private PayElementUpdate CreateUpdatePayElement(int id)
+        {
+            return _fixture.Build<PayElementUpdate>()
+                .With(peu => peu.Id, id)
+                .Create();
         }
     }
 }

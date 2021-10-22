@@ -26,6 +26,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public decimal Duration { get; set; }
 
         public decimal Value { get; set; }
+        public bool ReadOnly { get; set; }
 
         public void UpdateFrom(PayElementUpdate payElement)
         {

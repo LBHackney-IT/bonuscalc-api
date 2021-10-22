@@ -2,7 +2,7 @@ namespace BonusCalcApi.V1.Boundary.Request
 {
     public class PayElementUpdate
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public int PayElementTypeId { get; set; }
 
