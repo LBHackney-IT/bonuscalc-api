@@ -26,21 +26,31 @@ namespace BonusCalcApi.V1.UseCase
 
             existingTimesheet.PayElements ??= new List<PayElement>();
 
-            // add new elements
-            var newElements = request.PayElements.Where(pe => !existingTimesheet.PayElements.Exists(pe2 => pe2.Id == pe.Id)).Select(pe => pe.ToDb());
-            existingTimesheet.PayElements.AddRange(newElements);
-
-            // update elements
-            foreach (var payElement in request.PayElements)
+            if (request.PayElements != null)
             {
-                var existingPayElement = existingTimesheet.PayElements?.SingleOrDefault(pe => pe.Id == payElement.Id);
-                existingPayElement?.UpdateFrom(payElement);
+                // update elements
+                foreach (var payElement in request.PayElements)
+                {
+                    var existingPayElement = existingTimesheet.PayElements?.SingleOrDefault(pe => pe.Id == payElement.Id);
+                    existingPayElement?.UpdateFrom(payElement);
+                }
+
+                // add new elements
+                var newElements = request.PayElements?.Where(pe => !existingTimesheet.PayElements.Exists(pe2 => pe2.Id == pe.Id)).Select(pe => pe.ToDb());
+                if (newElements != null) existingTimesheet.PayElements.AddRange(newElements);
             }
 
             // remove old elements
-            existingTimesheet.PayElements.RemoveAll(pe => !request.PayElements.Exists(pe2 => pe2.Id == pe.Id));
+            existingTimesheet.PayElements.RemoveAll(pe => !ExistsInRequest(request, pe) && !pe.ReadOnly);
 
             await _dbSaver.SaveChangesAsync();
+        }
+
+        private static bool ExistsInRequest(TimesheetUpdateRequest request, PayElement pe)
+        {
+            if (request.PayElements is null) return false;
+
+            return request.PayElements.Exists(pe2 => pe2.Id == pe.Id);
         }
     }
 }
