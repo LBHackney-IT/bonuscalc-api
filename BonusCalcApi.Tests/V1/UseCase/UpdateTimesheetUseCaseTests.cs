@@ -45,9 +45,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             // Arrange
             var existingTimesheet = CreateExistingTimesheet();
 
-            var newPayElement = _fixture.Build<PayElementUpdate>()
-                .Without(x => x.Id)
-                .Create();
+            var newPayElement = CreateNewPayElement();
             var request = CreateRequest(newPayElement);
 
             // Act
@@ -94,9 +92,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
                 existingPayElement
             };
 
-            var updatedPayElement = _fixture.Build<PayElementUpdate>()
-                .With(pe => pe.Id, existingPayElement.Id)
-                .Create();
+            var updatedPayElement = CreateUpdatePayElement(existingPayElement.Id);
             var request = CreateRequest(updatedPayElement);
 
             // Act
@@ -115,25 +111,42 @@ namespace BonusCalcApi.Tests.V1.UseCase
         }
 
         [Test]
+        public async Task ThrowsWhenUpdateNonExistingPayElements()
+        {
+            // Arrange
+            var existingTimesheet = CreateExistingTimesheet();
+
+            var updatedPayElement = CreateUpdatePayElement(1);
+            var request = CreateRequest(updatedPayElement);
+
+            // Act
+            Func<Task> act = async () => await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+
+            // Assert
+            await act.Should().ThrowAsync<ResourceNotFoundException>();
+            InMemoryDb.DbSaver.VerifySaveNotCalled();
+        }
+
+        [Test]
         public async Task RemovesExistingPayElements()
         {
             // Arrange
-            var existingPayElement = _fixture.Create<PayElementUpdate>();
+            var existingPayElement = CreateUpdatePayElement(1);
             var existingTimesheet = CreateExistingTimesheet();
             existingTimesheet.PayElements = new List<PayElement>()
             {
                 existingPayElement.ToDb()
             };
 
-            var updatedPayElement = _fixture.Create<PayElementUpdate>();
-            var request = CreateRequest(updatedPayElement);
+            var newPayElement = CreateNewPayElement();
+            var request = CreateRequest(newPayElement);
 
             // Act
             await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
 
             // Assert
             var payElement = existingTimesheet.PayElements.Single();
-            payElement.Should().BeEquivalentTo(updatedPayElement.ToDb());
+            payElement.Should().BeEquivalentTo(newPayElement.ToDb());
             InMemoryDb.DbSaver.VerifySaveCalled();
         }
 
@@ -166,7 +179,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             // Arrange
             var existingTimesheet = CreateExistingTimesheet();
 
-            var updatedPayElement = _fixture.Create<PayElementUpdate>();
+            var updatedPayElement = CreateNewPayElement();
             var request = CreateRequest(updatedPayElement);
 
             // Act
@@ -213,6 +226,20 @@ namespace BonusCalcApi.Tests.V1.UseCase
             _timesheetGatewayMock.Setup(x => x.GetOperativesTimesheetAsync(existingTimesheet.WeekId, existingTimesheet.OperativeId))
                 .ReturnsAsync(existingTimesheet);
             return existingTimesheet;
+        }
+
+        private PayElementUpdate CreateNewPayElement()
+        {
+            return _fixture.Build<PayElementUpdate>()
+                .Without(peu => peu.Id)
+                .Create();
+        }
+
+        private PayElementUpdate CreateUpdatePayElement(int id)
+        {
+            return _fixture.Build<PayElementUpdate>()
+                .With(peu => peu.Id, id)
+                .Create();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace BonusCalcApi.V1.Factories
         {
             return new PayElement
             {
-                Id = payElementUpdate.Id,
+                Id = payElementUpdate.Id.GetValueOrDefault(),
                 Address = payElementUpdate.Address,
                 Comment = payElementUpdate.Comment,
                 Duration = payElementUpdate.Duration,

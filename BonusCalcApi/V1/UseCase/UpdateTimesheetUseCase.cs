@@ -1,3 +1,4 @@
+#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,24 +25,27 @@ namespace BonusCalcApi.V1.UseCase
 
             if (existingTimesheet is null) ThrowHelper.ThrowNotFound($"Timesheet not found for operative: {operativeId} and week: {weekId}");
 
-            existingTimesheet.PayElements ??= new List<PayElement>();
+            existingTimesheet!.PayElements ??= new List<PayElement>();
+
+            // remove old elements
+            existingTimesheet.PayElements.RemoveAll(pe => !ExistsInRequest(request, pe) && !pe.ReadOnly);
 
             if (request.PayElements != null)
             {
                 // update elements
-                foreach (var payElement in request.PayElements)
+                var payElementsToUpdate = request.PayElements.Where(pe => pe.Id != null);
+                foreach (var payElement in payElementsToUpdate)
                 {
-                    var existingPayElement = existingTimesheet.PayElements?.SingleOrDefault(pe => pe.Id == payElement.Id);
+                    var existingPayElement = existingTimesheet!.PayElements.SingleOrDefault(pe => pe.Id == payElement.Id);
+
+                    if (existingPayElement is null) ThrowHelper.ThrowNotFound($"Pay element not found {payElement.Id}");
                     existingPayElement?.UpdateFrom(payElement);
                 }
 
                 // add new elements
-                var newElements = request.PayElements?.Where(pe => !existingTimesheet.PayElements.Exists(pe2 => pe2.Id == pe.Id)).Select(pe => pe.ToDb());
-                if (newElements != null) existingTimesheet.PayElements.AddRange(newElements);
+                var newElements = request.PayElements?.Where(pe => pe.Id is null).Select(pe => pe.ToDb());
+                if (newElements != null) existingTimesheet!.PayElements.AddRange(newElements);
             }
-
-            // remove old elements
-            existingTimesheet.PayElements.RemoveAll(pe => !ExistsInRequest(request, pe) && !pe.ReadOnly);
 
             await _dbSaver.SaveChangesAsync();
         }
