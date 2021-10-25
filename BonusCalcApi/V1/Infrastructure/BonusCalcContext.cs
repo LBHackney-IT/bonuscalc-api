@@ -60,6 +60,41 @@ namespace BonusCalcApi.V1.Infrastructure
                 .Property(pe => pe.Value)
                 .HasPrecision(10, 4);
 
+            modelBuilder.Entity<PayElement>()
+                .Property(pe => pe.Monday)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
+
+            modelBuilder.Entity<PayElement>()
+                .Property(pe => pe.Tuesday)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
+
+            modelBuilder.Entity<PayElement>()
+                .Property(pe => pe.Wednesday)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
+
+            modelBuilder.Entity<PayElement>()
+                .Property(pe => pe.Thursday)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
+
+            modelBuilder.Entity<PayElement>()
+                .Property(pe => pe.Friday)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
+
+            modelBuilder.Entity<PayElement>()
+                .Property(pe => pe.Saturday)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
+
+            modelBuilder.Entity<PayElement>()
+                .Property(pe => pe.Sunday)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
+
             modelBuilder.Entity<PayElementType>()
                 .HasIndex(pet => pet.Description)
                 .IsUnique();

@@ -96,9 +96,15 @@ namespace BonusCalcApi.Tests.V1.E2ETests
         {
             payElement.Address.Should().Be(expectedPayElement.Address);
             payElement.Comment.Should().Be(expectedPayElement.Comment);
+            payElement.Monday.Should().Be(expectedPayElement.Monday);
+            payElement.Tuesday.Should().Be(expectedPayElement.Tuesday);
+            payElement.Wednesday.Should().Be(expectedPayElement.Wednesday);
+            payElement.Thursday.Should().Be(expectedPayElement.Thursday);
+            payElement.Friday.Should().Be(expectedPayElement.Friday);
+            payElement.Saturday.Should().Be(expectedPayElement.Saturday);
+            payElement.Sunday.Should().Be(expectedPayElement.Sunday);
             payElement.Duration.Should().Be(expectedPayElement.Duration);
             payElement.Value.Should().Be(expectedPayElement.Value);
-            payElement.WeekDay.Should().Be(expectedPayElement.WeekDay);
             payElement.WorkOrder.Should().Be(expectedPayElement.WorkOrder);
         }
         private PayElementUpdate CreatePayElementUpdate(IEnumerable<PayElementType> payElementsTypes)

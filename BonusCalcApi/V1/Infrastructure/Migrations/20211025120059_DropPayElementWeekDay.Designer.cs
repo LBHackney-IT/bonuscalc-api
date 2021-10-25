@@ -3,15 +3,17 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211025120059_DropPayElementWeekDay")]
+    partial class DropPayElementWeekDay
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,20 +162,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("numeric(10,4)")
                         .HasColumnName("duration");
 
-                    b.Property<decimal>("Friday")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasDefaultValue(0m)
-                        .HasColumnName("friday");
-
-                    b.Property<decimal>("Monday")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasDefaultValue(0m)
-                        .HasColumnName("monday");
-
                     b.Property<int>("PayElementTypeId")
                         .HasColumnType("integer")
                         .HasColumnName("pay_element_type_id");
@@ -182,49 +170,14 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("read_only");
 
-                    b.Property<decimal>("Saturday")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasDefaultValue(0m)
-                        .HasColumnName("saturday");
-
-                    b.Property<decimal>("Sunday")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasDefaultValue(0m)
-                        .HasColumnName("sunday");
-
-                    b.Property<decimal>("Thursday")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasDefaultValue(0m)
-                        .HasColumnName("thursday");
-
                     b.Property<int>("TimesheetId")
                         .HasColumnType("integer")
                         .HasColumnName("timesheet_id");
-
-                    b.Property<decimal>("Tuesday")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasDefaultValue(0m)
-                        .HasColumnName("tuesday");
 
                     b.Property<decimal>("Value")
                         .HasPrecision(10, 4)
                         .HasColumnType("numeric(10,4)")
                         .HasColumnName("value");
-
-                    b.Property<decimal>("Wednesday")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasDefaultValue(0m)
-                        .HasColumnName("wednesday");
 
                     b.Property<string>("WorkOrder")
                         .HasMaxLength(10)
