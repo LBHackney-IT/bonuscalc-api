@@ -30,9 +30,15 @@ namespace BonusCalcApi.Tests.V1.Factories
             result.Id.Should().Be(payElementUpdate.Id);
             result.Address.Should().Be(payElementUpdate.Address);
             result.Comment.Should().Be(payElementUpdate.Comment);
+            result.Monday.Should().Be(payElementUpdate.Monday);
+            result.Tuesday.Should().Be(payElementUpdate.Tuesday);
+            result.Wednesday.Should().Be(payElementUpdate.Wednesday);
+            result.Thursday.Should().Be(payElementUpdate.Thursday);
+            result.Friday.Should().Be(payElementUpdate.Friday);
+            result.Saturday.Should().Be(payElementUpdate.Saturday);
+            result.Sunday.Should().Be(payElementUpdate.Sunday);
             result.Duration.Should().Be(payElementUpdate.Duration);
             result.Value.Should().Be(payElementUpdate.Value);
-            result.WeekDay.Should().Be(payElementUpdate.WeekDay);
             result.WorkOrder.Should().Be(payElementUpdate.WorkOrder);
             result.PayElementTypeId.Should().Be(payElementUpdate.PayElementTypeId);
         }

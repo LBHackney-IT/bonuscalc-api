@@ -63,9 +63,15 @@ namespace BonusCalcApi.V1.Factories
                 Id = payElement.Id,
                 Address = payElement.Address,
                 Comment = payElement.Comment,
+                Monday = payElement.Monday,
+                Tuesday = payElement.Tuesday,
+                Wednesday = payElement.Wednesday,
+                Thursday = payElement.Thursday,
+                Friday = payElement.Friday,
+                Saturday = payElement.Saturday,
+                Sunday = payElement.Sunday,
                 Duration = payElement.Duration,
                 Value = payElement.Value,
-                WeekDay = payElement.WeekDay,
                 WorkOrder = payElement.WorkOrder,
                 PayElementType = payElement.PayElementType.ToResponse()
             };

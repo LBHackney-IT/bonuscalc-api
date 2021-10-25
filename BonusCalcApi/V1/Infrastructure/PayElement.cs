@@ -14,14 +14,20 @@ namespace BonusCalcApi.V1.Infrastructure
         public int PayElementTypeId { get; set; }
         public PayElementType PayElementType { get; set; }
 
-        public int WeekDay { get; set; }
-
         [StringLength(10)]
         public string WorkOrder { get; set; }
 
         public string Address { get; set; }
 
         public string Comment { get; set; }
+
+        public decimal Monday { get; set; }
+        public decimal Tuesday { get; set; }
+        public decimal Wednesday { get; set; }
+        public decimal Thursday { get; set; }
+        public decimal Friday { get; set; }
+        public decimal Saturday { get; set; }
+        public decimal Sunday { get; set; }
 
         public decimal Duration { get; set; }
 
@@ -32,9 +38,15 @@ namespace BonusCalcApi.V1.Infrastructure
         {
             Address = payElement.Address;
             Comment = payElement.Comment;
+            Monday = payElement.Monday;
+            Tuesday = payElement.Tuesday;
+            Wednesday = payElement.Wednesday;
+            Thursday = payElement.Thursday;
+            Friday = payElement.Friday;
+            Saturday = payElement.Saturday;
+            Sunday = payElement.Sunday;
             Duration = payElement.Duration;
             Value = payElement.Value;
-            WeekDay = payElement.WeekDay;
             WorkOrder = payElement.WorkOrder;
             PayElementTypeId = payElement.PayElementTypeId;
         }

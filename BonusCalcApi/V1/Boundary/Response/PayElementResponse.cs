@@ -6,8 +6,6 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public PayElementTypeResponse PayElementType { get; set; }
 
-        public int WeekDay { get; set; }
-
         public string WorkOrder { get; set; }
 
         public string Address { get; set; }
@@ -15,6 +13,14 @@ namespace BonusCalcApi.V1.Boundary.Response
         public string Comment { get; set; }
 
         public bool Productive { get; set; }
+
+        public decimal Monday { get; set; }
+        public decimal Tuesday { get; set; }
+        public decimal Wednesday { get; set; }
+        public decimal Thursday { get; set; }
+        public decimal Friday { get; set; }
+        public decimal Saturday { get; set; }
+        public decimal Sunday { get; set; }
 
         public decimal Duration { get; set; }
 
