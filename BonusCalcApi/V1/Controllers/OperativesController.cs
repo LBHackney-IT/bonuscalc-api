@@ -53,7 +53,7 @@ namespace BonusCalcApi.V1.Controllers
             if (!IsValid(operativePayrollNumber))
                 return Problem(
                     "The requested payroll number is invalid",
-                    $"/api/v2/operatives/{operativePayrollNumber}",
+                    $"/api/v1/operatives/{operativePayrollNumber}",
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
 
@@ -63,7 +63,7 @@ namespace BonusCalcApi.V1.Controllers
             {
                 return Problem(
                     "The requested payroll number was not found",
-                    $"/api/v2/operatives/{operativePayrollNumber}",
+                    $"/api/v1/operatives/{operativePayrollNumber}",
                     StatusCodes.Status404NotFound, "Not Found"
                 );
             }
@@ -80,7 +80,7 @@ namespace BonusCalcApi.V1.Controllers
             if (!IsValid(operativePayrollNumber))
                 return Problem(
                     "The requested payroll number is invalid",
-                    $"/api/v2/operatives/{operativePayrollNumber}?week={week}",
+                    $"/api/v1/operatives/{operativePayrollNumber}?week={week}",
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
 
@@ -90,7 +90,7 @@ namespace BonusCalcApi.V1.Controllers
             {
                 return Problem(
                     "The requested timesheet is not found",
-                    $"/api/v2/operatives/{operativePayrollNumber}?week={week}",
+                    $"/api/v1/operatives/{operativePayrollNumber}?week={week}",
                     StatusCodes.Status404NotFound, "Not Found"
                 );
             }
@@ -105,7 +105,7 @@ namespace BonusCalcApi.V1.Controllers
             if (!IsValid(operativePayrollNumber))
                 return Problem(
                     "The requested payroll number is invalid",
-                    $"/api/v2/operatives/{operativePayrollNumber}?week={week}",
+                    $"/api/v1/operatives/{operativePayrollNumber}?week={week}",
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
 
