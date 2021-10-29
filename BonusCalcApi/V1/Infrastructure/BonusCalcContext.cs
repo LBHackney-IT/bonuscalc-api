@@ -119,6 +119,11 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasIndex(s => s.Description)
                 .IsUnique();
 
+            modelBuilder.Entity<Scheme>()
+                .Property(s => s.ConversionFactor)
+                .HasPrecision(20, 14)
+                .HasDefaultValue(1.0);
+
             modelBuilder.Entity<Timesheet>()
                 .HasIndex(t => new { t.OperativeId, t.WeekId })
                 .IsUnique();

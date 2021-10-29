@@ -105,6 +105,7 @@ namespace BonusCalcApi.V1.Factories
             {
                 Type = scheme.Type,
                 Description = scheme.Description,
+                ConversionFactor = scheme.ConversionFactor,
                 PayBands = scheme.PayBands.Select(pb => pb.ToResponse()).OrderBy(pb => pb.Band).ToList()
             };
         }
