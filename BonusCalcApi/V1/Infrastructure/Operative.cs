@@ -18,6 +18,9 @@ namespace BonusCalcApi.V1.Infrastructure
         public string TradeId { get; set; }
         public Trade Trade { get; set; }
 
+        public int? SchemeId { get; set; }
+        public Scheme Scheme { get; set; }
+
         [Required]
         [StringLength(10)]
         public string Section { get; set; }

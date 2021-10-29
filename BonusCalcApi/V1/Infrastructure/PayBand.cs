@@ -7,6 +7,9 @@ namespace BonusCalcApi.V1.Infrastructure
         [Key]
         public int Id { get; set; }
 
+        public int? SchemeId { get; set; }
+        public Scheme Scheme { get; set; }
+
         public int Band { get; set; }
 
         public decimal Value { get; set; }
