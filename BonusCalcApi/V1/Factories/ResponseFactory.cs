@@ -14,6 +14,7 @@ namespace BonusCalcApi.V1.Factories
                 Id = operative.Id,
                 Name = operative.Name,
                 Trade = operative.Trade.ToResponse(),
+                Scheme = operative.Scheme.ToResponse(),
                 Section = operative.Section,
                 SalaryBand = operative.SalaryBand,
                 FixedBand = operative.FixedBand,
@@ -95,6 +96,15 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = trade.Id,
                 Description = trade.Description
+            };
+        }
+
+        public static SchemeResponse ToResponse(this Scheme scheme)
+        {
+            return new SchemeResponse
+            {
+                Type = scheme.Type,
+                Description = scheme.Description
             };
         }
     }
