@@ -33,15 +33,6 @@ namespace BonusCalcApi.V1.Infrastructure
                 .WithMany(t => t.Operatives)
                 .HasForeignKey(o => o.TradeId);
 
-            modelBuilder.Entity<PayBand>()
-                .HasIndex(pb => new { pb.TradeId, pb.Band })
-                .IsUnique();
-
-            modelBuilder.Entity<PayBand>()
-                .HasOne(pb => pb.Trade)
-                .WithMany(t => t.PayBands)
-                .HasForeignKey(pb => pb.TradeId);
-
             modelBuilder.Entity<PayElement>()
                 .HasOne(pe => pe.Timesheet)
                 .WithMany(t => t.PayElements)
