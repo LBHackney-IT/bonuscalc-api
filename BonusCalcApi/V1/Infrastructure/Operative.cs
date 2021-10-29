@@ -22,10 +22,6 @@ namespace BonusCalcApi.V1.Infrastructure
         [StringLength(10)]
         public string Section { get; set; }
 
-        [Required]
-        [StringLength(10)]
-        public string Scheme { get; set; }
-
         public int SalaryBand { get; set; }
 
         public bool FixedBand { get; set; }
