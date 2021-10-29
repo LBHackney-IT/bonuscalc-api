@@ -7,10 +7,8 @@ namespace BonusCalcApi.V1.Infrastructure
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(3)]
-        public string TradeId { get; set; }
-        public Trade Trade { get; set; }
+        public int? SchemeId { get; set; }
+        public Scheme Scheme { get; set; }
 
         public int Band { get; set; }
 

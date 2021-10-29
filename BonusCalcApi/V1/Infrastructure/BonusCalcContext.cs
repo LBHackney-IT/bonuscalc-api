@@ -14,6 +14,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public DbSet<PayBand> PayBands { get; set; }
         public DbSet<PayElement> PayElements { get; set; }
         public DbSet<PayElementType> PayElementTypes { get; set; }
+        public DbSet<Scheme> Schemes { get; set; }
         public DbSet<Timesheet> Timesheets { get; set; }
         public DbSet<Trade> Trades { get; set; }
         public DbSet<Week> Weeks { get; set; }
@@ -33,14 +34,21 @@ namespace BonusCalcApi.V1.Infrastructure
                 .WithMany(t => t.Operatives)
                 .HasForeignKey(o => o.TradeId);
 
-            modelBuilder.Entity<PayBand>()
-                .HasIndex(pb => new { pb.TradeId, pb.Band })
-                .IsUnique();
+            modelBuilder.Entity<Operative>()
+                .HasIndex(o => o.SchemeId);
+
+            modelBuilder.Entity<Operative>()
+                .HasOne(o => o.Scheme)
+                .WithMany(s => s.Operatives)
+                .HasForeignKey(o => o.SchemeId);
 
             modelBuilder.Entity<PayBand>()
-                .HasOne(pb => pb.Trade)
-                .WithMany(t => t.PayBands)
-                .HasForeignKey(pb => pb.TradeId);
+                .HasIndex(pb => pb.SchemeId);
+
+            modelBuilder.Entity<PayBand>()
+                .HasOne(pb => pb.Scheme)
+                .WithMany(s => s.PayBands)
+                .HasForeignKey(pb => pb.SchemeId);
 
             modelBuilder.Entity<PayElement>()
                 .HasOne(pe => pe.Timesheet)
@@ -106,6 +114,15 @@ namespace BonusCalcApi.V1.Infrastructure
             modelBuilder.Entity<PayElementType>()
                 .Property(pet => pet.Adjustment)
                 .HasDefaultValue(false);
+
+            modelBuilder.Entity<Scheme>()
+                .HasIndex(s => s.Description)
+                .IsUnique();
+
+            modelBuilder.Entity<Scheme>()
+                .Property(s => s.ConversionFactor)
+                .HasPrecision(20, 14)
+                .HasDefaultValue(1.0);
 
             modelBuilder.Entity<Timesheet>()
                 .HasIndex(t => new { t.OperativeId, t.WeekId })

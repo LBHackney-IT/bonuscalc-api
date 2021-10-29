@@ -14,8 +14,8 @@ namespace BonusCalcApi.V1.Factories
                 Id = operative.Id,
                 Name = operative.Name,
                 Trade = operative.Trade.ToResponse(),
+                Scheme = operative.Scheme?.ToResponse(),
                 Section = operative.Section,
-                Scheme = operative.Scheme,
                 SalaryBand = operative.SalaryBand,
                 FixedBand = operative.FixedBand,
                 IsArchived = operative.IsArchived
@@ -96,6 +96,26 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = trade.Id,
                 Description = trade.Description
+            };
+        }
+
+        public static SchemeResponse ToResponse(this Scheme scheme)
+        {
+            return new SchemeResponse
+            {
+                Type = scheme.Type,
+                Description = scheme.Description,
+                ConversionFactor = scheme.ConversionFactor,
+                PayBands = scheme.PayBands.Select(pb => pb.ToResponse()).OrderBy(pb => pb.Band).ToList()
+            };
+        }
+
+        public static PayBandResponse ToResponse(this PayBand payBand)
+        {
+            return new PayBandResponse
+            {
+                Band = payBand.Band,
+                Value = payBand.Value
             };
         }
     }

@@ -3,15 +3,17 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211029132605_DropPayBandRelationshipFromTrades")]
+    partial class DropPayBandRelationshipFromTrades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,9 +82,11 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("salary_band");
 
-                    b.Property<int?>("SchemeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("scheme_id");
+                    b.Property<string>("Scheme")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("scheme");
 
                     b.Property<string>("Section")
                         .IsRequired()
@@ -98,9 +102,6 @@ namespace V1.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_operatives");
-
-                    b.HasIndex("SchemeId")
-                        .HasDatabaseName("ix_operatives_scheme_id");
 
                     b.HasIndex("TradeId")
                         .HasDatabaseName("ix_operatives_trade_id");
@@ -120,19 +121,12 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("band");
 
-                    b.Property<int?>("SchemeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("scheme_id");
-
                     b.Property<decimal>("Value")
                         .HasColumnType("numeric")
                         .HasColumnName("value");
 
                     b.HasKey("Id")
                         .HasName("pk_pay_bands");
-
-                    b.HasIndex("SchemeId")
-                        .HasDatabaseName("ix_pay_bands_scheme_id");
 
                     b.ToTable("pay_bands");
                 });
@@ -285,43 +279,6 @@ namespace V1.Infrastructure.Migrations
                     b.ToTable("pay_element_types");
                 });
 
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Scheme", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<decimal>("ConversionFactor")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(20, 14)
-                        .HasColumnType("numeric(20,14)")
-                        .HasDefaultValue(1m)
-                        .HasColumnName("conversion_factor");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("type");
-
-                    b.HasKey("Id")
-                        .HasName("pk_schemes");
-
-                    b.HasIndex("Description")
-                        .IsUnique()
-                        .HasDatabaseName("ix_schemes_description");
-
-                    b.ToTable("schemes");
-                });
-
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Timesheet", b =>
                 {
                     b.Property<int>("Id")
@@ -410,11 +367,6 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Operative", b =>
                 {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Scheme", "Scheme")
-                        .WithMany("Operatives")
-                        .HasForeignKey("SchemeId")
-                        .HasConstraintName("fk_operatives_schemes_scheme_id");
-
                     b.HasOne("BonusCalcApi.V1.Infrastructure.Trade", "Trade")
                         .WithMany("Operatives")
                         .HasForeignKey("TradeId")
@@ -422,19 +374,7 @@ namespace V1.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Scheme");
-
                     b.Navigation("Trade");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayBand", b =>
-                {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Scheme", "Scheme")
-                        .WithMany("PayBands")
-                        .HasForeignKey("SchemeId")
-                        .HasConstraintName("fk_pay_bands_schemes_scheme_id");
-
-                    b.Navigation("Scheme");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayElement", b =>
@@ -500,13 +440,6 @@ namespace V1.Infrastructure.Migrations
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayElementType", b =>
                 {
                     b.Navigation("PayElements");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Scheme", b =>
-                {
-                    b.Navigation("Operatives");
-
-                    b.Navigation("PayBands");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Timesheet", b =>
