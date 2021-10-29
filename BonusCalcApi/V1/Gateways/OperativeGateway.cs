@@ -22,6 +22,7 @@ namespace BonusCalcApi.V1.Gateways
             return await _context.Operatives
                 .Include(o => o.Trade)
                 .Include(o => o.Scheme)
+                .ThenInclude(s => s.PayBands)
                 .SingleOrDefaultAsync(o => o.Id == operativePayrollNumber);
         }
     }

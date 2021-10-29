@@ -104,7 +104,17 @@ namespace BonusCalcApi.V1.Factories
             return new SchemeResponse
             {
                 Type = scheme.Type,
-                Description = scheme.Description
+                Description = scheme.Description,
+                PayBands = scheme.PayBands.Select(pb => pb.ToResponse()).OrderBy(pb => pb.Band).ToList()
+            };
+        }
+
+        public static PayBandResponse ToResponse(this PayBand payBand)
+        {
+            return new PayBandResponse
+            {
+                Band = payBand.Band,
+                Value = payBand.Value
             };
         }
     }
