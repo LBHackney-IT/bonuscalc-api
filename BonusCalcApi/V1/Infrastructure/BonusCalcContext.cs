@@ -43,6 +43,10 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasForeignKey(o => o.SchemeId);
 
             modelBuilder.Entity<PayBand>()
+                .Property(pb => pb.Id)
+                .ValueGeneratedNever();
+
+            modelBuilder.Entity<PayBand>()
                 .HasIndex(pb => pb.SchemeId);
 
             modelBuilder.Entity<PayBand>()
@@ -104,6 +108,10 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasDefaultValue(0.0);
 
             modelBuilder.Entity<PayElementType>()
+                .Property(pet => pet.Id)
+                .ValueGeneratedNever();
+
+            modelBuilder.Entity<PayElementType>()
                 .HasIndex(pet => pet.Description)
                 .IsUnique();
 
@@ -114,6 +122,10 @@ namespace BonusCalcApi.V1.Infrastructure
             modelBuilder.Entity<PayElementType>()
                 .Property(pet => pet.Adjustment)
                 .HasDefaultValue(false);
+
+            modelBuilder.Entity<Scheme>()
+                .Property(s => s.Id)
+                .ValueGeneratedNever();
 
             modelBuilder.Entity<Scheme>()
                 .HasIndex(s => s.Description)
