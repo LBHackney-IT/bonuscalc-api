@@ -116,6 +116,10 @@ namespace BonusCalcApi.V1.Infrastructure
                 .IsUnique();
 
             modelBuilder.Entity<PayElementType>()
+                .Property(pet => pet.NonProductive)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<PayElementType>()
                 .Property(pet => pet.Productive)
                 .HasDefaultValue(false);
 

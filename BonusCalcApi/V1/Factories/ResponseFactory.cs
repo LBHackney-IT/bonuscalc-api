@@ -85,6 +85,7 @@ namespace BonusCalcApi.V1.Factories
                 Description = payElementType.Description,
                 PayAtBand = payElementType.PayAtBand,
                 Paid = payElementType.Paid,
+                NonProductive = payElementType.NonProductive,
                 Productive = payElementType.Productive,
                 Adjustment = payElementType.Adjustment
             };
