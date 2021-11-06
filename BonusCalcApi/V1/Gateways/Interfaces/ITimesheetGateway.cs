@@ -7,5 +7,4 @@ namespace BonusCalcApi.V1.Gateways.Interfaces
     {
         public Task<Timesheet> GetOperativesTimesheetAsync(string weekId, string operativeId);
     }
-
 }
