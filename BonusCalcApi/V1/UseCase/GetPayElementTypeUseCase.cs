@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
@@ -9,7 +8,7 @@ namespace BonusCalcApi.V1.UseCase
 {
     public class GetPayElementTypeUseCase : IGetPayElementTypeUseCase
     {
-        private IPayElementTypesGateway _payElementTypesGateway;
+        private readonly IPayElementTypesGateway _payElementTypesGateway;
 
         public GetPayElementTypeUseCase(IPayElementTypesGateway payElementTypesGateway)
         {

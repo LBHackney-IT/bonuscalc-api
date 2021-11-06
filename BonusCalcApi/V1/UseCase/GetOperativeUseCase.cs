@@ -1,7 +1,4 @@
 using System.Threading.Tasks;
-using BonusCalcApi.V1.Boundary.Response;
-using BonusCalcApi.V1.Factories;
-using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;

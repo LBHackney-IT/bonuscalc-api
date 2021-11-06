@@ -7,5 +7,4 @@ namespace BonusCalcApi.V1.UseCase.Interfaces
     {
         public Task Execute(TimesheetUpdateRequest request, string operativeId, string weekId);
     }
-
 }

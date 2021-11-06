@@ -10,6 +10,7 @@ namespace BonusCalcApi.V1.Gateways
     public class TimesheetGateway : ITimesheetGateway
     {
         private readonly BonusCalcContext _context;
+
         public TimesheetGateway(BonusCalcContext context)
         {
             _context = context;
