@@ -29,11 +29,11 @@ namespace BonusCalcApi.Tests.V1.UseCase
         {
             // Arrange
             var expectedTimesheet = _fixture.Create<Timesheet>();
-            _mockTimeSheetGateway.Setup(x => x.GetOperativesTimesheetAsync(expectedTimesheet.WeekId, expectedTimesheet.OperativeId))
+            _mockTimeSheetGateway.Setup(x => x.GetOperativesTimesheetAsync(expectedTimesheet.OperativeId, expectedTimesheet.WeekId))
                 .ReturnsAsync(expectedTimesheet);
 
             // Act
-            var result = await _classUnderTest.Execute(expectedTimesheet.WeekId, expectedTimesheet.OperativeId);
+            var result = await _classUnderTest.Execute(expectedTimesheet.OperativeId, expectedTimesheet.WeekId);
 
             // Assert
             result.Should().BeEquivalentTo(expectedTimesheet);

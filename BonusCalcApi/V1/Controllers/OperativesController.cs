@@ -84,7 +84,7 @@ namespace BonusCalcApi.V1.Controllers
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
 
-            var timesheet = await _getOperativeTimesheetUseCase.Execute(week, operativePayrollNumber);
+            var timesheet = await _getOperativeTimesheetUseCase.Execute(operativePayrollNumber, week);
 
             if (timesheet is null)
             {

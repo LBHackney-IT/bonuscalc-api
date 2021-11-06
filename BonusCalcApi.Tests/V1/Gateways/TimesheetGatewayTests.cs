@@ -38,7 +38,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
             await AddTimesheets(expectedTimesheet, week);
 
             // Act
-            var result = await _classUnderTest.GetOperativesTimesheetAsync(week.Id, operative.Id);
+            var result = await _classUnderTest.GetOperativesTimesheetAsync(operative.Id, week.Id);
 
             // Assert
             result.Should().BeEquivalentTo(expectedTimesheet);

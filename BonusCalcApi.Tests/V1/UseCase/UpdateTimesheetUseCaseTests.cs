@@ -223,7 +223,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var existingTimesheet = _fixture.Build<Timesheet>()
                 .Without(t => t.PayElements)
                 .Create();
-            _timesheetGatewayMock.Setup(x => x.GetOperativesTimesheetAsync(existingTimesheet.WeekId, existingTimesheet.OperativeId))
+            _timesheetGatewayMock.Setup(x => x.GetOperativesTimesheetAsync(existingTimesheet.OperativeId, existingTimesheet.WeekId))
                 .ReturnsAsync(existingTimesheet);
             return existingTimesheet;
         }
