@@ -17,13 +17,13 @@ namespace BonusCalcApi.V1.Gateways
             _context = context;
         }
 
-        public async Task<Operative> GetAsync(string operativePayrollNumber)
+        public async Task<Operative> GetAsync(string operativeId)
         {
             return await _context.Operatives
                 .Include(o => o.Trade)
                 .Include(o => o.Scheme)
                 .ThenInclude(s => s.PayBands)
-                .SingleOrDefaultAsync(o => o.Id == operativePayrollNumber);
+                .SingleOrDefaultAsync(o => o.Id == operativeId);
         }
     }
 }

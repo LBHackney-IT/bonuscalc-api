@@ -17,9 +17,9 @@ namespace BonusCalcApi.V1.UseCase
             _operativeGateway = operativeGateway;
         }
 
-        public async Task<Operative> ExecuteAsync(string operativePayrollNumber)
+        public async Task<Operative> ExecuteAsync(string operativeId)
         {
-            return await _operativeGateway.GetAsync(operativePayrollNumber);
+            return await _operativeGateway.GetAsync(operativeId);
         }
     }
 }

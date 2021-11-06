@@ -6,6 +6,6 @@ namespace BonusCalcApi.V1.UseCase.Interfaces
 {
     public interface IGetOperativeUseCase
     {
-        Task<Operative> ExecuteAsync(string operativePayrollNumber);
+        public Task<Operative> ExecuteAsync(string operativeId);
     }
 }
