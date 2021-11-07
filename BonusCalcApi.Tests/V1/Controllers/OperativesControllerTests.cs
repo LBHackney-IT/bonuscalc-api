@@ -27,7 +27,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
         private OperativesController _classUnderTest;
         private MockOperativeHelpers _operativeHelpers;
-        private Mock<IGetOperativeTimesheetUseCase> _getOperativesTimesheetUseCaseMock;
+        private Mock<IGetOperativeTimesheetUseCase> _getOperativeTimesheetUseCaseMock;
         private Mock<IUpdateTimesheetUseCase> _updateTimesheetUseCaseMock;
 
         [SetUp]
@@ -36,7 +36,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
             _getOperativeUseCaseMock = new Mock<IGetOperativeUseCase>();
-            _getOperativesTimesheetUseCaseMock = new Mock<IGetOperativeTimesheetUseCase>();
+            _getOperativeTimesheetUseCaseMock = new Mock<IGetOperativeTimesheetUseCase>();
             _updateTimesheetUseCaseMock = new Mock<IUpdateTimesheetUseCase>();
             _operativeHelpers = new MockOperativeHelpers();
             _problemDetailsFactoryMock = new MockProblemDetailsFactory();
@@ -44,7 +44,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _classUnderTest = new OperativesController(
                 _operativeHelpers.Object,
                 _getOperativeUseCaseMock.Object,
-                _getOperativesTimesheetUseCaseMock.Object,
+                _getOperativeTimesheetUseCaseMock.Object,
                 _updateTimesheetUseCaseMock.Object
             );
 
@@ -138,7 +138,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         {
             // Arrange
             var expectedTimesheet = _fixture.Create<Timesheet>();
-            _getOperativesTimesheetUseCaseMock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>()))
+            _getOperativeTimesheetUseCaseMock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(expectedTimesheet);
             _operativeHelpers.ValidPrn(true);
 
@@ -157,7 +157,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         {
             // Arrange
             var expectedTimesheet = _fixture.Create<Timesheet>();
-            _getOperativesTimesheetUseCaseMock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>()))
+            _getOperativeTimesheetUseCaseMock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(null as Timesheet);
             _operativeHelpers.ValidPrn(true);
 

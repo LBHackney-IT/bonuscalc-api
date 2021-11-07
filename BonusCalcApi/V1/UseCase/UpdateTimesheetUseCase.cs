@@ -21,7 +21,7 @@ namespace BonusCalcApi.V1.UseCase
         }
         public async Task Execute(TimesheetUpdateRequest request, string operativeId, string weekId)
         {
-            var existingTimesheet = await _timesheetGateway.GetOperativesTimesheetAsync(operativeId, weekId);
+            var existingTimesheet = await _timesheetGateway.GetOperativeTimesheetAsync(operativeId, weekId);
 
             if (existingTimesheet is null) ThrowHelper.ThrowNotFound($"Timesheet not found for operative: {operativeId} and week: {weekId}");
 

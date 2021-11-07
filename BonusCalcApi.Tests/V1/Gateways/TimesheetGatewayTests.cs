@@ -38,7 +38,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
             await AddTimesheets(expectedTimesheet, week);
 
             // Act
-            var result = await _classUnderTest.GetOperativesTimesheetAsync(operative.Id, week.Id);
+            var result = await _classUnderTest.GetOperativeTimesheetAsync(operative.Id, week.Id);
 
             // Assert
             result.Should().BeEquivalentTo(expectedTimesheet);
@@ -48,7 +48,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         public async Task RetrievesNonExistentTimesheetFromDB()
         {
             // Act
-            var result = await _classUnderTest.GetOperativesTimesheetAsync("1234", "4569");
+            var result = await _classUnderTest.GetOperativeTimesheetAsync("1234", "4569");
 
             // Assert
             result.Should().BeNull();

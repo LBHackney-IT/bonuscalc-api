@@ -26,14 +26,14 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
         private PayElementTypesController _classUnderTest;
         //private MockOperativeHelpers _operativeHelpers;
-        //private Mock<IGetPayElementTypeUseCase> _getOperativesTimesheetUseCaseMock;
+        //private Mock<IGetPayElementTypeUseCase> _getOperativeTimesheetUseCaseMock;
 
         [SetUp]
         public void SetUp()
         {
             _fixture = FixtureHelpers.Fixture;
             _getPayElementTypeUseCaseMock = new Mock<IGetPayElementTypeUseCase>();
-            //_getOperativesTimesheetUseCaseMock = new Mock<IGetOperativeTimesheetUseCase>();
+            //_getOperativeTimesheetUseCaseMock = new Mock<IGetOperativeTimesheetUseCase>();
             //_operativeHelpers = new MockOperativeHelpers();
             _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 

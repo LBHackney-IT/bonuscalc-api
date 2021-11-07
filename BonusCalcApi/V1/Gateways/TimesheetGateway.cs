@@ -16,7 +16,7 @@ namespace BonusCalcApi.V1.Gateways
             _context = context;
         }
 
-        public async Task<Timesheet> GetOperativesTimesheetAsync(string operativeId, string weekId)
+        public async Task<Timesheet> GetOperativeTimesheetAsync(string operativeId, string weekId)
         {
             return await _context.Timesheets
                 .Include(t => t.Week)

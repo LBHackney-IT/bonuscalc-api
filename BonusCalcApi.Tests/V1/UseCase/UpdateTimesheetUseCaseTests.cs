@@ -195,7 +195,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
         public async Task ThrowsResourceNotFoundWhenTimesheetDoesntExist()
         {
             // Arrange
-            _timesheetGatewayMock.Setup(x => x.GetOperativesTimesheetAsync(It.IsAny<string>(), It.IsAny<string>()))
+            _timesheetGatewayMock.Setup(x => x.GetOperativeTimesheetAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(null as Timesheet);
 
             // Act
@@ -223,7 +223,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var existingTimesheet = _fixture.Build<Timesheet>()
                 .Without(t => t.PayElements)
                 .Create();
-            _timesheetGatewayMock.Setup(x => x.GetOperativesTimesheetAsync(existingTimesheet.OperativeId, existingTimesheet.WeekId))
+            _timesheetGatewayMock.Setup(x => x.GetOperativeTimesheetAsync(existingTimesheet.OperativeId, existingTimesheet.WeekId))
                 .ReturnsAsync(existingTimesheet);
             return existingTimesheet;
         }
