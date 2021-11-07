@@ -49,7 +49,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var request = CreateRequest(newPayElement);
 
             // Act
-            await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+            await _classUnderTest.ExecuteAsync(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
 
             // Assert
             var payElement = existingTimesheet.PayElements.Single();
@@ -74,7 +74,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var request = new TimesheetUpdateRequest();
 
             // Act
-            await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+            await _classUnderTest.ExecuteAsync(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
 
             // Assert
             existingTimesheet.PayElements.Should().BeEmpty();
@@ -96,7 +96,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var request = CreateRequest(updatedPayElement);
 
             // Act
-            await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+            await _classUnderTest.ExecuteAsync(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
 
             // Assert
             var payElement = existingTimesheet.PayElements.Single();
@@ -120,7 +120,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var request = CreateRequest(updatedPayElement);
 
             // Act
-            Func<Task> act = async () => await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+            Func<Task> act = async () => await _classUnderTest.ExecuteAsync(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
 
             // Assert
             await act.Should().ThrowAsync<ResourceNotFoundException>();
@@ -142,7 +142,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var request = CreateRequest(newPayElement);
 
             // Act
-            await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+            await _classUnderTest.ExecuteAsync(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
 
             // Assert
             var payElement = existingTimesheet.PayElements.Single();
@@ -165,7 +165,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var request = new TimesheetUpdateRequest();
 
             // Act
-            await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+            await _classUnderTest.ExecuteAsync(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
 
             // Assert
             var payElement = existingTimesheet.PayElements.Single();
@@ -183,7 +183,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var request = CreateRequest(updatedPayElement);
 
             // Act
-            await _classUnderTest.Execute(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
+            await _classUnderTest.ExecuteAsync(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
 
             // Assert
             var payElement = existingTimesheet.PayElements.Single();
@@ -199,7 +199,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
                 .ReturnsAsync(null as Timesheet);
 
             // Act
-            Func<Task> act = async () => await _classUnderTest.Execute(new TimesheetUpdateRequest(), "1", "1");
+            Func<Task> act = async () => await _classUnderTest.ExecuteAsync(new TimesheetUpdateRequest(), "1", "1");
 
             // Assert
             await act.Should().ThrowAsync<ResourceNotFoundException>();

@@ -5,7 +5,7 @@ namespace BonusCalcApi.V1.UseCase.Interfaces
 {
     public interface IGetOperativeTimesheetUseCase
     {
-        public Task<Timesheet> Execute(string operativeId, string weekId);
+        public Task<Timesheet> ExecuteAsync(string operativeId, string weekId);
     }
 
 }

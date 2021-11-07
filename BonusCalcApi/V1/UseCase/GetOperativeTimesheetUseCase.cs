@@ -14,7 +14,7 @@ namespace BonusCalcApi.V1.UseCase
             _timesheetGateway = timesheetGateway;
         }
 
-        public async Task<Timesheet> Execute(string operativeId, string weekId)
+        public async Task<Timesheet> ExecuteAsync(string operativeId, string weekId)
         {
             return await _timesheetGateway.GetOperativeTimesheetAsync(operativeId, weekId);
         }

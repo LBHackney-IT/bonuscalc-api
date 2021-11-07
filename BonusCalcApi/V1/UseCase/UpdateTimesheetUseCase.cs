@@ -19,7 +19,7 @@ namespace BonusCalcApi.V1.UseCase
             _timesheetGateway = timesheetGateway;
             _dbSaver = dbSaver;
         }
-        public async Task Execute(TimesheetUpdateRequest request, string operativeId, string weekId)
+        public async Task ExecuteAsync(TimesheetUpdateRequest request, string operativeId, string weekId)
         {
             var existingTimesheet = await _timesheetGateway.GetOperativeTimesheetAsync(operativeId, weekId);
 

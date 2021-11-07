@@ -138,7 +138,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         {
             // Arrange
             var expectedTimesheet = _fixture.Create<Timesheet>();
-            _getOperativeTimesheetUseCaseMock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>()))
+            _getOperativeTimesheetUseCaseMock.Setup(x => x.ExecuteAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(expectedTimesheet);
             _operativeHelpers.ValidPrn(true);
 
@@ -157,7 +157,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         {
             // Arrange
             var expectedTimesheet = _fixture.Create<Timesheet>();
-            _getOperativeTimesheetUseCaseMock.Setup(x => x.Execute(It.IsAny<string>(), It.IsAny<string>()))
+            _getOperativeTimesheetUseCaseMock.Setup(x => x.ExecuteAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(null as Timesheet);
             _operativeHelpers.ValidPrn(true);
 
@@ -185,7 +185,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.OK);
-            _updateTimesheetUseCaseMock.Verify(x => x.Execute(updateRequest, expectedOperativeId, expectedWeekId));
+            _updateTimesheetUseCaseMock.Verify(x => x.ExecuteAsync(updateRequest, expectedOperativeId, expectedWeekId));
         }
     }
 

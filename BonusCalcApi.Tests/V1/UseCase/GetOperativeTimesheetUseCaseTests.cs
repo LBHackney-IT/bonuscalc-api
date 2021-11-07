@@ -33,7 +33,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
                 .ReturnsAsync(expectedTimesheet);
 
             // Act
-            var result = await _classUnderTest.Execute(expectedTimesheet.OperativeId, expectedTimesheet.WeekId);
+            var result = await _classUnderTest.ExecuteAsync(expectedTimesheet.OperativeId, expectedTimesheet.WeekId);
 
             // Assert
             result.Should().BeEquivalentTo(expectedTimesheet);
