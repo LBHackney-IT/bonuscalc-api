@@ -22,27 +22,13 @@ namespace BonusCalcApi.Tests
         private MockWebApplicationFactory<TStartup> _factory;
         private IDbContextTransaction _transaction;
         private DbContextOptionsBuilder _builder;
-        private readonly bool _usePostgres = Environment.GetEnvironmentVariable("DB_TYPE") == "postgres";
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
             _builder = new DbContextOptionsBuilder();
-
-            if (_usePostgres)
-            {
-                _builder.UseNpgsql(ConnectionString.TestDatabase())
-                    .UseSnakeCaseNamingConvention();
-            }
-            else
-            {
-                _builder.UseInMemoryDatabase("integration")
-                    .UseSnakeCaseNamingConvention();
-                _builder.ConfigureWarnings(warningOptions =>
-                {
-                    warningOptions.Ignore(InMemoryEventId.TransactionIgnoredWarning);
-                });
-            }
+            _builder.UseNpgsql(ConnectionString.TestDatabase())
+                .UseSnakeCaseNamingConvention();
         }
 
         [SetUp]
@@ -50,7 +36,7 @@ namespace BonusCalcApi.Tests
         {
             _factory = new MockWebApplicationFactory<TStartup>(_builder);
             Client = _factory.CreateClient();
-            _factory.Context.Database.EnsureCreated();
+            _factory.Context.Database.Migrate();
             _transaction = _factory.Context.Database.BeginTransaction();
         }
 
@@ -61,7 +47,6 @@ namespace BonusCalcApi.Tests
             _factory.Dispose();
             _transaction.Rollback();
             _transaction.Dispose();
-            if (!_usePostgres) _factory.Context.Database.EnsureDeleted();
         }
 
         public async Task<(HttpStatusCode statusCode, TResponse response)> Get<TResponse>(string address)

@@ -21,6 +21,9 @@ namespace BonusCalcApi.Tests
 
             BonusCalcContext.Database.Migrate();
             _transaction = BonusCalcContext.Database.BeginTransaction();
+
+            // Empty trades table for tests
+            BonusCalcContext.Trades.RemoveRange(BonusCalcContext.Trades);
         }
 
         [TearDown]
