@@ -80,7 +80,7 @@ namespace BonusCalcApi.V1.Controllers
             if (!IsValid(operativePayrollNumber))
                 return Problem(
                     "The requested payroll number is invalid",
-                    $"/api/v1/operatives/{operativePayrollNumber}?week={week}",
+                    $"/api/v1/operatives/{operativePayrollNumber}/timesheet?week={week}",
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
 
@@ -90,7 +90,7 @@ namespace BonusCalcApi.V1.Controllers
             {
                 return Problem(
                     "The requested timesheet is not found",
-                    $"/api/v1/operatives/{operativePayrollNumber}?week={week}",
+                    $"/api/v1/operatives/{operativePayrollNumber}/timesheet?week={week}",
                     StatusCodes.Status404NotFound, "Not Found"
                 );
             }
