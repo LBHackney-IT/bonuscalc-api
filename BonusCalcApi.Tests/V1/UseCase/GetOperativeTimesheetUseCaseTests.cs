@@ -12,7 +12,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
     public class GetOperativeTimesheetUseCaseTests
     {
         private GetOperativeTimesheetUseCase _classUnderTest;
-        private Mock<ITimesheetGateway> _mockTimeSheetGateway;
+        private Mock<ITimesheetGateway> _mockTimesheetGateway;
         private Fixture _fixture;
 
         [SetUp]
@@ -21,15 +21,15 @@ namespace BonusCalcApi.Tests.V1.UseCase
             _fixture = new Fixture();
             _fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
             _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
-            _mockTimeSheetGateway = new Mock<ITimesheetGateway>();
-            _classUnderTest = new GetOperativeTimesheetUseCase(_mockTimeSheetGateway.Object);
+            _mockTimesheetGateway = new Mock<ITimesheetGateway>();
+            _classUnderTest = new GetOperativeTimesheetUseCase(_mockTimesheetGateway.Object);
         }
         [Test]
         public async Task GetOperativeTimesheet()
         {
             // Arrange
             var expectedTimesheet = _fixture.Create<Timesheet>();
-            _mockTimeSheetGateway.Setup(x => x.GetOperativeTimesheetAsync(expectedTimesheet.OperativeId, expectedTimesheet.WeekId))
+            _mockTimesheetGateway.Setup(x => x.GetOperativeTimesheetAsync(expectedTimesheet.OperativeId, expectedTimesheet.WeekId))
                 .ReturnsAsync(expectedTimesheet);
 
             // Act
