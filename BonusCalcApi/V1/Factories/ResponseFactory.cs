@@ -119,5 +119,30 @@ namespace BonusCalcApi.V1.Factories
                 Value = payBand.Value
             };
         }
+
+        public static SummaryResponse ToResponse(this Summary summary)
+        {
+            return new SummaryResponse
+            {
+                Id = summary.Id,
+                BonusPeriod = summary.BonusPeriod.ToResponse(),
+                WeeklySummaries = summary.WeeklySummaries.Select(ws => ws.ToResponse()).OrderBy(ws => ws.Number).ToList()
+            };
+        }
+
+        public static WeeklySummaryResponse ToResponse(this WeeklySummary weeklySummary)
+        {
+            return new WeeklySummaryResponse
+            {
+                Number = weeklySummary.Number,
+                StartAt = weeklySummary.StartAt,
+                ClosedAt = weeklySummary.ClosedAt,
+                ProductiveValue = weeklySummary.ProductiveValue,
+                NonProductiveDuration = weeklySummary.NonProductiveDuration,
+                NonProductiveValue = weeklySummary.NonProductiveValue,
+                TotalValue = weeklySummary.TotalValue,
+                ProjectedValue = weeklySummary.ProjectedValue
+            };
+        }
     }
 }

@@ -29,10 +29,31 @@ namespace BonusCalcApi.Tests.V1.Factories
             // Assert
             result.Id.Should().Be(timesheet.Id);
             ValidateWeek(result.Week, timesheet.Week);
+
             foreach (var payElement in timesheet.PayElements)
             {
                 var payElementResponse = result.PayElements.Single(pe => pe.Id == payElement.Id);
                 ValidatePayElement(payElementResponse, payElement);
+            }
+        }
+
+        [Test]
+        public void SummaryResponseMapsCorrectly()
+        {
+            // Arrange
+            var summary = _fixture.Create<Summary>();
+
+            // Act
+            var result = summary.ToResponse();
+
+            // Assert
+            result.Id.Should().Be(summary.Id);
+            ValidateBonusPeriod(result.BonusPeriod, summary.BonusPeriod);
+
+            foreach (var weeklySummary in summary.WeeklySummaries)
+            {
+                var weeklySummaryResponse = result.WeeklySummaries.Single(ws => ws.Number == weeklySummary.Number);
+                ValidateWeeklySummary(weeklySummaryResponse, weeklySummary);
             }
         }
 
@@ -79,6 +100,18 @@ namespace BonusCalcApi.Tests.V1.Factories
             bonusPeriodResponse.Year.Should().Be(bonusPeriod.Year);
             bonusPeriodResponse.ClosedAt.Should().Be(bonusPeriod.ClosedAt);
             bonusPeriodResponse.StartAt.Should().Be(bonusPeriod.StartAt);
+        }
+
+        private static void ValidateWeeklySummary(WeeklySummaryResponse weeklySummaryResponse, WeeklySummary weeklySummary)
+        {
+            weeklySummaryResponse.Number.Should().Be(weeklySummary.Number);
+            weeklySummaryResponse.StartAt.Should().Be(weeklySummary.StartAt);
+            weeklySummaryResponse.ClosedAt.Should().Be(weeklySummary.ClosedAt);
+            weeklySummaryResponse.ProductiveValue.Should().Be(weeklySummary.ProductiveValue);
+            weeklySummaryResponse.NonProductiveDuration.Should().Be(weeklySummary.NonProductiveDuration);
+            weeklySummaryResponse.NonProductiveValue.Should().Be(weeklySummary.NonProductiveValue);
+            weeklySummaryResponse.TotalValue.Should().Be(weeklySummary.TotalValue);
+            weeklySummaryResponse.ProjectedValue.Should().Be(weeklySummary.ProjectedValue);
         }
     }
 }

@@ -20,18 +20,21 @@ namespace BonusCalcApi.V1.Controllers
     {
         private readonly IOperativeHelpers _operativeHelpers;
         private readonly IGetOperativeUseCase _getOperativeUseCase;
+        private readonly IGetOperativeSummaryUseCase _getOperativeSummaryUseCase;
         private readonly IGetOperativeTimesheetUseCase _getOperativeTimesheetUseCase;
         private readonly IUpdateTimesheetUseCase _updateTimesheetUseCase;
 
         public OperativesController(
             IOperativeHelpers operativeHelpers,
             IGetOperativeUseCase getOperativeUseCase,
+            IGetOperativeSummaryUseCase getOperativeSummaryUseCase,
             IGetOperativeTimesheetUseCase getOperativeTimesheetUseCase,
             IUpdateTimesheetUseCase updateTimesheetUseCase
         )
         {
             _operativeHelpers = operativeHelpers;
             _getOperativeUseCase = getOperativeUseCase;
+            _getOperativeSummaryUseCase = getOperativeSummaryUseCase;
             _getOperativeTimesheetUseCase = getOperativeTimesheetUseCase;
             _updateTimesheetUseCase = updateTimesheetUseCase;
         }
@@ -68,6 +71,34 @@ namespace BonusCalcApi.V1.Controllers
                 );
             }
             return Ok(operative.ToResponse());
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(SummaryResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [Route("summary")]
+        public async Task<IActionResult> GetSummary([FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string bonusPeriod)
+        {
+            if (!IsValid(operativePayrollNumber))
+                return Problem(
+                    "The requested payroll number is invalid",
+                    $"/api/v1/operatives/{operativePayrollNumber}/summary?bonusPeriod={bonusPeriod}",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+
+            var summary = await _getOperativeSummaryUseCase.ExecuteAsync(operativePayrollNumber, bonusPeriod);
+
+            if (summary is null)
+            {
+                return Problem(
+                    "The requested summary is not found",
+                    $"/api/v1/operatives/{operativePayrollNumber}/summary?bonusPeriod={bonusPeriod}",
+                    StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+
+            return Ok(summary.ToResponse());
         }
 
         [HttpGet]

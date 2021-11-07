@@ -27,6 +27,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
         private OperativesController _classUnderTest;
         private MockOperativeHelpers _operativeHelpers;
+        private Mock<IGetOperativeSummaryUseCase> _getOperativeSummaryUseCaseMock;
         private Mock<IGetOperativeTimesheetUseCase> _getOperativeTimesheetUseCaseMock;
         private Mock<IUpdateTimesheetUseCase> _updateTimesheetUseCaseMock;
 
@@ -36,6 +37,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
             _getOperativeUseCaseMock = new Mock<IGetOperativeUseCase>();
+            _getOperativeSummaryUseCaseMock = new Mock<IGetOperativeSummaryUseCase>();
             _getOperativeTimesheetUseCaseMock = new Mock<IGetOperativeTimesheetUseCase>();
             _updateTimesheetUseCaseMock = new Mock<IUpdateTimesheetUseCase>();
             _operativeHelpers = new MockOperativeHelpers();
@@ -44,6 +46,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _classUnderTest = new OperativesController(
                 _operativeHelpers.Object,
                 _getOperativeUseCaseMock.Object,
+                _getOperativeSummaryUseCaseMock.Object,
                 _getOperativeTimesheetUseCaseMock.Object,
                 _updateTimesheetUseCaseMock.Object
             );
@@ -106,6 +109,20 @@ namespace BonusCalcApi.Tests.V1.Controllers
         }
 
         [Test]
+        public async Task GetSummaryReturnsBadRequestIfPayrollNumberIsInvalid()
+        {
+            // Arrange
+
+            // Act
+            var objectResult = await _classUnderTest.GetSummary("bad", "period");
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
         public async Task GetTimesheetReturnsBadRequestIfPayrollNumberIsInvalid()
         {
             // Arrange
@@ -131,6 +148,25 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.BadRequest);
             _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task GetsSummary()
+        {
+            // Arrange
+            var expectedSummary = _fixture.Create<Summary>();
+            _getOperativeSummaryUseCaseMock.Setup(x => x.ExecuteAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(expectedSummary);
+            _operativeHelpers.ValidPrn(true);
+
+            // Act
+            var objectResult = await _classUnderTest.GetSummary(expectedSummary.OperativeId, expectedSummary.BonusPeriodId);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<SummaryResponse>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Should().BeEquivalentTo(expectedSummary.ToResponse());
         }
 
         [Test]
