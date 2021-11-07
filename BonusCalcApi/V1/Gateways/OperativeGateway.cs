@@ -16,7 +16,7 @@ namespace BonusCalcApi.V1.Gateways
             _context = context;
         }
 
-        public async Task<Operative> GetAsync(string operativeId)
+        public async Task<Operative> GetOperativeAsync(string operativeId)
         {
             return await _context.Operatives
                 .Include(o => o.Trade)
