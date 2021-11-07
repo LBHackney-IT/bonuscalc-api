@@ -13,7 +13,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
 {
     public class GetPayElementTypeUseCaseTests
     {
-        private Mock<IPayElementTypesGateway> _mockPayElementTypeGateway;
+        private Mock<IPayElementTypeGateway> _mockPayElementTypeGateway;
         private GetPayElementTypeUseCase _classUnderTest;
         private Fixture _fixture;
 
@@ -21,7 +21,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
         public void Setup()
         {
             _fixture = FixtureHelpers.Fixture;
-            _mockPayElementTypeGateway = new Mock<IPayElementTypesGateway>();
+            _mockPayElementTypeGateway = new Mock<IPayElementTypeGateway>();
             _classUnderTest = new GetPayElementTypeUseCase(_mockPayElementTypeGateway.Object);
         }
         [Test]

@@ -7,7 +7,7 @@ using BonusCalcApi.V1.Infrastructure;
 
 namespace BonusCalcApi.V1.Gateways
 {
-    public class PayElementTypeGateway : IPayElementTypesGateway
+    public class PayElementTypeGateway : IPayElementTypeGateway
     {
         private readonly BonusCalcContext _context;
 
@@ -18,7 +18,7 @@ namespace BonusCalcApi.V1.Gateways
 
         public async Task<IEnumerable<PayElementType>> GetPayElementTypesAsync()
         {
-            return await _context.PayElementTypes.ToListAsync();
+            return await _context.PayElementTypes.OrderBy(pet => pet.Id).ToListAsync();
         }
     }
 }

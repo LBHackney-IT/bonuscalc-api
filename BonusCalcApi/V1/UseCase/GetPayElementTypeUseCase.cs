@@ -8,9 +8,9 @@ namespace BonusCalcApi.V1.UseCase
 {
     public class GetPayElementTypeUseCase : IGetPayElementTypeUseCase
     {
-        private readonly IPayElementTypesGateway _payElementTypesGateway;
+        private readonly IPayElementTypeGateway _payElementTypesGateway;
 
-        public GetPayElementTypeUseCase(IPayElementTypesGateway payElementTypesGateway)
+        public GetPayElementTypeUseCase(IPayElementTypeGateway payElementTypesGateway)
         {
             _payElementTypesGateway = payElementTypesGateway;
         }

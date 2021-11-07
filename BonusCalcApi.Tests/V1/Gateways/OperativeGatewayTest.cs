@@ -7,61 +7,41 @@ using NUnit.Framework;
 
 namespace BonusCalcApi.Tests.V1.Gateways
 {
-    public class OperativeGatewayTests
+    [TestFixture]
+    public class OperativeGatewayTests : DatabaseTests
     {
         private OperativeGateway _classUnderTest;
 
         [SetUp]
         public void Setup()
         {
-            _classUnderTest = new OperativeGateway(InMemoryDb.Instance);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            InMemoryDb.Teardown();
+            _classUnderTest = new OperativeGateway(BonusCalcContext);
         }
 
         [Test]
         public async Task RetrievesOperativeFromDB()
         {
             // Arrange
-            var trade = await AddTrade();
-            var scheme = await AddScheme();
-            var operative = await AddOperative(trade, scheme);
-            var expectedOperative = new Operative
-            {
-                Id = operative.Id,
-                Name = "An Operative",
-                TradeId = trade.Id,
-                Trade = trade,
-                SchemeId = scheme.Id,
-                Scheme = scheme,
-                Section = "H3007",
-                SalaryBand = 5,
-                FixedBand = false,
-                IsArchived = false
-            };
+            var operative = await AddOperative();
 
             // Act
             var result = await _classUnderTest.GetOperativeAsync(operative.Id);
 
             // Assert
-            result.Should().BeEquivalentTo(expectedOperative);
+            result.Should().BeEquivalentTo(operative);
         }
 
         [Test]
         public async Task RetrievesNonExistentOperativeFromDB()
         {
             // Act
-            var result = await _classUnderTest.GetOperativeAsync("1234");
+            var result = await _classUnderTest.GetOperativeAsync("000000");
 
             // Assert
             result.Should().BeNull();
         }
 
-        private static async Task<Trade> AddTrade()
+        private async Task<Operative> AddOperative()
         {
             var trade = new Trade
             {
@@ -69,13 +49,6 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 Description = "Electrician"
             };
 
-            await InMemoryDb.Instance.Trades.AddAsync(trade);
-            await InMemoryDb.Instance.SaveChangesAsync();
-            return trade;
-        }
-
-        private static async Task<Scheme> AddScheme()
-        {
             var scheme = new Scheme
             {
                 Id = 1,
@@ -84,27 +57,23 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 ConversionFactor = 1.0M
             };
 
-            await InMemoryDb.Instance.Schemes.AddAsync(scheme);
-            await InMemoryDb.Instance.SaveChangesAsync();
-            return scheme;
-        }
-
-        private static async Task<Operative> AddOperative(Trade trade, Scheme scheme)
-        {
             var operative = new Operative
             {
-                Id = "1234",
+                Id = "123456",
                 Name = "An Operative",
-                TradeId = trade.Id,
-                SchemeId = scheme.Id,
+                Trade = trade,
+                Scheme = scheme,
                 Section = "H3007",
                 SalaryBand = 5,
                 FixedBand = false,
                 IsArchived = false
             };
 
-            await InMemoryDb.Instance.Operatives.AddAsync(operative);
-            await InMemoryDb.Instance.SaveChangesAsync();
+            await BonusCalcContext.Trades.AddAsync(trade);
+            await BonusCalcContext.Schemes.AddAsync(scheme);
+            await BonusCalcContext.Operatives.AddAsync(operative);
+            await BonusCalcContext.SaveChangesAsync();
+
             return operative;
         }
     }

@@ -15,10 +15,11 @@ namespace BonusCalcApi.Tests
         public void RunBeforeAnyTests()
         {
             var builder = new DbContextOptionsBuilder();
-            builder.UseNpgsql(ConnectionString.TestDatabase());
+            builder.UseNpgsql(ConnectionString.TestDatabase())
+                .UseSnakeCaseNamingConvention();
             BonusCalcContext = new BonusCalcContext(builder.Options);
 
-            BonusCalcContext.Database.EnsureCreated();
+            BonusCalcContext.Database.Migrate();
             _transaction = BonusCalcContext.Database.BeginTransaction();
         }
 
