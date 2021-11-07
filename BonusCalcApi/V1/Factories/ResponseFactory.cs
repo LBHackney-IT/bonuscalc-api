@@ -28,7 +28,7 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = timesheet.Id,
                 Week = timesheet.Week.ToResponse(),
-                PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).ToList()
+                PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).OrderBy(pe => pe.Id).ToList()
             };
         }
 
