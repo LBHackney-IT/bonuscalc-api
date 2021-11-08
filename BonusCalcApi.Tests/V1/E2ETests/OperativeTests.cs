@@ -139,16 +139,10 @@ namespace BonusCalcApi.Tests.V1.E2ETests
 
         private async Task<Summary> SeedSummary(Operative operative)
         {
-            var bonusPeriod = _fixture.Build<BonusPeriod>()
-                .Without(bp => bp.Weeks)
-                .Create();
+            var bonusPeriod = FixtureHelpers.CreateBonusPeriod();
             await Context.BonusPeriods.AddAsync(bonusPeriod);
 
-            var week = _fixture.Build<Week>()
-                .With(w => w.BonusPeriodId, bonusPeriod.Id)
-                .Without(w => w.BonusPeriod)
-                .Without(w => w.Timesheets)
-                .Create();
+            var week = FixtureHelpers.CreateWeek(bonusPeriod);
             await Context.Weeks.AddAsync(week);
 
             var timesheet = _fixture.Build<Timesheet>()
@@ -171,9 +165,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
 
         private async Task<Timesheet> SeedTimesheet(Operative operative, IEnumerable<PayElementType> payElementsTypes = null)
         {
-            var week = _fixture.Build<Week>()
-                .Without(w => w.Timesheets)
-                .Create();
+            var week = FixtureHelpers.CreateWeek();
             await Context.Weeks.AddAsync(week);
 
             if (!(payElementsTypes is null))

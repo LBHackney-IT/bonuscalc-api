@@ -10,5 +10,11 @@ namespace BonusCalcApi.Tests.V1.Helpers.Mocks
             Setup(x => x.IsValidPrn(It.IsAny<string>()))
                 .Returns(valid);
         }
+
+        public void ValidDate(bool valid)
+        {
+            Setup(x => x.IsValidDate(It.IsAny<string>()))
+                .Returns(valid);
+        }
     }
 }

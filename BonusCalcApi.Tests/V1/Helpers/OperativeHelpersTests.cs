@@ -34,5 +34,26 @@ namespace BonusCalcApi.Tests.V1.Helpers
 
             result.Should().BeTrue();
         }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase("2021")]
+        [TestCase("2021-10")]
+        [TestCase("20211018")]
+        public void ReturnsFalseWhenInvalidDate(string isodate)
+        {
+            var result = _classUnderTest.IsValidDate(isodate);
+
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void ReturnsTrueWhenValidDate()
+        {
+            var result = _classUnderTest.IsValidDate("2021-10-18");
+
+            result.Should().BeTrue();
+        }
     }
 }

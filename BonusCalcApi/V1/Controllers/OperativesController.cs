@@ -53,7 +53,7 @@ namespace BonusCalcApi.V1.Controllers
         [HttpGet]
         public async Task<IActionResult> GetOperative([FromRoute][Required] string operativePayrollNumber)
         {
-            if (!IsValid(operativePayrollNumber))
+            if (!IsValidPrn(operativePayrollNumber))
                 return Problem(
                     "The requested payroll number is invalid",
                     $"/api/v1/operatives/{operativePayrollNumber}",
@@ -80,9 +80,16 @@ namespace BonusCalcApi.V1.Controllers
         [Route("summary")]
         public async Task<IActionResult> GetSummary([FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string bonusPeriod)
         {
-            if (!IsValid(operativePayrollNumber))
+            if (!IsValidPrn(operativePayrollNumber))
                 return Problem(
                     "The requested payroll number is invalid",
+                    $"/api/v1/operatives/{operativePayrollNumber}/summary?bonusPeriod={bonusPeriod}",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+
+            if (!IsValidDate(bonusPeriod))
+                return Problem(
+                    "The requested bonus period is invalid",
                     $"/api/v1/operatives/{operativePayrollNumber}/summary?bonusPeriod={bonusPeriod}",
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
@@ -108,9 +115,16 @@ namespace BonusCalcApi.V1.Controllers
         [Route("timesheet")]
         public async Task<IActionResult> GetTimesheet([FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
         {
-            if (!IsValid(operativePayrollNumber))
+            if (!IsValidPrn(operativePayrollNumber))
                 return Problem(
                     "The requested payroll number is invalid",
+                    $"/api/v1/operatives/{operativePayrollNumber}/timesheet?week={week}",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+
+            if (!IsValidDate(week))
+                return Problem(
+                    "The requested week is invalid",
                     $"/api/v1/operatives/{operativePayrollNumber}/timesheet?week={week}",
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
@@ -133,10 +147,17 @@ namespace BonusCalcApi.V1.Controllers
         [Route("timesheet")]
         public async Task<IActionResult> UpdateTimesheet([FromBody] TimesheetUpdateRequest updateRequest, [FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
         {
-            if (!IsValid(operativePayrollNumber))
+            if (!IsValidPrn(operativePayrollNumber))
                 return Problem(
                     "The requested payroll number is invalid",
-                    $"/api/v1/operatives/{operativePayrollNumber}?week={week}",
+                    $"/api/v1/operatives/{operativePayrollNumber}/timesheet?week={week}",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+
+            if (!IsValidDate(week))
+                return Problem(
+                    "The requested week is invalid",
+                    $"/api/v1/operatives/{operativePayrollNumber}/timesheet?week={week}",
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
 
@@ -145,9 +166,14 @@ namespace BonusCalcApi.V1.Controllers
             return Ok();
         }
 
-        private bool IsValid(string operativePayrollNumber)
+        private bool IsValidPrn(string operativePayrollNumber)
         {
             return _operativeHelpers.IsValidPrn(operativePayrollNumber);
+        }
+
+        private bool IsValidDate(string date)
+        {
+            return _operativeHelpers.IsValidDate(date);
         }
     }
 }
