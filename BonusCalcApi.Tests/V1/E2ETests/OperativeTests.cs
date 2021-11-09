@@ -40,6 +40,23 @@ namespace BonusCalcApi.Tests.V1.E2ETests
         }
 
         [Test]
+        public async Task CanGetSummary()
+        {
+            // Arrange
+            var operative = await SeedOperative();
+            var summary = await SeedSummary(operative);
+
+            // Act
+            var (code, response) = await Get<SummaryResponse>($"/api/v1/operatives/{operative.Id}/summary?bonusPeriod={summary.BonusPeriodId}");
+
+            // Assert
+            code.Should().Be(HttpStatusCode.OK);
+            response.Should().BeEquivalentTo(summary.ToResponse(), options =>
+                options.Using<DateTime>(x => x.Subject.Should().BeCloseTo(x.Expectation)).WhenTypeIs<DateTime>()
+            );
+        }
+
+        [Test]
         public async Task CanGetTimesheet()
         {
             // Arrange
@@ -92,6 +109,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 ValidatePayElement(updatedResult, updatedPayElement);
             }
         }
+
         private static void ValidatePayElement(PayElementResponse payElement, PayElementUpdate expectedPayElement)
         {
             payElement.Address.Should().Be(expectedPayElement.Address);
@@ -107,6 +125,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             payElement.Value.Should().Be(expectedPayElement.Value);
             payElement.WorkOrder.Should().Be(expectedPayElement.WorkOrder);
         }
+
         private PayElementUpdate CreatePayElementUpdate(IEnumerable<PayElementType> payElementsTypes)
         {
 
@@ -118,11 +137,35 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             return newPayElement;
         }
 
+        private async Task<Summary> SeedSummary(Operative operative)
+        {
+            var bonusPeriod = FixtureHelpers.CreateBonusPeriod();
+            await Context.BonusPeriods.AddAsync(bonusPeriod);
+
+            var week = FixtureHelpers.CreateWeek(bonusPeriod);
+            await Context.Weeks.AddAsync(week);
+
+            var timesheet = _fixture.Build<Timesheet>()
+                .With(t => t.OperativeId, operative.Id)
+                .Without(t => t.Operative)
+                .With(t => t.WeekId, week.Id)
+                .Without(t => t.Week)
+                .Create();
+            await Context.Timesheets.AddAsync(timesheet);
+            await Context.SaveChangesAsync();
+
+            var summary = await Context.Summaries
+                .Include(s => s.BonusPeriod)
+                .Include(s => s.WeeklySummaries)
+                .Where(s => s.OperativeId == operative.Id && s.BonusPeriodId == bonusPeriod.Id)
+                .SingleOrDefaultAsync();
+
+            return summary;
+        }
+
         private async Task<Timesheet> SeedTimesheet(Operative operative, IEnumerable<PayElementType> payElementsTypes = null)
         {
-            var week = _fixture.Build<Week>()
-                .Without(w => w.Timesheets)
-                .Create();
+            var week = FixtureHelpers.CreateWeek();
             await Context.Weeks.AddAsync(week);
 
             if (!(payElementsTypes is null))
@@ -133,7 +176,6 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                     .With(pe => pe.PayElementTypeId, () => payElementsTypes.GetRandom().Id)
                 );
             }
-            ;
 
             var timesheet = _fixture.Build<Timesheet>()
                 .With(t => t.OperativeId, operative.Id)

@@ -10,6 +10,8 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public bool Paid { get; set; }
 
+        public bool NonProductive { get; set; }
+
         public bool Productive { get; set; }
 
         public bool Adjustment { get; set; }

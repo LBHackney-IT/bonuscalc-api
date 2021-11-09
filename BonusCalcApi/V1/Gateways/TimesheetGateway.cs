@@ -10,12 +10,13 @@ namespace BonusCalcApi.V1.Gateways
     public class TimesheetGateway : ITimesheetGateway
     {
         private readonly BonusCalcContext _context;
+
         public TimesheetGateway(BonusCalcContext context)
         {
             _context = context;
         }
 
-        public async Task<Timesheet> GetOperativesTimesheetAsync(string weekId, string operativeId)
+        public async Task<Timesheet> GetOperativeTimesheetAsync(string operativeId, string weekId)
         {
             return await _context.Timesheets
                 .Include(t => t.Week)
@@ -23,7 +24,7 @@ namespace BonusCalcApi.V1.Gateways
                 .Include(t => t.PayElements)
                 .ThenInclude(pe => pe.PayElementType)
                 .Include(t => t.Operative)
-                .Where(x => x.WeekId == weekId && x.OperativeId == operativeId)
+                .Where(t => t.OperativeId == operativeId && t.WeekId == weekId)
                 .SingleOrDefaultAsync();
         }
     }

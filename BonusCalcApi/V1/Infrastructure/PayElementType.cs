@@ -16,6 +16,8 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public bool Paid { get; set; }
 
+        public bool NonProductive { get; set; }
+
         public bool Productive { get; set; }
 
         public bool Adjustment { get; set; }

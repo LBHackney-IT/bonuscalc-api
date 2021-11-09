@@ -18,6 +18,8 @@ namespace BonusCalcApi.V1.Infrastructure
         public DbSet<Timesheet> Timesheets { get; set; }
         public DbSet<Trade> Trades { get; set; }
         public DbSet<Week> Weeks { get; set; }
+        public DbSet<Summary> Summaries { get; set; }
+        public DbSet<WeeklySummary> WeeklySummaries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -116,6 +118,10 @@ namespace BonusCalcApi.V1.Infrastructure
                 .IsUnique();
 
             modelBuilder.Entity<PayElementType>()
+                .Property(pet => pet.NonProductive)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<PayElementType>()
                 .Property(pet => pet.Productive)
                 .HasDefaultValue(false);
 
@@ -162,6 +168,16 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasOne(w => w.BonusPeriod)
                 .WithMany(bp => bp.Weeks)
                 .HasForeignKey(w => w.BonusPeriodId);
+
+            modelBuilder
+                .Entity<Summary>()
+                .ToView("summaries")
+                .HasKey(s => s.Id);
+
+            modelBuilder
+                .Entity<WeeklySummary>()
+                .ToView("weekly_summaries")
+                .HasKey(ws => ws.Id);
         }
     }
 }

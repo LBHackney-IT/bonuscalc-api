@@ -1,4 +1,3 @@
-
 namespace BonusCalcApi.V1.UseCase
 {
     public static class ThrowOpsErrorUsecase

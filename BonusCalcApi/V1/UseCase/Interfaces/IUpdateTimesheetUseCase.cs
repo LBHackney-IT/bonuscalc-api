@@ -5,7 +5,6 @@ namespace BonusCalcApi.V1.UseCase.Interfaces
 {
     public interface IUpdateTimesheetUseCase
     {
-        public Task Execute(TimesheetUpdateRequest request, string operativeId, string weekId);
+        public Task ExecuteAsync(TimesheetUpdateRequest request, string operativeId, string weekId);
     }
-
 }

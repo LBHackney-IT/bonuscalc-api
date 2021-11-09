@@ -34,7 +34,7 @@ namespace BonusCalcApi.Tests
                 var serviceProvider = services.BuildServiceProvider();
                 var dbContext = serviceProvider.GetRequiredService<BonusCalcContext>();
 
-                dbContext.Database.EnsureCreated();
+                dbContext.Database.Migrate();
             });
         }
         public BonusCalcContext Context { get; set; }

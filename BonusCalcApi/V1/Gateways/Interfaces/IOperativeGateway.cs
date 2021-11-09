@@ -5,6 +5,6 @@ namespace BonusCalcApi.V1.Gateways.Interfaces
 {
     public interface IOperativeGateway
     {
-        Task<Operative> GetAsync(string operativePayrollNumber);
+        public Task<Operative> GetOperativeAsync(string operativeId);
     }
 }

@@ -5,7 +5,6 @@ namespace BonusCalcApi.V1.Gateways.Interfaces
 {
     public interface ITimesheetGateway
     {
-        public Task<Timesheet> GetOperativesTimesheetAsync(string weekId, string operativeId);
+        public Task<Timesheet> GetOperativeTimesheetAsync(string operativeId, string weekId);
     }
-
 }

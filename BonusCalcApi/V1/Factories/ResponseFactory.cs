@@ -28,7 +28,7 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = timesheet.Id,
                 Week = timesheet.Week.ToResponse(),
-                PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).ToList()
+                PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).OrderBy(pe => pe.Id).ToList()
             };
         }
 
@@ -85,6 +85,7 @@ namespace BonusCalcApi.V1.Factories
                 Description = payElementType.Description,
                 PayAtBand = payElementType.PayAtBand,
                 Paid = payElementType.Paid,
+                NonProductive = payElementType.NonProductive,
                 Productive = payElementType.Productive,
                 Adjustment = payElementType.Adjustment
             };
@@ -116,6 +117,31 @@ namespace BonusCalcApi.V1.Factories
             {
                 Band = payBand.Band,
                 Value = payBand.Value
+            };
+        }
+
+        public static SummaryResponse ToResponse(this Summary summary)
+        {
+            return new SummaryResponse
+            {
+                Id = summary.Id,
+                BonusPeriod = summary.BonusPeriod.ToResponse(),
+                WeeklySummaries = summary.WeeklySummaries.Select(ws => ws.ToResponse()).OrderBy(ws => ws.Number).ToList()
+            };
+        }
+
+        public static WeeklySummaryResponse ToResponse(this WeeklySummary weeklySummary)
+        {
+            return new WeeklySummaryResponse
+            {
+                Number = weeklySummary.Number,
+                StartAt = weeklySummary.StartAt,
+                ClosedAt = weeklySummary.ClosedAt,
+                ProductiveValue = weeklySummary.ProductiveValue,
+                NonProductiveDuration = weeklySummary.NonProductiveDuration,
+                NonProductiveValue = weeklySummary.NonProductiveValue,
+                TotalValue = weeklySummary.TotalValue,
+                ProjectedValue = weeklySummary.ProjectedValue
             };
         }
     }
