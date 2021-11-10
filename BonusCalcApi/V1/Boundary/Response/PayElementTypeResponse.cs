@@ -15,5 +15,9 @@ namespace BonusCalcApi.V1.Boundary.Response
         public bool Productive { get; set; }
 
         public bool Adjustment { get; set; }
+
+        public bool OutOfHours { get; set; }
+
+        public bool Overtime { get; set; }
     }
 }

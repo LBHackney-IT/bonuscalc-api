@@ -22,6 +22,10 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public bool Adjustment { get; set; }
 
+        public bool OutOfHours { get; set; }
+
+        public bool Overtime { get; set; }
+
         public List<PayElement> PayElements { get; set; }
     }
 }
