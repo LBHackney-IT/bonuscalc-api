@@ -117,7 +117,9 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 Paid = true,
                 Adjustment = false,
                 Productive = false,
-                NonProductive = true
+                NonProductive = true,
+                OutOfHours = false,
+                Overtime = false
             };
 
             var timesheet = new Timesheet

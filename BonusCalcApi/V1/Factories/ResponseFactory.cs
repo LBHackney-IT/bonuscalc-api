@@ -87,7 +87,9 @@ namespace BonusCalcApi.V1.Factories
                 Paid = payElementType.Paid,
                 NonProductive = payElementType.NonProductive,
                 Productive = payElementType.Productive,
-                Adjustment = payElementType.Adjustment
+                Adjustment = payElementType.Adjustment,
+                OutOfHours = payElementType.OutOfHours,
+                Overtime = payElementType.Overtime
             };
         }
 
