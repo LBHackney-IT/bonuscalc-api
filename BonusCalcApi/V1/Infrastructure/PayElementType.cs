@@ -26,6 +26,8 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public bool Overtime { get; set; }
 
+        public bool Selectable { get; set; }
+
         public List<PayElement> PayElements { get; set; }
     }
 }

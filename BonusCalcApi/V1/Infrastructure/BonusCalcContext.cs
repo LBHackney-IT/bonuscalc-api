@@ -137,6 +137,10 @@ namespace BonusCalcApi.V1.Infrastructure
                 .Property(pet => pet.Overtime)
                 .HasDefaultValue(false);
 
+            modelBuilder.Entity<PayElementType>()
+                .Property(pet => pet.Selectable)
+                .HasDefaultValue(false);
+
             modelBuilder.Entity<Scheme>()
                 .Property(s => s.Id)
                 .ValueGeneratedNever();

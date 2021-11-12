@@ -85,6 +85,7 @@ namespace BonusCalcApi.Tests.V1.Factories
             payElementTypeResponse.Adjustment.Should().Be(payElementType.Adjustment);
             payElementTypeResponse.OutOfHours.Should().Be(payElementType.OutOfHours);
             payElementTypeResponse.Overtime.Should().Be(payElementType.Overtime);
+            payElementTypeResponse.Selectable.Should().Be(payElementType.Selectable);
         }
 
         private static void ValidateWeek(WeekResponse weekResponse, Week week)
