@@ -47,7 +47,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Productive = false,
                     NonProductive = true,
                     OutOfHours = false,
-                    Overtime = false
+                    Overtime = false,
+                    Selectable = true
                 },
                 new PayElementType
                 {
@@ -56,10 +57,11 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     PayAtBand = false,
                     Paid = false,
                     Adjustment = true,
-                    Productive = false,
+                    Productive = true,
                     NonProductive = false,
                     OutOfHours = false,
-                    Overtime = false
+                    Overtime = false,
+                    Selectable = true
                 },
                 new PayElementType
                 {

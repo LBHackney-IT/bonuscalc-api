@@ -19,5 +19,7 @@ namespace BonusCalcApi.V1.Boundary.Response
         public bool OutOfHours { get; set; }
 
         public bool Overtime { get; set; }
+
+        public bool Selectable { get; set; }
     }
 }
