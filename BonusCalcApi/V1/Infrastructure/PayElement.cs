@@ -8,7 +8,9 @@ namespace BonusCalcApi.V1.Infrastructure
         [Key]
         public int Id { get; set; }
 
-        public int TimesheetId { get; set; }
+        [Required]
+        [StringLength(17)]
+        public string TimesheetId { get; set; }
         public Timesheet Timesheet { get; set; }
 
         public int PayElementTypeId { get; set; }

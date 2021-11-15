@@ -125,6 +125,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
 
             var timesheet = new Timesheet
             {
+                Id = "123456/2021-10-18",
                 Week = week,
                 Operative = operative,
                 PayElements = new List<PayElement>()

@@ -205,6 +205,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
             {
                 new Timesheet
                 {
+                    Id = "123456/2021-08-02",
                     WeekId = "2021-08-02",
                     Operative = operative,
                     PayElements = new List<PayElement>()
@@ -225,6 +226,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 },
                 new Timesheet
                 {
+                    Id = "123456/2021-08-09",
                     WeekId = "2021-08-09",
                     Operative = operative,
                     PayElements = new List<PayElement>()
@@ -245,6 +247,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 },
                 new Timesheet
                 {
+                    Id = "123456/2021-08-16",
                     WeekId = "2021-08-16",
                     Operative = operative,
                     PayElements = new List<PayElement>()
