@@ -73,6 +73,7 @@ namespace BonusCalcApi.V1.Factories
                 Duration = payElement.Duration,
                 Value = payElement.Value,
                 WorkOrder = payElement.WorkOrder,
+                ClosedAt = payElement.ClosedAt,
                 PayElementType = payElement.PayElementType.ToResponse()
             };
         }

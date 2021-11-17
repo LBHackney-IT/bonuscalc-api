@@ -258,8 +258,10 @@ namespace BonusCalcApi.Tests.V1.Gateways
                             WorkOrder = "1000001",
                             Address = "1 Knowhere Road",
                             Comment = "Fix broken light switch",
+                            Tuesday = 100.0M,
                             Value = 100.0M,
-                            ReadOnly = true
+                            ReadOnly = true,
+                            ClosedAt = new DateTime(2021, 8, 17, 14, 0, 0, DateTimeKind.Utc)
                         }
                     }
                 }

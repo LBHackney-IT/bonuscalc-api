@@ -124,6 +124,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             payElement.Duration.Should().Be(expectedPayElement.Duration);
             payElement.Value.Should().Be(expectedPayElement.Value);
             payElement.WorkOrder.Should().Be(expectedPayElement.WorkOrder);
+            payElement.ClosedAt.Should().Be(expectedPayElement.ClosedAt);
         }
 
         private PayElementUpdate CreatePayElementUpdate(IEnumerable<PayElementType> payElementsTypes)

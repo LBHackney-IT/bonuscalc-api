@@ -40,6 +40,7 @@ namespace BonusCalcApi.Tests.V1.Factories
             result.Duration.Should().Be(payElementUpdate.Duration);
             result.Value.Should().Be(payElementUpdate.Value);
             result.WorkOrder.Should().Be(payElementUpdate.WorkOrder);
+            result.ClosedAt.Should().Be(payElementUpdate.ClosedAt);
             result.PayElementTypeId.Should().Be(payElementUpdate.PayElementTypeId);
         }
     }
