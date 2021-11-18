@@ -22,6 +22,7 @@ namespace BonusCalcApi.V1.Factories
                 Duration = payElementUpdate.Duration,
                 Value = payElementUpdate.Value,
                 WorkOrder = payElementUpdate.WorkOrder,
+                ClosedAt = payElementUpdate.ClosedAt,
                 PayElementTypeId = payElementUpdate.PayElementTypeId
             };
         }

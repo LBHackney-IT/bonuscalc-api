@@ -1,3 +1,5 @@
+using System;
+
 namespace BonusCalcApi.V1.Boundary.Request
 {
     public class PayElementUpdate
@@ -23,5 +25,7 @@ namespace BonusCalcApi.V1.Boundary.Request
         public decimal Duration { get; set; }
 
         public decimal Value { get; set; }
+
+        public DateTime? ClosedAt { get; set; }
     }
 }

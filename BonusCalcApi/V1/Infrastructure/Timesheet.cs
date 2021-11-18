@@ -7,7 +7,8 @@ namespace BonusCalcApi.V1.Infrastructure
     public class Timesheet
     {
         [Key]
-        public int Id { get; set; }
+        [StringLength(17)]
+        public string Id { get; set; }
 
         [Required]
         [StringLength(6)]

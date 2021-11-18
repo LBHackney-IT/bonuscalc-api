@@ -32,6 +32,9 @@ namespace BonusCalcApi.V1.Infrastructure
                 .IsUnique();
 
             modelBuilder.Entity<Operative>()
+                .HasIndex(o => o.TradeId);
+
+            modelBuilder.Entity<Operative>()
                 .HasOne(o => o.Trade)
                 .WithMany(t => t.Operatives)
                 .HasForeignKey(o => o.TradeId);
@@ -57,9 +60,15 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasForeignKey(pb => pb.SchemeId);
 
             modelBuilder.Entity<PayElement>()
+                .HasIndex(pe => pe.TimesheetId);
+
+            modelBuilder.Entity<PayElement>()
                 .HasOne(pe => pe.Timesheet)
                 .WithMany(t => t.PayElements)
                 .HasForeignKey(t => t.TimesheetId);
+
+            modelBuilder.Entity<PayElement>()
+                .HasIndex(pe => pe.PayElementTypeId);
 
             modelBuilder.Entity<PayElement>()
                 .HasOne(pe => pe.PayElementType)
@@ -155,8 +164,15 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasDefaultValue(1.0);
 
             modelBuilder.Entity<Timesheet>()
+                .Property(t => t.Id)
+                .ValueGeneratedNever();
+
+            modelBuilder.Entity<Timesheet>()
                 .HasIndex(t => new { t.OperativeId, t.WeekId })
                 .IsUnique();
+
+            modelBuilder.Entity<Timesheet>()
+                .HasIndex(t => t.WeekId);
 
             modelBuilder.Entity<Timesheet>()
                 .HasOne(t => t.Operative)

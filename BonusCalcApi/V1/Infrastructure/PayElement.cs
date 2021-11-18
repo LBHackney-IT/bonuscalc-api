@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using BonusCalcApi.V1.Boundary.Request;
 
@@ -8,7 +9,9 @@ namespace BonusCalcApi.V1.Infrastructure
         [Key]
         public int Id { get; set; }
 
-        public int TimesheetId { get; set; }
+        [Required]
+        [StringLength(17)]
+        public string TimesheetId { get; set; }
         public Timesheet Timesheet { get; set; }
 
         public int PayElementTypeId { get; set; }
@@ -33,6 +36,7 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public decimal Value { get; set; }
         public bool ReadOnly { get; set; }
+        public DateTime? ClosedAt { get; set; }
 
         public void UpdateFrom(PayElementUpdate payElement)
         {
@@ -49,6 +53,7 @@ namespace BonusCalcApi.V1.Infrastructure
             Value = payElement.Value;
             WorkOrder = payElement.WorkOrder;
             PayElementTypeId = payElement.PayElementTypeId;
+            ClosedAt = payElement.ClosedAt;
         }
     }
 }
