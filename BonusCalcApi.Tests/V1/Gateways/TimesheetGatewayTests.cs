@@ -64,6 +64,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
             {
                 Id = "123456",
                 Name = "An Operative",
+                EmailAddress = "an.operative@hackney.gov.uk",
                 Trade = trade,
                 Scheme = scheme,
                 Section = "H3007",
