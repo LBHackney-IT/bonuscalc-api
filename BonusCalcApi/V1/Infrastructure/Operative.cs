@@ -13,6 +13,9 @@ namespace BonusCalcApi.V1.Infrastructure
         [StringLength(100)]
         public string Name { get; set; }
 
+        [StringLength(100)]
+        public string EmailAddress { get; set; }
+
         [Required]
         [StringLength(3)]
         public string TradeId { get; set; }

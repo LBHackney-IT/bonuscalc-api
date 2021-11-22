@@ -13,6 +13,7 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = operative.Id,
                 Name = operative.Name,
+                EmailAddress = operative.EmailAddress,
                 Trade = operative.Trade.ToResponse(),
                 Scheme = operative.Scheme?.ToResponse(),
                 Section = operative.Section,

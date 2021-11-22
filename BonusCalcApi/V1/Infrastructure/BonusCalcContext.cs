@@ -47,6 +47,10 @@ namespace BonusCalcApi.V1.Infrastructure
                 .WithMany(s => s.Operatives)
                 .HasForeignKey(o => o.SchemeId);
 
+            modelBuilder.Entity<Operative>()
+                .HasIndex(o => o.EmailAddress)
+                .IsUnique();
+
             modelBuilder.Entity<PayBand>()
                 .Property(pb => pb.Id)
                 .ValueGeneratedNever();
