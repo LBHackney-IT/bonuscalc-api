@@ -11,6 +11,7 @@ namespace BonusCalcApi.V1.Boundary.Response
         public SchemeResponse Scheme { get; set; }
         public string Section { get; set; }
         public int SalaryBand { get; set; }
+        public decimal Utilisation { get; set; }
         public bool FixedBand { get; set; }
         public bool IsArchived { get; set; }
     }

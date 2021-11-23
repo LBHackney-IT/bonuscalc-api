@@ -24,6 +24,7 @@ namespace BonusCalcApi.Tests.V1.Helpers
         {
             return Fixture.Build<Operative>()
                 .With(o => o.Id, CreateOperativeId())
+                .With(o => o.Utilisation, 1.0M)
                 .Without(o => o.Timesheets);
         }
 

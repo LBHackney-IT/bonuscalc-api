@@ -119,6 +119,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 Scheme = scheme,
                 Section = "H3007",
                 SalaryBand = 5,
+                Utilisation = 1.0M,
                 FixedBand = false,
                 IsArchived = false
             };
