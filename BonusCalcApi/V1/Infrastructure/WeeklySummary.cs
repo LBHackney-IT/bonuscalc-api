@@ -24,6 +24,10 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public decimal TotalValue { get; set; }
 
+        public decimal Utilisation { get; set; }
+
         public decimal ProjectedValue { get; set; }
+
+        public decimal AverageUtilisation { get; set; }
     }
 }

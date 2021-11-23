@@ -46,7 +46,9 @@ namespace BonusCalcApi.Tests.V1.Gateways
                         NonProductiveDuration = 5.0M,
                         NonProductiveValue = 500.0M,
                         TotalValue = 500.0M,
-                        ProjectedValue = 500.0M
+                        Utilisation = 1.0M,
+                        ProjectedValue = 500.0M,
+                        AverageUtilisation = 1.0M
                     },
                     new WeeklySummary
                     {
@@ -59,7 +61,9 @@ namespace BonusCalcApi.Tests.V1.Gateways
                         NonProductiveDuration = 3.0M,
                         NonProductiveValue = 300.0M,
                         TotalValue = 300.0M,
-                        ProjectedValue = 400.0M
+                        Utilisation = 1.0M,
+                        ProjectedValue = 400.0M,
+                        AverageUtilisation = 1.0M
                     },
                     new WeeklySummary
                     {
@@ -72,7 +76,9 @@ namespace BonusCalcApi.Tests.V1.Gateways
                         NonProductiveDuration = 0.0M,
                         NonProductiveValue = 0.0M,
                         TotalValue = 100.0M,
-                        ProjectedValue = 300.0M
+                        Utilisation = 1.0M,
+                        ProjectedValue = 300.0M,
+                        AverageUtilisation = 1.0M
                     }
                 }
             };
@@ -210,6 +216,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Id = "123456/2021-08-02",
                     WeekId = "2021-08-02",
                     Operative = operative,
+                    Utilisation = 1.0M,
                     PayElements = new List<PayElement>()
                     {
                         new PayElement
@@ -231,6 +238,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Id = "123456/2021-08-09",
                     WeekId = "2021-08-09",
                     Operative = operative,
+                    Utilisation = 1.0M,
                     PayElements = new List<PayElement>()
                     {
                         new PayElement
@@ -252,6 +260,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Id = "123456/2021-08-16",
                     WeekId = "2021-08-16",
                     Operative = operative,
+                    Utilisation = 1.0M,
                     PayElements = new List<PayElement>()
                     {
                         new PayElement
