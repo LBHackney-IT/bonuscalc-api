@@ -51,6 +51,11 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasIndex(o => o.EmailAddress)
                 .IsUnique();
 
+            modelBuilder.Entity<Operative>()
+                .Property(o => o.Utilisation)
+                .HasPrecision(5, 4)
+                .HasDefaultValue(1.0);
+
             modelBuilder.Entity<PayBand>()
                 .Property(pb => pb.Id)
                 .ValueGeneratedNever();

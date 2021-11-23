@@ -30,6 +30,8 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public int SalaryBand { get; set; }
 
+        public decimal Utilisation { get; set; }
+
         public bool FixedBand { get; set; }
 
         public bool IsArchived { get; set; }

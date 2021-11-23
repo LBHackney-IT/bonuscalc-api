@@ -18,6 +18,7 @@ namespace BonusCalcApi.V1.Factories
                 Scheme = operative.Scheme?.ToResponse(),
                 Section = operative.Section,
                 SalaryBand = operative.SalaryBand,
+                Utilisation = operative.Utilisation,
                 FixedBand = operative.FixedBand,
                 IsArchived = operative.IsArchived
             };
