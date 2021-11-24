@@ -193,6 +193,11 @@ namespace BonusCalcApi.V1.Infrastructure
                 .WithMany(w => w.Timesheets)
                 .HasForeignKey(t => t.WeekId);
 
+            modelBuilder.Entity<Timesheet>()
+                .Property(t => t.Utilisation)
+                .HasPrecision(5, 4)
+                .HasDefaultValue(1.0);
+
             modelBuilder.Entity<Trade>()
                 .HasIndex(t => t.Description)
                 .IsUnique();

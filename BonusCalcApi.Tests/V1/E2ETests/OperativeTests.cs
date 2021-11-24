@@ -147,6 +147,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             await Context.Weeks.AddAsync(week);
 
             var timesheet = _fixture.Build<Timesheet>()
+                .With(t => t.Utilisation, 1.0M)
                 .With(t => t.OperativeId, operative.Id)
                 .Without(t => t.Operative)
                 .With(t => t.WeekId, week.Id)
@@ -179,6 +180,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             }
 
             var timesheet = _fixture.Build<Timesheet>()
+                .With(t => t.Utilisation, 1.0M)
                 .With(t => t.OperativeId, operative.Id)
                 .Without(t => t.Operative)
                 .With(t => t.WeekId, week.Id)

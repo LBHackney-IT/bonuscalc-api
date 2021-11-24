@@ -29,6 +29,7 @@ namespace BonusCalcApi.V1.Factories
             return new TimesheetResponse
             {
                 Id = timesheet.Id,
+                Utilisation = timesheet.Utilisation,
                 Week = timesheet.Week.ToResponse(),
                 PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).OrderBy(pe => pe.Id).ToList()
             };
@@ -147,7 +148,9 @@ namespace BonusCalcApi.V1.Factories
                 NonProductiveDuration = weeklySummary.NonProductiveDuration,
                 NonProductiveValue = weeklySummary.NonProductiveValue,
                 TotalValue = weeklySummary.TotalValue,
-                ProjectedValue = weeklySummary.ProjectedValue
+                Utilisation = weeklySummary.Utilisation,
+                ProjectedValue = weeklySummary.ProjectedValue,
+                AverageUtilisation = weeklySummary.AverageUtilisation
             };
         }
     }

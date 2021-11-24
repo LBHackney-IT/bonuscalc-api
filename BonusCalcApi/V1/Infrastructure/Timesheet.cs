@@ -18,6 +18,8 @@ namespace BonusCalcApi.V1.Infrastructure
         public string WeekId { get; set; }
         public Week Week { get; set; }
 
+        public decimal Utilisation { get; set; }
+
         public List<PayElement> PayElements { get; set; }
     }
 }
