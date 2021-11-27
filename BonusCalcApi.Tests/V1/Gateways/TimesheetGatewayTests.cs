@@ -88,7 +88,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
             {
                 Id = "2021-08-02",
                 StartAt = new DateTime(2021, 8, 1, 23, 0, 0, DateTimeKind.Utc),
-                Year = 2020,
+                Year = 2021,
                 Number = 3,
                 ClosedAt = null
             };
