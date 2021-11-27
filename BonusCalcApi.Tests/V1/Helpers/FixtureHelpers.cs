@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.Dsl;
 using BonusCalcApi.V1.Infrastructure;
@@ -67,6 +68,26 @@ namespace BonusCalcApi.Tests.V1.Helpers
         public static BonusPeriod CreateBonusPeriod()
         {
             return BuildBonusPeriod().Create();
+        }
+
+        public static List<BonusPeriod> CreateBonusPeriods()
+        {
+            return new List<BonusPeriod>()
+            {
+                CreateBonusPeriod(),
+                CreateBonusPeriod()
+            };
+        }
+
+        public static IPostprocessComposer<Summary> BuildSummary()
+        {
+            return Fixture.Build<Summary>()
+                .With(s => s.BonusPeriod, CreateBonusPeriod());
+        }
+
+        public static Summary CreateSummary()
+        {
+            return BuildSummary().Create();
         }
     }
 }

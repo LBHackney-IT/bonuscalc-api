@@ -41,7 +41,7 @@ namespace BonusCalcApi.Tests.V1.Factories
         public void SummaryResponseMapsCorrectly()
         {
             // Arrange
-            var summary = _fixture.Create<Summary>();
+            var summary = FixtureHelpers.CreateSummary();
 
             // Act
             var result = summary.ToResponse();
