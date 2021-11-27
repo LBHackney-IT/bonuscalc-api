@@ -31,7 +31,7 @@ namespace BonusCalcApi.V1.Factories
                 Id = timesheet.Id,
                 Utilisation = timesheet.Utilisation,
                 Week = timesheet.Week.ToResponse(),
-                PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).OrderBy(pe => pe.Id).ToList()
+                PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).ToList()
             };
         }
 
@@ -115,7 +115,7 @@ namespace BonusCalcApi.V1.Factories
                 Type = scheme.Type,
                 Description = scheme.Description,
                 ConversionFactor = scheme.ConversionFactor,
-                PayBands = scheme.PayBands.Select(pb => pb.ToResponse()).OrderBy(pb => pb.Band).ToList()
+                PayBands = scheme.PayBands.Select(pb => pb.ToResponse()).ToList()
             };
         }
 
@@ -134,7 +134,7 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = summary.Id,
                 BonusPeriod = summary.BonusPeriod.ToResponse(),
-                WeeklySummaries = summary.WeeklySummaries.Select(ws => ws.ToResponse()).OrderBy(ws => ws.Number).ToList()
+                WeeklySummaries = summary.WeeklySummaries.Select(ws => ws.ToResponse()).ToList()
             };
         }
 

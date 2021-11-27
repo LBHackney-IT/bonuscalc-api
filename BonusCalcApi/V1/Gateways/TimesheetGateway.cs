@@ -21,7 +21,7 @@ namespace BonusCalcApi.V1.Gateways
             return await _context.Timesheets
                 .Include(t => t.Week)
                 .ThenInclude(w => w.BonusPeriod)
-                .Include(t => t.PayElements)
+                .Include(t => t.PayElements.OrderBy(pe => pe.Id))
                 .ThenInclude(pe => pe.PayElementType)
                 .Include(t => t.Operative)
                 .Where(t => t.OperativeId == operativeId && t.WeekId == weekId)
