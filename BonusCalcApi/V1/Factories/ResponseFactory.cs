@@ -35,19 +35,19 @@ namespace BonusCalcApi.V1.Factories
             };
         }
 
-        public static WeekResponse ToResponse(this Week week)
+        public static WeekResponse ToResponse(this Week week, bool includeBonusPeriod = true)
         {
             return new WeekResponse
             {
                 Id = week.Id,
                 Number = week.Number,
-                BonusPeriod = week.BonusPeriod.ToResponse(),
+                BonusPeriod = includeBonusPeriod ? week.BonusPeriod.ToResponse(false) : null,
                 ClosedAt = week.ClosedAt,
                 StartAt = week.StartAt
             };
         }
 
-        public static BonusPeriodResponse ToResponse(this BonusPeriod bonusPeriod)
+        public static BonusPeriodResponse ToResponse(this BonusPeriod bonusPeriod, bool includeWeeks = true)
         {
             return new BonusPeriodResponse
             {
@@ -55,7 +55,8 @@ namespace BonusCalcApi.V1.Factories
                 Number = bonusPeriod.Number,
                 Year = bonusPeriod.Year,
                 ClosedAt = bonusPeriod.ClosedAt,
-                StartAt = bonusPeriod.StartAt
+                StartAt = bonusPeriod.StartAt,
+                Weeks = includeWeeks ? bonusPeriod.Weeks.Select(w => w.ToResponse(false)).ToList() : null
             };
         }
 
@@ -133,7 +134,7 @@ namespace BonusCalcApi.V1.Factories
             return new SummaryResponse
             {
                 Id = summary.Id,
-                BonusPeriod = summary.BonusPeriod.ToResponse(),
+                BonusPeriod = summary.BonusPeriod.ToResponse(false),
                 WeeklySummaries = summary.WeeklySummaries.Select(ws => ws.ToResponse()).ToList()
             };
         }

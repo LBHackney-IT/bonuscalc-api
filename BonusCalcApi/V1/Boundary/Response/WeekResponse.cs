@@ -13,5 +13,7 @@ namespace BonusCalcApi.V1.Boundary.Response
         public int Number { get; set; }
 
         public DateTime? ClosedAt { get; set; }
+
+        public bool ShouldSerializeBonusPeriod() => BonusPeriod != null;
     }
 }

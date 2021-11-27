@@ -40,5 +40,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public NpgsqlTsVector SearchVector { get; set; }
 
         public List<Timesheet> Timesheets { get; set; }
+
+        public List<WeeklySummary> WeeklySummaries { get; set; }
     }
 }
