@@ -122,7 +122,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 NonProductive = true,
                 OutOfHours = false,
                 Overtime = false,
-                Selectable = true
+                Selectable = true,
+                SmvPerHour = null
             };
 
             var timesheet = new Timesheet

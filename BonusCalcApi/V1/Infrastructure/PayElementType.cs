@@ -28,6 +28,8 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public bool Selectable { get; set; }
 
+        public int? SmvPerHour { get; set; }
+
         public List<PayElement> PayElements { get; set; }
     }
 }

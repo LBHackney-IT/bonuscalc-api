@@ -94,7 +94,8 @@ namespace BonusCalcApi.V1.Factories
                 Adjustment = payElementType.Adjustment,
                 OutOfHours = payElementType.OutOfHours,
                 Overtime = payElementType.Overtime,
-                Selectable = payElementType.Selectable
+                Selectable = payElementType.Selectable,
+                SmvPerHour = payElementType.SmvPerHour
             };
         }
 

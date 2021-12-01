@@ -192,7 +192,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 NonProductive = true,
                 OutOfHours = false,
                 Overtime = false,
-                Selectable = true
+                Selectable = true,
+                SmvPerHour = null
             };
 
             var productiveType = new PayElementType
@@ -206,7 +207,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 NonProductive = false,
                 OutOfHours = false,
                 Overtime = false,
-                Selectable = false
+                Selectable = false,
+                SmvPerHour = null
             };
 
             var timesheets = new List<Timesheet>()

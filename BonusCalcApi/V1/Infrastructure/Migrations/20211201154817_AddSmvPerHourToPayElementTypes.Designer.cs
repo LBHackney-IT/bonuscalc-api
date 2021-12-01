@@ -3,15 +3,17 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211201154817_AddSmvPerHourToPayElementTypes")]
+    partial class AddSmvPerHourToPayElementTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -487,6 +489,10 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("id");
 
+                    b.Property<decimal>("AverageUtilisation")
+                        .HasColumnType("numeric")
+                        .HasColumnName("average_utilisation");
+
                     b.Property<DateTime?>("ClosedAt")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("closed_at");
@@ -522,6 +528,10 @@ namespace V1.Infrastructure.Migrations
                     b.Property<decimal>("TotalValue")
                         .HasColumnType("numeric")
                         .HasColumnName("total_value");
+
+                    b.Property<decimal>("Utilisation")
+                        .HasColumnType("numeric")
+                        .HasColumnName("utilisation");
 
                     b.HasKey("Id")
                         .HasName("pk_weekly_summaries");
