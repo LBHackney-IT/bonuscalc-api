@@ -48,7 +48,22 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     NonProductive = true,
                     OutOfHours = false,
                     Overtime = false,
-                    Selectable = true
+                    Selectable = true,
+                    SmvPerHour = null
+                },
+                new PayElementType
+                {
+                    Id = 132,
+                    Description = "Apprentice",
+                    PayAtBand = false,
+                    Paid = true,
+                    Adjustment = false,
+                    Productive = false,
+                    NonProductive = true,
+                    OutOfHours = false,
+                    Overtime = false,
+                    Selectable = true,
+                    SmvPerHour = 60
                 },
                 new PayElementType
                 {
@@ -61,7 +76,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     NonProductive = false,
                     OutOfHours = false,
                     Overtime = false,
-                    Selectable = true
+                    Selectable = true,
+                    SmvPerHour = null
                 },
                 new PayElementType
                 {
@@ -73,7 +89,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Productive = true,
                     NonProductive = false,
                     OutOfHours = false,
-                    Overtime = false
+                    Overtime = false,
+                    SmvPerHour = null
                 }
             };
 
