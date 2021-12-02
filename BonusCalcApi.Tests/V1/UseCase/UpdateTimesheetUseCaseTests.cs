@@ -106,6 +106,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
                 .Excluding(pe => pe.TimesheetId)
                 .Excluding(pe => pe.PayElementType)
                 .Excluding(pe => pe.ReadOnly)
+                .Excluding(pe => pe.SearchVector)
             );
             InMemoryDb.DbSaver.VerifySaveCalled();
         }
