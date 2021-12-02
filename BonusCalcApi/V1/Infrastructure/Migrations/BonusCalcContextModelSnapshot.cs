@@ -487,6 +487,10 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("id");
 
+                    b.Property<decimal>("AverageUtilisation")
+                        .HasColumnType("numeric")
+                        .HasColumnName("average_utilisation");
+
                     b.Property<DateTime?>("ClosedAt")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("closed_at");
@@ -522,6 +526,10 @@ namespace V1.Infrastructure.Migrations
                     b.Property<decimal>("TotalValue")
                         .HasColumnType("numeric")
                         .HasColumnName("total_value");
+
+                    b.Property<decimal>("Utilisation")
+                        .HasColumnType("numeric")
+                        .HasColumnName("utilisation");
 
                     b.HasKey("Id")
                         .HasName("pk_weekly_summaries");
