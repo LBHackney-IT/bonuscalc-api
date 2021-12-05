@@ -26,6 +26,21 @@ namespace BonusCalcApi.Tests.V1.E2ETests
         }
 
         [Test]
+        public async Task CanGetOperatives()
+        {
+            // Arrange
+            var operatives = await SeedOperatives();
+            var operativeId = operatives.First().Id;
+
+            // Act
+            var (code, response) = await Get<List<OperativeResponse>>($"/api/v1/operatives?query={operativeId}");
+
+            // Assert
+            code.Should().Be(HttpStatusCode.OK);
+            response.Should().BeEquivalentTo(operatives.Select(o => o.ToResponse()).ToList());
+        }
+
+        [Test]
         public async Task CanGetOperative()
         {
             // Arrange
@@ -197,6 +212,13 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             await Context.Operatives.AddAsync(operative);
             await Context.SaveChangesAsync();
             return operative;
+        }
+
+        private async Task<IEnumerable<Operative>> SeedOperatives()
+        {
+            return new List<Operative>(){
+                await SeedOperative()
+            };
         }
 
         private async Task<IEnumerable<PayElementType>> SeedPayElementTypes()

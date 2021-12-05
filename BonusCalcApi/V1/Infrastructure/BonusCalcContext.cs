@@ -57,6 +57,13 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasPrecision(5, 4)
                 .HasDefaultValue(1.0);
 
+            modelBuilder.Entity<Operative>()
+                .HasGeneratedTsVectorColumn(
+                    o => o.SearchVector, "english",
+                    o => new { o.Id, o.Name, o.TradeId, o.Section })
+                .HasIndex(pe => pe.SearchVector)
+                .HasMethod("GIN");
+
             modelBuilder.Entity<PayBand>()
                 .Property(pb => pb.Id)
                 .ValueGeneratedNever();

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private readonly Fixture _fixture = new Fixture();
 
         private Mock<IGetOperativeUseCase> _getOperativeUseCaseMock;
+        private Mock<IGetOperativesUseCase> _getOperativesUseCaseMock;
         private MockProblemDetailsFactory _problemDetailsFactoryMock;
 
         private OperativesController _classUnderTest;
@@ -37,6 +39,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
             _getOperativeUseCaseMock = new Mock<IGetOperativeUseCase>();
+            _getOperativesUseCaseMock = new Mock<IGetOperativesUseCase>();
             _getOperativeSummaryUseCaseMock = new Mock<IGetOperativeSummaryUseCase>();
             _getOperativeTimesheetUseCaseMock = new Mock<IGetOperativeTimesheetUseCase>();
             _updateTimesheetUseCaseMock = new Mock<IUpdateTimesheetUseCase>();
@@ -46,6 +49,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _classUnderTest = new OperativesController(
                 _operativeHelpers.Object,
                 _getOperativeUseCaseMock.Object,
+                _getOperativesUseCaseMock.Object,
                 _getOperativeSummaryUseCaseMock.Object,
                 _getOperativeTimesheetUseCaseMock.Object,
                 _updateTimesheetUseCaseMock.Object
@@ -53,6 +57,39 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
             _classUnderTest.ProblemDetailsFactory = _problemDetailsFactoryMock.Object;
+        }
+
+        [Test]
+        public async Task GetOperativesReturnsOk()
+        {
+            // Arrange
+            var expectedOperatives = _fixture.CreateMany<Operative>();
+            _getOperativesUseCaseMock
+                .Setup(m => m.ExecuteAsync(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>()))
+                .ReturnsAsync(expectedOperatives);
+
+            // Act
+            var objectResult = await _classUnderTest.GetOperatives("12345678", 1, 25);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<List<OperativeResponse>>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Should().BeEquivalentTo(expectedOperatives.Select(pe => pe.ToResponse()).ToList());
+        }
+
+        [Test]
+        public async Task GetOperativesReturnsBadRequestIfQueryIsMissing()
+        {
+            // Arrange
+
+            // Act
+            var objectResult = await _classUnderTest.GetOperatives("", null, null);
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
         }
 
         [Test]

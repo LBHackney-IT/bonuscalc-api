@@ -199,6 +199,7 @@ namespace BonusCalcApi
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
+            services.AddTransient<IGetOperativesUseCase, GetOperativesUseCase>();
             services.AddTransient<IGetOperativeTimesheetUseCase, GetOperativeTimesheetUseCase>();
             services.AddTransient<IGetOperativeSummaryUseCase, GetOperativeSummaryUseCase>();
             services.AddTransient<IGetPayElementTypeUseCase, GetPayElementTypeUseCase>();
