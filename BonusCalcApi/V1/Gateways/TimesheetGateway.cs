@@ -23,7 +23,6 @@ namespace BonusCalcApi.V1.Gateways
                 .ThenInclude(w => w.BonusPeriod)
                 .Include(t => t.PayElements.OrderBy(pe => pe.Id))
                 .ThenInclude(pe => pe.PayElementType)
-                .Include(t => t.Operative)
                 .Where(t => t.OperativeId == operativeId && t.WeekId == weekId)
                 .SingleOrDefaultAsync();
         }
