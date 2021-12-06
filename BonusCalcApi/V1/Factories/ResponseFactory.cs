@@ -15,7 +15,7 @@ namespace BonusCalcApi.V1.Factories
                 Name = operative.Name,
                 EmailAddress = operative.EmailAddress,
                 Trade = operative.Trade.ToResponse(),
-                Scheme = operative.Scheme?.ToResponse(),
+                Scheme = operative.Scheme.ToResponse(),
                 Section = operative.Section,
                 SalaryBand = operative.SalaryBand,
                 Utilisation = operative.Utilisation,
