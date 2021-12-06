@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using BonusCalcApi.V1.Boundary.Request;
+using NpgsqlTypes;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
@@ -37,6 +38,8 @@ namespace BonusCalcApi.V1.Infrastructure
         public decimal Value { get; set; }
         public bool ReadOnly { get; set; }
         public DateTime? ClosedAt { get; set; }
+
+        public NpgsqlTsVector SearchVector { get; set; }
 
         public void UpdateFrom(PayElementUpdate payElement)
         {

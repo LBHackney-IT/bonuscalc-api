@@ -193,14 +193,17 @@ namespace BonusCalcApi
             services.AddScoped<ITimesheetGateway, TimesheetGateway>();
             services.AddScoped<IPayElementTypeGateway, PayElementTypeGateway>();
             services.AddScoped<ISummaryGateway, SummaryGateway>();
+            services.AddScoped<IWorkElementGateway, WorkElementGateway>();
         }
 
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
+            services.AddTransient<IGetOperativesUseCase, GetOperativesUseCase>();
             services.AddTransient<IGetOperativeTimesheetUseCase, GetOperativeTimesheetUseCase>();
             services.AddTransient<IGetOperativeSummaryUseCase, GetOperativeSummaryUseCase>();
             services.AddTransient<IGetPayElementTypeUseCase, GetPayElementTypeUseCase>();
+            services.AddTransient<IGetWorkElementsUseCase, GetWorkElementsUseCase>();
             services.AddTransient<IUpdateTimesheetUseCase, UpdateTimesheetUseCase>();
         }
 

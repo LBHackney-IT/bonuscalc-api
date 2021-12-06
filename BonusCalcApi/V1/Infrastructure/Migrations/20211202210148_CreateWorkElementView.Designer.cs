@@ -3,16 +3,17 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using NpgsqlTypes;
 
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211202210148_CreateWorkOrderView")]
+    partial class CreateWorkOrderView
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,13 +91,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("scheme_id");
 
-                    b.Property<NpgsqlTsVector>("SearchVector")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("tsvector")
-                        .HasColumnName("search_vector")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english")
-                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Id", "Name", "TradeId", "Section" });
-
                     b.Property<string>("Section")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -125,10 +119,6 @@ namespace V1.Infrastructure.Migrations
 
                     b.HasIndex("SchemeId")
                         .HasDatabaseName("ix_operatives_scheme_id");
-
-                    b.HasIndex("SearchVector")
-                        .HasDatabaseName("ix_operatives_search_vector")
-                        .HasMethod("GIN");
 
                     b.HasIndex("TradeId")
                         .HasDatabaseName("ix_operatives_trade_id");
@@ -217,13 +207,6 @@ namespace V1.Infrastructure.Migrations
                         .HasDefaultValue(0m)
                         .HasColumnName("saturday");
 
-                    b.Property<NpgsqlTsVector>("SearchVector")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("tsvector")
-                        .HasColumnName("search_vector")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english")
-                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "WorkOrder", "Address" });
-
                     b.Property<decimal>("Sunday")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(10, 4)
@@ -274,15 +257,8 @@ namespace V1.Infrastructure.Migrations
                     b.HasIndex("PayElementTypeId")
                         .HasDatabaseName("ix_pay_elements_pay_element_type_id");
 
-                    b.HasIndex("SearchVector")
-                        .HasDatabaseName("ix_pay_elements_search_vector")
-                        .HasMethod("GIN");
-
                     b.HasIndex("TimesheetId")
                         .HasDatabaseName("ix_pay_elements_timesheet_id");
-
-                    b.HasIndex("WorkOrder")
-                        .HasDatabaseName("ix_pay_elements_work_order");
 
                     b.ToTable("pay_elements");
                 });
@@ -564,58 +540,6 @@ namespace V1.Infrastructure.Migrations
                         .HasDatabaseName("ix_weekly_summaries_summary_id");
 
                     b.ToView("weekly_summaries");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.WorkElement", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("text")
-                        .HasColumnName("address");
-
-                    b.Property<DateTime?>("ClosedAt")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("closed_at");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("OperativeId")
-                        .HasColumnType("text")
-                        .HasColumnName("operative_id");
-
-                    b.Property<string>("OperativeName")
-                        .HasColumnType("text")
-                        .HasColumnName("operative_name");
-
-                    b.Property<NpgsqlTsVector>("SearchVector")
-                        .HasColumnType("tsvector")
-                        .HasColumnName("search_vector");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("text")
-                        .HasColumnName("type");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("numeric")
-                        .HasColumnName("value");
-
-                    b.Property<string>("WeekId")
-                        .HasColumnType("text")
-                        .HasColumnName("week_id");
-
-                    b.Property<string>("WorkOrder")
-                        .HasColumnType("text")
-                        .HasColumnName("work_order");
-
-                    b.HasKey("Id")
-                        .HasName("pk_work_elements");
-
-                    b.ToView("work_elements");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Operative", b =>

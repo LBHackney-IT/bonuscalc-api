@@ -1,5 +1,6 @@
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Boundary.Request;
 using Microsoft.AspNetCore.Authorization;
@@ -13,13 +14,14 @@ using BonusCalcApi.V1.UseCase.Interfaces;
 namespace BonusCalcApi.V1.Controllers
 {
     [ApiController]
-    [Route("api/v1/operatives/{operativePayrollNumber}")]
+    [Route("api/v1/operatives")]
     [Produces("application/json")]
     [ApiVersion("1.0")]
     public class OperativesController : BaseController
     {
         private readonly IOperativeHelpers _operativeHelpers;
         private readonly IGetOperativeUseCase _getOperativeUseCase;
+        private readonly IGetOperativesUseCase _getOperativesUseCase;
         private readonly IGetOperativeSummaryUseCase _getOperativeSummaryUseCase;
         private readonly IGetOperativeTimesheetUseCase _getOperativeTimesheetUseCase;
         private readonly IUpdateTimesheetUseCase _updateTimesheetUseCase;
@@ -27,6 +29,7 @@ namespace BonusCalcApi.V1.Controllers
         public OperativesController(
             IOperativeHelpers operativeHelpers,
             IGetOperativeUseCase getOperativeUseCase,
+            IGetOperativesUseCase getOperativesUseCase,
             IGetOperativeSummaryUseCase getOperativeSummaryUseCase,
             IGetOperativeTimesheetUseCase getOperativeTimesheetUseCase,
             IUpdateTimesheetUseCase updateTimesheetUseCase
@@ -34,9 +37,27 @@ namespace BonusCalcApi.V1.Controllers
         {
             _operativeHelpers = operativeHelpers;
             _getOperativeUseCase = getOperativeUseCase;
+            _getOperativesUseCase = getOperativesUseCase;
             _getOperativeSummaryUseCase = getOperativeSummaryUseCase;
             _getOperativeTimesheetUseCase = getOperativeTimesheetUseCase;
             _updateTimesheetUseCase = updateTimesheetUseCase;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<OperativeResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetOperatives([FromQuery][Required] string query, [FromQuery] int? page, [FromQuery] int? size)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return Problem(
+                    "The requested query is missing or invalid",
+                    $"/api/v1/operatives?query={query}",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+
+            var operatives = await _getOperativesUseCase.ExecuteAsync(query, page, size);
+            return Ok(operatives.Select(o => o.ToResponse()).ToList());
         }
 
         /// <summary>
@@ -46,11 +67,12 @@ namespace BonusCalcApi.V1.Controllers
         /// <response code="400">Bad request sent to controller</response>
         /// <response code="404">No operative found for the specified payroll ID</response>
         /// <response code="500">Server error searching for the operative</response>
+        [HttpGet]
         [ProducesResponseType(typeof(OperativeResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        [HttpGet]
+        [Route("{operativePayrollNumber}")]
         public async Task<IActionResult> GetOperative([FromRoute][Required] string operativePayrollNumber)
         {
             if (!IsValidPrn(operativePayrollNumber))
@@ -77,7 +99,7 @@ namespace BonusCalcApi.V1.Controllers
         [ProducesResponseType(typeof(SummaryResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [Route("summary")]
+        [Route("{operativePayrollNumber}/summary")]
         public async Task<IActionResult> GetSummary([FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string bonusPeriod)
         {
             if (!IsValidPrn(operativePayrollNumber))
@@ -112,7 +134,7 @@ namespace BonusCalcApi.V1.Controllers
         [ProducesResponseType(typeof(TimesheetResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-        [Route("timesheet")]
+        [Route("{operativePayrollNumber}/timesheet")]
         public async Task<IActionResult> GetTimesheet([FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
         {
             if (!IsValidPrn(operativePayrollNumber))
@@ -144,7 +166,7 @@ namespace BonusCalcApi.V1.Controllers
         }
 
         [HttpPost]
-        [Route("timesheet")]
+        [Route("{operativePayrollNumber}/timesheet")]
         public async Task<IActionResult> UpdateTimesheet([FromBody] TimesheetUpdateRequest updateRequest, [FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
         {
             if (!IsValidPrn(operativePayrollNumber))

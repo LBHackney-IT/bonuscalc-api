@@ -20,6 +20,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public DbSet<Week> Weeks { get; set; }
         public DbSet<Summary> Summaries { get; set; }
         public DbSet<WeeklySummary> WeeklySummaries { get; set; }
+        public DbSet<WorkElement> WorkElements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,6 +57,13 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasPrecision(5, 4)
                 .HasDefaultValue(1.0);
 
+            modelBuilder.Entity<Operative>()
+                .HasGeneratedTsVectorColumn(
+                    o => o.SearchVector, "english",
+                    o => new { o.Id, o.Name, o.TradeId, o.Section })
+                .HasIndex(pe => pe.SearchVector)
+                .HasMethod("GIN");
+
             modelBuilder.Entity<PayBand>()
                 .Property(pb => pb.Id)
                 .ValueGeneratedNever();
@@ -70,6 +78,9 @@ namespace BonusCalcApi.V1.Infrastructure
 
             modelBuilder.Entity<PayElement>()
                 .HasIndex(pe => pe.TimesheetId);
+
+            modelBuilder.Entity<PayElement>()
+                .HasIndex(pe => pe.WorkOrder);
 
             modelBuilder.Entity<PayElement>()
                 .HasOne(pe => pe.Timesheet)
@@ -126,6 +137,13 @@ namespace BonusCalcApi.V1.Infrastructure
                 .Property(pe => pe.Sunday)
                 .HasPrecision(10, 4)
                 .HasDefaultValue(0.0);
+
+            modelBuilder.Entity<PayElement>()
+                .HasGeneratedTsVectorColumn(
+                    pe => pe.SearchVector, "english",
+                    pe => new { pe.WorkOrder, pe.Address })
+                .HasIndex(pe => pe.SearchVector)
+                .HasMethod("GIN");
 
             modelBuilder.Entity<PayElementType>()
                 .Property(pet => pet.Id)
@@ -211,15 +229,22 @@ namespace BonusCalcApi.V1.Infrastructure
                 .WithMany(bp => bp.Weeks)
                 .HasForeignKey(w => w.BonusPeriodId);
 
-            modelBuilder
-                .Entity<Summary>()
+            modelBuilder.Entity<Summary>()
                 .ToView("summaries")
                 .HasKey(s => s.Id);
 
-            modelBuilder
-                .Entity<WeeklySummary>()
+            modelBuilder.Entity<WeeklySummary>()
                 .ToView("weekly_summaries")
                 .HasKey(ws => ws.Id);
+
+            modelBuilder
+                .Entity<WorkElement>()
+                .ToView("work_elements")
+                .HasKey(wo => wo.Id);
+
+            modelBuilder.Entity<WorkElement>()
+                .Property(we => we.Id)
+                .ValueGeneratedNever();
         }
     }
 }

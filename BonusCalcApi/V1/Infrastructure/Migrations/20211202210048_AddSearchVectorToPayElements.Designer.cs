@@ -3,6 +3,7 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -10,9 +11,10 @@ using NpgsqlTypes;
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211202210048_AddSearchVectorToPayElements")]
+    partial class AddSearchVectorToPayElements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,13 +92,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("scheme_id");
 
-                    b.Property<NpgsqlTsVector>("SearchVector")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("tsvector")
-                        .HasColumnName("search_vector")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english")
-                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Id", "Name", "TradeId", "Section" });
-
                     b.Property<string>("Section")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -125,10 +120,6 @@ namespace V1.Infrastructure.Migrations
 
                     b.HasIndex("SchemeId")
                         .HasDatabaseName("ix_operatives_scheme_id");
-
-                    b.HasIndex("SearchVector")
-                        .HasDatabaseName("ix_operatives_search_vector")
-                        .HasMethod("GIN");
 
                     b.HasIndex("TradeId")
                         .HasDatabaseName("ix_operatives_trade_id");
@@ -222,7 +213,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("tsvector")
                         .HasColumnName("search_vector")
                         .HasAnnotation("Npgsql:TsVectorConfig", "english")
-                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "WorkOrder", "Address" });
+                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "WorkOrder", "Address", "Comment" });
 
                     b.Property<decimal>("Sunday")
                         .ValueGeneratedOnAdd()
@@ -591,10 +582,6 @@ namespace V1.Infrastructure.Migrations
                     b.Property<string>("OperativeName")
                         .HasColumnType("text")
                         .HasColumnName("operative_name");
-
-                    b.Property<NpgsqlTsVector>("SearchVector")
-                        .HasColumnType("tsvector")
-                        .HasColumnName("search_vector");
 
                     b.Property<string>("Type")
                         .HasColumnType("text")

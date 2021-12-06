@@ -154,5 +154,22 @@ namespace BonusCalcApi.V1.Factories
                 AverageUtilisation = weeklySummary.AverageUtilisation
             };
         }
+
+        public static WorkElementResponse ToResponse(this WorkElement workElement)
+        {
+            return new WorkElementResponse
+            {
+                Id = workElement.Id,
+                Type = workElement.Type,
+                WorkOrder = workElement.WorkOrder,
+                Address = workElement.Address,
+                Description = workElement.Description,
+                OperativeId = workElement.OperativeId,
+                OperativeName = workElement.OperativeName,
+                WeekId = workElement.WeekId,
+                Value = workElement.Value,
+                ClosedAt = workElement.ClosedAt
+            };
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using NpgsqlTypes;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
@@ -35,6 +36,8 @@ namespace BonusCalcApi.V1.Infrastructure
         public bool FixedBand { get; set; }
 
         public bool IsArchived { get; set; }
+
+        public NpgsqlTsVector SearchVector { get; set; }
 
         public List<Timesheet> Timesheets { get; set; }
     }
