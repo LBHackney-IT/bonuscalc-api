@@ -92,6 +92,7 @@ namespace BonusCalcApi.V1.Controllers
                     StatusCodes.Status404NotFound, "Not Found"
                 );
             }
+
             return Ok(operative.ToResponse());
         }
 

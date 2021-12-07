@@ -24,6 +24,28 @@ namespace BonusCalcApi.V1.Factories
             };
         }
 
+        public static OperativeSummaryResponse ToResponse(this OperativeSummary operativeSummary)
+        {
+            return new OperativeSummaryResponse
+            {
+                Id = operativeSummary.Id,
+                Name = operativeSummary.Name,
+                Trade = new TradeResponse
+                {
+                    Id = operativeSummary.TradeId,
+                    Description = operativeSummary.TradeDescription
+                },
+                SchemeId = operativeSummary.SchemeId,
+                ProductiveValue = operativeSummary.ProductiveValue,
+                NonProductiveDuration = operativeSummary.NonProductiveDuration,
+                NonProductiveValue = operativeSummary.NonProductiveValue,
+                TotalValue = operativeSummary.TotalValue,
+                Utilisation = operativeSummary.Utilisation,
+                ProjectedValue = operativeSummary.ProjectedValue,
+                AverageUtilisation = operativeSummary.AverageUtilisation
+            };
+        }
+
         public static TimesheetResponse ToResponse(this Timesheet timesheet)
         {
             return new TimesheetResponse
@@ -50,7 +72,8 @@ namespace BonusCalcApi.V1.Factories
                     StartAt = week.BonusPeriod.StartAt,
                 },
                 ClosedAt = week.ClosedAt,
-                StartAt = week.StartAt
+                StartAt = week.StartAt,
+                OperativeSummaries = week.OperativeSummaries?.Select(os => os.ToResponse()).ToList()
             };
         }
 

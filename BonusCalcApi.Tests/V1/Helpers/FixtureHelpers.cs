@@ -45,12 +45,14 @@ namespace BonusCalcApi.Tests.V1.Helpers
             if (bonusPeriod == null)
                 return Fixture.Build<Week>()
                     .With(w => w.Id, CreateIsoDateId())
-                    .Without(w => w.Timesheets);
+                    .Without(w => w.Timesheets)
+                    .Without(w => w.OperativeSummaries);
             else
                 return Fixture.Build<Week>()
                     .With(w => w.BonusPeriodId, bonusPeriod.Id)
                     .Without(w => w.BonusPeriod)
-                    .Without(w => w.Timesheets);
+                    .Without(w => w.Timesheets)
+                    .Without(w => w.OperativeSummaries);
         }
 
         public static Week CreateWeek(BonusPeriod bonusPeriod = null)

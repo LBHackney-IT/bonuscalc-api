@@ -11,6 +11,7 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public DbSet<BonusPeriod> BonusPeriods { get; set; }
         public DbSet<Operative> Operatives { get; set; }
+        public DbSet<OperativeSummary> OperativeSummaries { get; set; }
         public DbSet<PayBand> PayBands { get; set; }
         public DbSet<PayElement> PayElements { get; set; }
         public DbSet<PayElementType> PayElementTypes { get; set; }
@@ -21,6 +22,12 @@ namespace BonusCalcApi.V1.Infrastructure
         public DbSet<Summary> Summaries { get; set; }
         public DbSet<WeeklySummary> WeeklySummaries { get; set; }
         public DbSet<WorkElement> WorkElements { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseNpgsql(o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -63,6 +70,10 @@ namespace BonusCalcApi.V1.Infrastructure
                     o => new { o.Id, o.Name, o.TradeId, o.Section })
                 .HasIndex(pe => pe.SearchVector)
                 .HasMethod("GIN");
+
+            modelBuilder.Entity<OperativeSummary>()
+                .ToView("operative_summaries")
+                .HasKey(os => new { os.Id, os.WeekId });
 
             modelBuilder.Entity<PayBand>()
                 .Property(pb => pb.Id)

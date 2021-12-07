@@ -40,6 +40,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
             _classUnderTest.ProblemDetailsFactory = _problemDetailsFactoryMock.Object;
         }
+
         [Test]
         public async Task GetCurrentBonusPeriods()
         {

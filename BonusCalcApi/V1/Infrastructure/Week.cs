@@ -20,5 +20,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public DateTime? ClosedAt { get; set; }
 
         public List<Timesheet> Timesheets { get; set; }
+
+        public List<OperativeSummary> OperativeSummaries { get; set; }
     }
 }

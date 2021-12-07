@@ -195,6 +195,7 @@ namespace BonusCalcApi
             services.AddScoped<ITimesheetGateway, TimesheetGateway>();
             services.AddScoped<IPayElementTypeGateway, PayElementTypeGateway>();
             services.AddScoped<ISummaryGateway, SummaryGateway>();
+            services.AddScoped<IWeekGateway, WeekGateway>();
             services.AddScoped<IWorkElementGateway, WorkElementGateway>();
         }
 
@@ -206,6 +207,7 @@ namespace BonusCalcApi
             services.AddTransient<IGetOperativeTimesheetUseCase, GetOperativeTimesheetUseCase>();
             services.AddTransient<IGetOperativeSummaryUseCase, GetOperativeSummaryUseCase>();
             services.AddTransient<IGetPayElementTypeUseCase, GetPayElementTypeUseCase>();
+            services.AddTransient<IGetWeekUseCase, GetWeekUseCase>();
             services.AddTransient<IGetWorkElementsUseCase, GetWorkElementsUseCase>();
             services.AddTransient<IUpdateTimesheetUseCase, UpdateTimesheetUseCase>();
         }

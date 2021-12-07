@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace BonusCalcApi.V1.Boundary.Response
 {
@@ -14,6 +15,9 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public DateTime? ClosedAt { get; set; }
 
+        public List<OperativeSummaryResponse> OperativeSummaries { get; set; }
+
         public bool ShouldSerializeBonusPeriod() => BonusPeriod != null;
+        public bool ShouldSerializeOperativeSummaries() => OperativeSummaries != null;
     }
 }
