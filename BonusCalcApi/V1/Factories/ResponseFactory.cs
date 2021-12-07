@@ -143,6 +143,7 @@ namespace BonusCalcApi.V1.Factories
         {
             return new SchemeResponse
             {
+                Id = scheme.Id,
                 Type = scheme.Type,
                 Description = scheme.Description,
                 ConversionFactor = scheme.ConversionFactor,
