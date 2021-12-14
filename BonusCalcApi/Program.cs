@@ -13,7 +13,10 @@ namespace BonusCalcApi
             => Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseSentry();
+                    webBuilder.UseSentry(o =>
+                    {
+                        o.TracesSampleRate = 1.0;
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
     }

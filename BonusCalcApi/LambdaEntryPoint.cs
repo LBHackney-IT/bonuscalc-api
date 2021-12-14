@@ -7,8 +7,12 @@ namespace BonusCalcApi
     {
         protected override void Init(IWebHostBuilder builder)
         {
-            builder
-                .UseStartup<Startup>();
+            builder.UseSentry(o =>
+            {
+                o.TracesSampleRate = 1.0;
+                o.FlushOnCompletedRequest = true;
+            });
+            builder.UseStartup<Startup>();
         }
     }
 }
