@@ -25,6 +25,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Sentry.AspNetCore;
 using RepairsApi.V2.Gateways;
 
 namespace BonusCalcApi
@@ -248,6 +249,7 @@ namespace BonusCalcApi
             });
             app.UseSwagger();
             app.UseRouting();
+            app.UseSentryTracing();
             app.UseEndpoints(endpoints =>
             {
                 // SwaggerGen won't find controllers that are routed via this technique.
