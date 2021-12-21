@@ -105,8 +105,8 @@ custom:
         - subnet-000b89c249f12a8ad
     staging:
       subnetIds:
-        - subnet-0ea0020a44b98a2ca # b-housing-staging
-        - subnet-0743d86e9b362fa38 # a-housing-staging
+        - subnet-0ea0020a44b98a2ca # housing-stg-private-eu-west-2a
+        - subnet-0743d86e9b362fa38 # housing-stg-private-eu-west-2b
       securityGroupIds:
         - sg-0292b24504fdce1eb # allow_bonuscalc_db_traffic
     production:
