@@ -95,6 +95,7 @@ namespace BonusCalcApi.Tests.V1.Factories
             weekResponse.Id.Should().Be(week.Id);
             weekResponse.Number.Should().Be(week.Number);
             weekResponse.ClosedAt.Should().Be(week.ClosedAt);
+            weekResponse.ClosedBy.Should().Be(week.ClosedBy);
             weekResponse.StartAt.Should().Be(week.StartAt);
             ValidateBonusPeriod(weekResponse.BonusPeriod, week.BonusPeriod);
         }
