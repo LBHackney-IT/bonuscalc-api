@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using BonusCalcApi.Tests.V1.Helpers;
+using BonusCalcApi.V1.Boundary.Request;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Factories;
 using BonusCalcApi.V1.Infrastructure;
@@ -71,6 +72,26 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(response, Is.EqualTo(week.ToResponse()).Using(comparer));
             Assert.That(response.OperativeSummaries, Contains.Item(operativeSummary).Using(operativeComparer));
+        }
+
+        [Test]
+        public async Task CanUpdateWeek()
+        {
+            // Arrange
+            var week = await SeedWeek();
+            var update = new WeekUpdate()
+            {
+                ClosedAt = new DateTime(2021, 10, 29, 16, 0, 0, DateTimeKind.Utc),
+                ClosedBy = "a.manager@hackney.gov.uk"
+            };
+
+            // Act
+            var (code, response) = await Post<WeekResponse>($"/api/v1/weeks/2021-10-18", update);
+
+            // Assert
+            Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.ClosedAt, Is.EqualTo(update.ClosedAt));
+            Assert.That(response.ClosedBy, Is.EqualTo(update.ClosedBy));
         }
 
         private async Task<Week> SeedWeek()
