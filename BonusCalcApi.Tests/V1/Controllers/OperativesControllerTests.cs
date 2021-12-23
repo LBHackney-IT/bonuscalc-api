@@ -294,7 +294,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             const string expectedWeekId = "week_id";
             _operativeHelpers.ValidPrn(true);
             _operativeHelpers.ValidDate(true);
-            var updateRequest = _fixture.Create<TimesheetUpdateRequest>();
+            var updateRequest = _fixture.Create<TimesheetUpdate>();
 
             // Act
             var objectResult = await _classUnderTest.UpdateTimesheet(updateRequest, expectedOperativeId, expectedWeekId);
@@ -312,7 +312,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _operativeHelpers.ValidPrn(false);
 
             // Act
-            var objectResult = await _classUnderTest.UpdateTimesheet(new TimesheetUpdateRequest(), "bad", "week");
+            var objectResult = await _classUnderTest.UpdateTimesheet(new TimesheetUpdate(), "bad", "week");
             var statusCode = GetStatusCode(objectResult);
 
             // Assert
@@ -328,7 +328,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _operativeHelpers.ValidDate(false);
 
             // Act
-            var objectResult = await _classUnderTest.UpdateTimesheet(new TimesheetUpdateRequest(), "123456", "week");
+            var objectResult = await _classUnderTest.UpdateTimesheet(new TimesheetUpdate(), "123456", "week");
             var statusCode = GetStatusCode(objectResult);
 
             // Assert

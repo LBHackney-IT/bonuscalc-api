@@ -71,7 +71,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
                 existingPayElement
             };
 
-            var request = new TimesheetUpdateRequest();
+            var request = new TimesheetUpdate();
 
             // Act
             await _classUnderTest.ExecuteAsync(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
@@ -163,7 +163,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
                 existingPayElement
             };
 
-            var request = new TimesheetUpdateRequest();
+            var request = new TimesheetUpdate();
 
             // Act
             await _classUnderTest.ExecuteAsync(request, existingTimesheet.OperativeId, existingTimesheet.WeekId);
@@ -200,17 +200,17 @@ namespace BonusCalcApi.Tests.V1.UseCase
                 .ReturnsAsync(null as Timesheet);
 
             // Act
-            Func<Task> act = async () => await _classUnderTest.ExecuteAsync(new TimesheetUpdateRequest(), "1", "1");
+            Func<Task> act = async () => await _classUnderTest.ExecuteAsync(new TimesheetUpdate(), "1", "1");
 
             // Assert
             await act.Should().ThrowAsync<ResourceNotFoundException>();
             InMemoryDb.DbSaver.VerifySaveNotCalled();
         }
 
-        private TimesheetUpdateRequest CreateRequest(PayElementUpdate newPayElement)
+        private TimesheetUpdate CreateRequest(PayElementUpdate newPayElement)
         {
 
-            var request = _fixture.Build<TimesheetUpdateRequest>()
+            var request = _fixture.Build<TimesheetUpdate>()
                 .With(x => x.PayElements, new List<PayElementUpdate>()
                 {
                     newPayElement

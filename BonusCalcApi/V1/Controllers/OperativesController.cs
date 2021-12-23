@@ -168,7 +168,7 @@ namespace BonusCalcApi.V1.Controllers
 
         [HttpPost]
         [Route("{operativePayrollNumber}/timesheet")]
-        public async Task<IActionResult> UpdateTimesheet([FromBody] TimesheetUpdateRequest updateRequest, [FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
+        public async Task<IActionResult> UpdateTimesheet([FromBody] TimesheetUpdate updateRequest, [FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
         {
             if (!IsValidPrn(operativePayrollNumber))
                 return Problem(
