@@ -125,6 +125,24 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             }
         }
 
+        [Test]
+        public async Task CanUpdateReportSentAt()
+        {
+            // Arrange
+            var now = DateTime.UtcNow;
+            var operative = await SeedOperative();
+            var timesheet = await SeedTimesheet(operative);
+
+            // Act
+            var (postCode, _) = await Post<TimesheetResponse>($"/api/v1/operatives/{operative.Id}/timesheet/report/?week={timesheet.WeekId}", null);
+            var (getCode, response) = await Get<TimesheetResponse>($"/api/v1/operatives/{operative.Id}/timesheet?week={timesheet.WeekId}");
+
+            // Assert
+            postCode.Should().Be(HttpStatusCode.OK);
+            getCode.Should().Be(HttpStatusCode.OK);
+            response.ReportSentAt.Should().BeOnOrAfter(now);
+        }
+
         private static void ValidatePayElement(PayElementResponse payElement, PayElementUpdate expectedPayElement)
         {
             payElement.Address.Should().Be(expectedPayElement.Address);
@@ -196,6 +214,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
 
             var timesheet = _fixture.Build<Timesheet>()
                 .With(t => t.Utilisation, 1.0M)
+                .Without(t => t.ReportSentAt)
                 .With(t => t.OperativeId, operative.Id)
                 .Without(t => t.Operative)
                 .With(t => t.WeekId, week.Id)

@@ -28,6 +28,7 @@ namespace BonusCalcApi.Tests.V1.Factories
 
             // Assert
             result.Id.Should().Be(timesheet.Id);
+            result.ReportSentAt.Should().Be(timesheet.ReportSentAt);
             ValidateWeek(result.Week, timesheet.Week);
 
             foreach (var payElement in timesheet.PayElements)
@@ -118,6 +119,7 @@ namespace BonusCalcApi.Tests.V1.Factories
             weeklySummaryResponse.NonProductiveValue.Should().Be(weeklySummary.NonProductiveValue);
             weeklySummaryResponse.TotalValue.Should().Be(weeklySummary.TotalValue);
             weeklySummaryResponse.ProjectedValue.Should().Be(weeklySummary.ProjectedValue);
+            weeklySummaryResponse.ReportSentAt.Should().Be(weeklySummary.ReportSentAt);
         }
     }
 }

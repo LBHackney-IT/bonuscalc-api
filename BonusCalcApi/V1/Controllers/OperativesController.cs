@@ -24,6 +24,7 @@ namespace BonusCalcApi.V1.Controllers
         private readonly IGetOperativesUseCase _getOperativesUseCase;
         private readonly IGetOperativeSummaryUseCase _getOperativeSummaryUseCase;
         private readonly IGetOperativeTimesheetUseCase _getOperativeTimesheetUseCase;
+        private readonly IUpdateReportSentAtUseCase _updateReportSentAtUseCase;
         private readonly IUpdateTimesheetUseCase _updateTimesheetUseCase;
 
         public OperativesController(
@@ -32,6 +33,7 @@ namespace BonusCalcApi.V1.Controllers
             IGetOperativesUseCase getOperativesUseCase,
             IGetOperativeSummaryUseCase getOperativeSummaryUseCase,
             IGetOperativeTimesheetUseCase getOperativeTimesheetUseCase,
+            IUpdateReportSentAtUseCase updateReportSentAtUseCase,
             IUpdateTimesheetUseCase updateTimesheetUseCase
         )
         {
@@ -40,6 +42,7 @@ namespace BonusCalcApi.V1.Controllers
             _getOperativesUseCase = getOperativesUseCase;
             _getOperativeSummaryUseCase = getOperativeSummaryUseCase;
             _getOperativeTimesheetUseCase = getOperativeTimesheetUseCase;
+            _updateReportSentAtUseCase = updateReportSentAtUseCase;
             _updateTimesheetUseCase = updateTimesheetUseCase;
         }
 
@@ -185,6 +188,29 @@ namespace BonusCalcApi.V1.Controllers
                 );
 
             await _updateTimesheetUseCase.ExecuteAsync(updateRequest, operativePayrollNumber, week);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("{operativePayrollNumber}/timesheet/report")]
+        public async Task<IActionResult> UpdateReportSentAt([FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
+        {
+            if (!IsValidPrn(operativePayrollNumber))
+                return Problem(
+                    "The requested payroll number is invalid",
+                    $"/api/v1/operatives/{operativePayrollNumber}/timesheet/report?week={week}",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+
+            if (!IsValidDate(week))
+                return Problem(
+                    "The requested week is invalid",
+                    $"/api/v1/operatives/{operativePayrollNumber}/timesheet/report?week={week}",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+
+            await _updateReportSentAtUseCase.ExecuteAsync(operativePayrollNumber, week);
 
             return Ok();
         }

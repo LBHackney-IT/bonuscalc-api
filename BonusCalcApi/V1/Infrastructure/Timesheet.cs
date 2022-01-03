@@ -22,6 +22,8 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public decimal Utilisation { get; set; }
 
+        public DateTime? ReportSentAt { get; set; }
+
         public List<PayElement> PayElements { get; set; }
     }
 }

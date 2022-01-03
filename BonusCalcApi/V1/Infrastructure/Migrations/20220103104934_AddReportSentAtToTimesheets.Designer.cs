@@ -3,6 +3,7 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -10,9 +11,10 @@ using NpgsqlTypes;
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20220103104934_AddReportSentAtToTimesheets")]
+    partial class AddReportSentAtToTimesheets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,10 +172,6 @@ namespace V1.Infrastructure.Migrations
                     b.Property<decimal>("ProjectedValue")
                         .HasColumnType("numeric")
                         .HasColumnName("projected_value");
-
-                    b.Property<DateTime?>("ReportSentAt")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("report_sent_at");
 
                     b.Property<int>("SchemeId")
                         .HasColumnType("integer")
@@ -626,10 +624,6 @@ namespace V1.Infrastructure.Migrations
                     b.Property<decimal>("ProjectedValue")
                         .HasColumnType("numeric")
                         .HasColumnName("projected_value");
-
-                    b.Property<DateTime?>("ReportSentAt")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("report_sent_at");
 
                     b.Property<DateTime>("StartAt")
                         .HasColumnType("timestamp without time zone")

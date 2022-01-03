@@ -42,7 +42,8 @@ namespace BonusCalcApi.V1.Factories
                 TotalValue = operativeSummary.TotalValue,
                 Utilisation = operativeSummary.Utilisation,
                 ProjectedValue = operativeSummary.ProjectedValue,
-                AverageUtilisation = operativeSummary.AverageUtilisation
+                AverageUtilisation = operativeSummary.AverageUtilisation,
+                ReportSentAt = operativeSummary.ReportSentAt
             };
         }
 
@@ -52,6 +53,7 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = timesheet.Id,
                 Utilisation = timesheet.Utilisation,
+                ReportSentAt = timesheet.ReportSentAt,
                 Week = timesheet.Week.ToResponse(),
                 PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).ToList()
             };
@@ -184,7 +186,8 @@ namespace BonusCalcApi.V1.Factories
                 TotalValue = weeklySummary.TotalValue,
                 Utilisation = weeklySummary.Utilisation,
                 ProjectedValue = weeklySummary.ProjectedValue,
-                AverageUtilisation = weeklySummary.AverageUtilisation
+                AverageUtilisation = weeklySummary.AverageUtilisation,
+                ReportSentAt = weeklySummary.ReportSentAt
             };
         }
 
