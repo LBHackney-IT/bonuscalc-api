@@ -102,7 +102,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 PayElementTypeId = pe.PayElementTypeId,
                 Address = "updated"
             }).ToList();
-            var timesheetUpdate = _fixture.Build<TimesheetUpdateRequest>()
+            var timesheetUpdate = _fixture.Build<TimesheetUpdate>()
                 .With(r => r.Id, timesheet.Id)
                 .With(r => r.PayElements, updatedPayElements.Concat(new[] { newPayElement }).ToList)
                 .Create();

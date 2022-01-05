@@ -2,6 +2,7 @@ using AutoFixture;
 using BonusCalcApi.Tests.V1.Controllers.Mocks;
 using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.Tests.V1.Helpers.Mocks;
+using BonusCalcApi.V1.Boundary.Request;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Controllers;
 using BonusCalcApi.V1.Factories;
@@ -23,6 +24,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
     {
         private Fixture _fixture;
         private Mock<IGetWeekUseCase> _getWeekUseCaseMock;
+        private Mock<IUpdateWeekUseCase> _updateWeekUseCaseMock;
         private MockOperativeHelpers _operativeHelpers;
         private MockProblemDetailsFactory _problemDetailsFactoryMock;
 
@@ -34,11 +36,13 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _fixture = FixtureHelpers.Fixture;
             _operativeHelpers = new MockOperativeHelpers();
             _getWeekUseCaseMock = new Mock<IGetWeekUseCase>();
+            _updateWeekUseCaseMock = new Mock<IUpdateWeekUseCase>();
             _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
             _classUnderTest = new WeeksController(
                 _operativeHelpers.Object,
-                _getWeekUseCaseMock.Object
+                _getWeekUseCaseMock.Object,
+                _updateWeekUseCaseMock.Object
             );
 
             // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
@@ -90,6 +94,66 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Act
             var objectResult = await _classUnderTest.GetWeek("00000000");
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task UpdateWeekReturnsOk()
+        {
+            // Arrange
+            var expectedWeek = _fixture.Create<Week>();
+            var updateRequest = _fixture.Create<WeekUpdate>();
+            _operativeHelpers.ValidDate(true);
+            _updateWeekUseCaseMock
+                .Setup(x => x.ExecuteAsync(expectedWeek.Id, updateRequest))
+                .ReturnsAsync(expectedWeek);
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateWeek(expectedWeek.Id, updateRequest);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<WeekResponse>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Should().BeEquivalentTo(expectedWeek.ToResponse());
+
+            _updateWeekUseCaseMock
+                .Verify(x => x.ExecuteAsync(expectedWeek.Id, updateRequest));
+        }
+
+        [Test]
+        public async Task UpdateWeekReturnsNotFoundIfWeekNotFound()
+        {
+            // Arrange
+            var expectedWeek = _fixture.Create<Week>();
+            var updateRequest = _fixture.Create<WeekUpdate>();
+            _operativeHelpers.ValidDate(true);
+            _updateWeekUseCaseMock
+                .Setup(x => x.ExecuteAsync(It.IsAny<string>(), It.IsAny<WeekUpdate>()))
+                .ReturnsAsync(null as Week);
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateWeek(expectedWeek.Id, updateRequest);
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task UpdateWeekReturnsBadRequestIfWeekInvalid()
+        {
+            // Arrange
+            var updateRequest = _fixture.Create<WeekUpdate>();
+            _operativeHelpers.ValidDate(false);
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateWeek("00000000", updateRequest);
             var statusCode = GetStatusCode(objectResult);
 
             // Assert

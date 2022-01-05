@@ -212,6 +212,7 @@ namespace BonusCalcApi
             services.AddTransient<IGetWeekUseCase, GetWeekUseCase>();
             services.AddTransient<IGetWorkElementsUseCase, GetWorkElementsUseCase>();
             services.AddTransient<IUpdateTimesheetUseCase, UpdateTimesheetUseCase>();
+            services.AddTransient<IUpdateWeekUseCase, UpdateWeekUseCase>();
         }
 
         private static void RegisterHelpers(IServiceCollection services)

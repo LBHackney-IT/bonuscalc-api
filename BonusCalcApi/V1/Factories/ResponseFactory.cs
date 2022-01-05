@@ -72,6 +72,7 @@ namespace BonusCalcApi.V1.Factories
                     StartAt = week.BonusPeriod.StartAt,
                 },
                 ClosedAt = week.ClosedAt,
+                ClosedBy = week.ClosedBy,
                 StartAt = week.StartAt,
                 OperativeSummaries = week.OperativeSummaries?.Select(os => os.ToResponse()).ToList()
             };

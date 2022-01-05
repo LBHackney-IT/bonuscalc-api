@@ -19,7 +19,7 @@ namespace BonusCalcApi.V1.UseCase
             _timesheetGateway = timesheetGateway;
             _dbSaver = dbSaver;
         }
-        public async Task ExecuteAsync(TimesheetUpdateRequest request, string operativeId, string weekId)
+        public async Task ExecuteAsync(TimesheetUpdate request, string operativeId, string weekId)
         {
             var existingTimesheet = await _timesheetGateway.GetOperativeTimesheetAsync(operativeId, weekId);
 
@@ -50,7 +50,7 @@ namespace BonusCalcApi.V1.UseCase
             await _dbSaver.SaveChangesAsync();
         }
 
-        private static bool ExistsInRequest(TimesheetUpdateRequest request, PayElement pe)
+        private static bool ExistsInRequest(TimesheetUpdate request, PayElement pe)
         {
             if (request.PayElements is null) return false;
 

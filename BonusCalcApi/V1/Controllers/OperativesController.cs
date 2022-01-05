@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using BonusCalcApi.V1.Boundary.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using BonusCalcApi.V1.Boundary.Request;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Controllers.Helpers;
 using BonusCalcApi.V1.Factories;
@@ -168,7 +168,7 @@ namespace BonusCalcApi.V1.Controllers
 
         [HttpPost]
         [Route("{operativePayrollNumber}/timesheet")]
-        public async Task<IActionResult> UpdateTimesheet([FromBody] TimesheetUpdateRequest updateRequest, [FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
+        public async Task<IActionResult> UpdateTimesheet([FromBody] TimesheetUpdate updateRequest, [FromRoute][Required] string operativePayrollNumber, [FromQuery][Required] string week)
         {
             if (!IsValidPrn(operativePayrollNumber))
                 return Problem(
