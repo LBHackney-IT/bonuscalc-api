@@ -36,7 +36,7 @@ locals {
 
 data "aws_vpc" "default" {
   tags = {
-    Name = "vpc-housing-${local.environment}"
+    Name = "housing-stg"
   }
 }
 
