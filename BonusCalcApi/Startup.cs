@@ -189,21 +189,27 @@ namespace BonusCalcApi
         private static void RegisterGateways(IServiceCollection services)
         {
             services.AddScoped<IApiGateway, ApiGateway>();
+            services.AddScoped<IBonusPeriodGateway, BonusPeriodGateway>();
             services.AddScoped<IOperativeGateway, OperativeGateway>();
             services.AddScoped<IOperativesGateway, OperativesGateway>();
             services.AddScoped<ITimesheetGateway, TimesheetGateway>();
             services.AddScoped<IPayElementTypeGateway, PayElementTypeGateway>();
+            services.AddScoped<ISchemeGateway, SchemeGateway>();
             services.AddScoped<ISummaryGateway, SummaryGateway>();
+            services.AddScoped<IWeekGateway, WeekGateway>();
             services.AddScoped<IWorkElementGateway, WorkElementGateway>();
         }
 
         private static void RegisterUseCases(IServiceCollection services)
         {
+            services.AddTransient<IGetCurrentBonusPeriodsUseCase, GetCurrentBonusPeriodsUseCase>();
             services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
             services.AddTransient<IGetOperativesUseCase, GetOperativesUseCase>();
             services.AddTransient<IGetOperativeTimesheetUseCase, GetOperativeTimesheetUseCase>();
             services.AddTransient<IGetOperativeSummaryUseCase, GetOperativeSummaryUseCase>();
             services.AddTransient<IGetPayElementTypeUseCase, GetPayElementTypeUseCase>();
+            services.AddTransient<IGetSchemesUseCase, GetSchemesUseCase>();
+            services.AddTransient<IGetWeekUseCase, GetWeekUseCase>();
             services.AddTransient<IGetWorkElementsUseCase, GetWorkElementsUseCase>();
             services.AddTransient<IUpdateTimesheetUseCase, UpdateTimesheetUseCase>();
         }

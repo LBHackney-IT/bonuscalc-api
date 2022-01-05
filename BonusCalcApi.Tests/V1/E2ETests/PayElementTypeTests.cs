@@ -35,6 +35,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             code.Should().Be(HttpStatusCode.OK);
             response.Should().BeEquivalentTo(payElementTypes.Select(pet => pet.ToResponse()).ToList());
         }
+
         private async Task<IEnumerable<PayElementType>> SeedPayElementTypes()
         {
             var types = _fixture.Build<PayElementType>()

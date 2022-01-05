@@ -15,12 +15,34 @@ namespace BonusCalcApi.V1.Factories
                 Name = operative.Name,
                 EmailAddress = operative.EmailAddress,
                 Trade = operative.Trade.ToResponse(),
-                Scheme = operative.Scheme?.ToResponse(),
+                Scheme = operative.Scheme.ToResponse(),
                 Section = operative.Section,
                 SalaryBand = operative.SalaryBand,
                 Utilisation = operative.Utilisation,
                 FixedBand = operative.FixedBand,
                 IsArchived = operative.IsArchived
+            };
+        }
+
+        public static OperativeSummaryResponse ToResponse(this OperativeSummary operativeSummary)
+        {
+            return new OperativeSummaryResponse
+            {
+                Id = operativeSummary.Id,
+                Name = operativeSummary.Name,
+                Trade = new TradeResponse
+                {
+                    Id = operativeSummary.TradeId,
+                    Description = operativeSummary.TradeDescription
+                },
+                SchemeId = operativeSummary.SchemeId,
+                ProductiveValue = operativeSummary.ProductiveValue,
+                NonProductiveDuration = operativeSummary.NonProductiveDuration,
+                NonProductiveValue = operativeSummary.NonProductiveValue,
+                TotalValue = operativeSummary.TotalValue,
+                Utilisation = operativeSummary.Utilisation,
+                ProjectedValue = operativeSummary.ProjectedValue,
+                AverageUtilisation = operativeSummary.AverageUtilisation
             };
         }
 
@@ -31,7 +53,7 @@ namespace BonusCalcApi.V1.Factories
                 Id = timesheet.Id,
                 Utilisation = timesheet.Utilisation,
                 Week = timesheet.Week.ToResponse(),
-                PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).OrderBy(pe => pe.Id).ToList()
+                PayElements = timesheet.PayElements.Select(pe => pe.ToResponse()).ToList()
             };
         }
 
@@ -41,9 +63,17 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = week.Id,
                 Number = week.Number,
-                BonusPeriod = week.BonusPeriod.ToResponse(),
+                BonusPeriod = new BonusPeriodResponse()
+                {
+                    Id = week.BonusPeriod.Id,
+                    Number = week.BonusPeriod.Number,
+                    Year = week.BonusPeriod.Year,
+                    ClosedAt = week.BonusPeriod.ClosedAt,
+                    StartAt = week.BonusPeriod.StartAt,
+                },
                 ClosedAt = week.ClosedAt,
-                StartAt = week.StartAt
+                StartAt = week.StartAt,
+                OperativeSummaries = week.OperativeSummaries?.Select(os => os.ToResponse()).ToList()
             };
         }
 
@@ -55,7 +85,8 @@ namespace BonusCalcApi.V1.Factories
                 Number = bonusPeriod.Number,
                 Year = bonusPeriod.Year,
                 ClosedAt = bonusPeriod.ClosedAt,
-                StartAt = bonusPeriod.StartAt
+                StartAt = bonusPeriod.StartAt,
+                Weeks = bonusPeriod.Weeks?.Select(w => w.ToResponse()).ToList()
             };
         }
 
@@ -112,10 +143,11 @@ namespace BonusCalcApi.V1.Factories
         {
             return new SchemeResponse
             {
+                Id = scheme.Id,
                 Type = scheme.Type,
                 Description = scheme.Description,
                 ConversionFactor = scheme.ConversionFactor,
-                PayBands = scheme.PayBands.Select(pb => pb.ToResponse()).OrderBy(pb => pb.Band).ToList()
+                PayBands = scheme.PayBands.Select(pb => pb.ToResponse()).ToList()
             };
         }
 
@@ -134,7 +166,7 @@ namespace BonusCalcApi.V1.Factories
             {
                 Id = summary.Id,
                 BonusPeriod = summary.BonusPeriod.ToResponse(),
-                WeeklySummaries = summary.WeeklySummaries.Select(ws => ws.ToResponse()).OrderBy(ws => ws.Number).ToList()
+                WeeklySummaries = summary.WeeklySummaries.Select(ws => ws.ToResponse()).ToList()
             };
         }
 

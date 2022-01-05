@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.Dsl;
 using BonusCalcApi.V1.Infrastructure;
@@ -25,7 +26,8 @@ namespace BonusCalcApi.Tests.V1.Helpers
             return Fixture.Build<Operative>()
                 .With(o => o.Id, CreateOperativeId())
                 .With(o => o.Utilisation, 1.0M)
-                .Without(o => o.Timesheets);
+                .Without(o => o.Timesheets)
+                .Without(o => o.WeeklySummaries);
         }
 
         public static Operative CreateOperative()
@@ -43,12 +45,14 @@ namespace BonusCalcApi.Tests.V1.Helpers
             if (bonusPeriod == null)
                 return Fixture.Build<Week>()
                     .With(w => w.Id, CreateIsoDateId())
-                    .Without(w => w.Timesheets);
+                    .Without(w => w.Timesheets)
+                    .Without(w => w.OperativeSummaries);
             else
                 return Fixture.Build<Week>()
                     .With(w => w.BonusPeriodId, bonusPeriod.Id)
                     .Without(w => w.BonusPeriod)
-                    .Without(w => w.Timesheets);
+                    .Without(w => w.Timesheets)
+                    .Without(w => w.OperativeSummaries);
         }
 
         public static Week CreateWeek(BonusPeriod bonusPeriod = null)
@@ -66,6 +70,26 @@ namespace BonusCalcApi.Tests.V1.Helpers
         public static BonusPeriod CreateBonusPeriod()
         {
             return BuildBonusPeriod().Create();
+        }
+
+        public static List<BonusPeriod> CreateBonusPeriods()
+        {
+            return new List<BonusPeriod>()
+            {
+                CreateBonusPeriod(),
+                CreateBonusPeriod()
+            };
+        }
+
+        public static IPostprocessComposer<Summary> BuildSummary()
+        {
+            return Fixture.Build<Summary>()
+                .With(s => s.BonusPeriod, CreateBonusPeriod());
+        }
+
+        public static Summary CreateSummary()
+        {
+            return BuildSummary().Create();
         }
     }
 }

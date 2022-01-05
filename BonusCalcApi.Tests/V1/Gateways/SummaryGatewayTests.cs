@@ -39,6 +39,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     {
                         Id = "123456/2021-08-02/2021-08-02",
                         SummaryId = "123456/2021-08-02",
+                        WeekId = "2021-08-02",
+                        OperativeId = "123456",
                         StartAt = new DateTime(2021, 8, 1, 23, 0, 0, DateTimeKind.Utc),
                         Number = 1,
                         ClosedAt = null,
@@ -54,6 +56,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     {
                         Id = "123456/2021-08-02/2021-08-09",
                         SummaryId = "123456/2021-08-02",
+                        WeekId = "2021-08-09",
+                        OperativeId = "123456",
                         StartAt = new DateTime(2021, 8, 8, 23, 0, 0, DateTimeKind.Utc),
                         Number = 2,
                         ClosedAt = null,
@@ -69,6 +73,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     {
                         Id = "123456/2021-08-02/2021-08-16",
                         SummaryId = "123456/2021-08-02",
+                        WeekId = "2021-08-16",
+                        OperativeId = "123456",
                         StartAt = new DateTime(2021, 8, 15, 23, 0, 0, DateTimeKind.Utc),
                         Number = 3,
                         ClosedAt = null,

@@ -1,24 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
-namespace BonusCalcApi.V1.Infrastructure
+namespace BonusCalcApi.V1.Boundary.Response
 {
-    public class WeeklySummary
+    public class OperativeSummaryResponse
     {
         public string Id { get; set; }
 
-        public string SummaryId { get; set; }
+        public string Name { get; set; }
 
-        public string WeekId { get; set; }
+        public TradeResponse Trade { get; set; }
 
-        public string OperativeId { get; set; }
-
-        public int Number { get; set; }
-
-        public DateTime StartAt { get; set; }
-
-        public DateTime? ClosedAt { get; set; }
+        public int SchemeId { get; set; }
 
         public decimal ProductiveValue { get; set; }
 

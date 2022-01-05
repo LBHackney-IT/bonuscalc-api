@@ -20,7 +20,7 @@ namespace BonusCalcApi.V1.Gateways
         {
             return await _context.Summaries
                 .Include(s => s.BonusPeriod)
-                .Include(s => s.WeeklySummaries)
+                .Include(s => s.WeeklySummaries.OrderBy(ws => ws.Number))
                 .Where(s => s.OperativeId == operativeId && s.BonusPeriodId == bonusPeriodId)
                 .SingleOrDefaultAsync();
         }

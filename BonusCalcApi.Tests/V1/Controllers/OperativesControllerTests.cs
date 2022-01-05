@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
 using BonusCalcApi.Tests.V1.Controllers.Mocks;
+using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.Tests.V1.Helpers.Mocks;
 using BonusCalcApi.V1.Boundary.Request;
 using FluentAssertions;
@@ -149,7 +150,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         public async Task GetSummaryReturnsOk()
         {
             // Arrange
-            var expectedSummary = _fixture.Create<Summary>();
+            var expectedSummary = FixtureHelpers.CreateSummary();
             _getOperativeSummaryUseCaseMock.Setup(x => x.ExecuteAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(expectedSummary);
             _operativeHelpers.ValidPrn(true);

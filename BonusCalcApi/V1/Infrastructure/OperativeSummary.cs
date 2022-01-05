@@ -4,21 +4,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
-    public class WeeklySummary
+    public class OperativeSummary
     {
         public string Id { get; set; }
 
-        public string SummaryId { get; set; }
+        public string Name { get; set; }
 
         public string WeekId { get; set; }
 
-        public string OperativeId { get; set; }
+        public string TradeId { get; set; }
 
-        public int Number { get; set; }
+        public string TradeDescription { get; set; }
 
-        public DateTime StartAt { get; set; }
-
-        public DateTime? ClosedAt { get; set; }
+        public int SchemeId { get; set; }
 
         public decimal ProductiveValue { get; set; }
 

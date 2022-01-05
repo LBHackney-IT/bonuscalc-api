@@ -3,16 +3,17 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using NpgsqlTypes;
 
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20211205151324_AddWeekIdAndOperativeIdToWeeklySummaries")]
+    partial class AddWeekIdAndOperativeIdToWeeklySummaries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,13 +91,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("scheme_id");
 
-                    b.Property<NpgsqlTsVector>("SearchVector")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("tsvector")
-                        .HasColumnName("search_vector")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english")
-                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Id", "Name", "TradeId", "Section" });
-
                     b.Property<string>("Section")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -126,77 +120,10 @@ namespace V1.Infrastructure.Migrations
                     b.HasIndex("SchemeId")
                         .HasDatabaseName("ix_operatives_scheme_id");
 
-                    b.HasIndex("SearchVector")
-                        .HasDatabaseName("ix_operatives_search_vector")
-                        .HasMethod("GIN");
-
                     b.HasIndex("TradeId")
                         .HasDatabaseName("ix_operatives_trade_id");
 
                     b.ToTable("operatives");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OperativeSummary", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
-
-                    b.Property<string>("WeekId")
-                        .HasColumnType("text")
-                        .HasColumnName("week_id");
-
-                    b.Property<decimal>("AverageUtilisation")
-                        .HasColumnType("numeric")
-                        .HasColumnName("average_utilisation");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<decimal>("NonProductiveDuration")
-                        .HasColumnType("numeric")
-                        .HasColumnName("non_productive_duration");
-
-                    b.Property<decimal>("NonProductiveValue")
-                        .HasColumnType("numeric")
-                        .HasColumnName("non_productive_value");
-
-                    b.Property<decimal>("ProductiveValue")
-                        .HasColumnType("numeric")
-                        .HasColumnName("productive_value");
-
-                    b.Property<decimal>("ProjectedValue")
-                        .HasColumnType("numeric")
-                        .HasColumnName("projected_value");
-
-                    b.Property<int>("SchemeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("scheme_id");
-
-                    b.Property<decimal>("TotalValue")
-                        .HasColumnType("numeric")
-                        .HasColumnName("total_value");
-
-                    b.Property<string>("TradeDescription")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_description");
-
-                    b.Property<string>("TradeId")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_id");
-
-                    b.Property<decimal>("Utilisation")
-                        .HasColumnType("numeric")
-                        .HasColumnName("utilisation");
-
-                    b.HasKey("Id", "WeekId")
-                        .HasName("pk_operative_summaries");
-
-                    b.HasIndex("WeekId")
-                        .HasDatabaseName("ix_operative_summaries_week_id");
-
-                    b.ToView("operative_summaries");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayBand", b =>
@@ -280,13 +207,6 @@ namespace V1.Infrastructure.Migrations
                         .HasDefaultValue(0m)
                         .HasColumnName("saturday");
 
-                    b.Property<NpgsqlTsVector>("SearchVector")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("tsvector")
-                        .HasColumnName("search_vector")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english")
-                        .HasAnnotation("Npgsql:TsVectorProperties", new[] { "WorkOrder", "Address" });
-
                     b.Property<decimal>("Sunday")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(10, 4)
@@ -337,15 +257,8 @@ namespace V1.Infrastructure.Migrations
                     b.HasIndex("PayElementTypeId")
                         .HasDatabaseName("ix_pay_elements_pay_element_type_id");
 
-                    b.HasIndex("SearchVector")
-                        .HasDatabaseName("ix_pay_elements_search_vector")
-                        .HasMethod("GIN");
-
                     b.HasIndex("TimesheetId")
                         .HasDatabaseName("ix_pay_elements_timesheet_id");
-
-                    b.HasIndex("WorkOrder")
-                        .HasDatabaseName("ix_pay_elements_work_order");
 
                     b.ToTable("pay_elements");
                 });
@@ -405,10 +318,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(false)
                         .HasColumnName("selectable");
-
-                    b.Property<int?>("SmvPerHour")
-                        .HasColumnType("integer")
-                        .HasColumnName("smv_per_hour");
 
                     b.HasKey("Id")
                         .HasName("pk_pay_element_types");
@@ -596,10 +505,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("number");
 
-                    b.Property<string>("OperativeId")
-                        .HasColumnType("character varying(6)")
-                        .HasColumnName("operative_id");
-
                     b.Property<decimal>("ProductiveValue")
                         .HasColumnType("numeric")
                         .HasColumnName("productive_value");
@@ -624,72 +529,13 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("utilisation");
 
-                    b.Property<string>("WeekId")
-                        .HasColumnType("text")
-                        .HasColumnName("week_id");
-
                     b.HasKey("Id")
                         .HasName("pk_weekly_summaries");
-
-                    b.HasIndex("OperativeId")
-                        .HasDatabaseName("ix_weekly_summaries_operative_id");
 
                     b.HasIndex("SummaryId")
                         .HasDatabaseName("ix_weekly_summaries_summary_id");
 
                     b.ToView("weekly_summaries");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.WorkElement", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("text")
-                        .HasColumnName("address");
-
-                    b.Property<DateTime?>("ClosedAt")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("closed_at");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("OperativeId")
-                        .HasColumnType("text")
-                        .HasColumnName("operative_id");
-
-                    b.Property<string>("OperativeName")
-                        .HasColumnType("text")
-                        .HasColumnName("operative_name");
-
-                    b.Property<NpgsqlTsVector>("SearchVector")
-                        .HasColumnType("tsvector")
-                        .HasColumnName("search_vector");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("text")
-                        .HasColumnName("type");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("numeric")
-                        .HasColumnName("value");
-
-                    b.Property<string>("WeekId")
-                        .HasColumnType("text")
-                        .HasColumnName("week_id");
-
-                    b.Property<string>("WorkOrder")
-                        .HasColumnType("text")
-                        .HasColumnName("work_order");
-
-                    b.HasKey("Id")
-                        .HasName("pk_work_elements");
-
-                    b.ToView("work_elements");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Operative", b =>
@@ -709,16 +555,6 @@ namespace V1.Infrastructure.Migrations
                     b.Navigation("Scheme");
 
                     b.Navigation("Trade");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OperativeSummary", b =>
-                {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Week", null)
-                        .WithMany("OperativeSummaries")
-                        .HasForeignKey("WeekId")
-                        .HasConstraintName("fk_operative_summaries_weeks_week_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayBand", b =>
@@ -793,11 +629,6 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.WeeklySummary", b =>
                 {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Operative", null)
-                        .WithMany("WeeklySummaries")
-                        .HasForeignKey("OperativeId")
-                        .HasConstraintName("fk_weekly_summaries_operatives_operative_id");
-
                     b.HasOne("BonusCalcApi.V1.Infrastructure.Summary", null)
                         .WithMany("WeeklySummaries")
                         .HasForeignKey("SummaryId")
@@ -812,8 +643,6 @@ namespace V1.Infrastructure.Migrations
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Operative", b =>
                 {
                     b.Navigation("Timesheets");
-
-                    b.Navigation("WeeklySummaries");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayElementType", b =>
@@ -845,8 +674,6 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Week", b =>
                 {
-                    b.Navigation("OperativeSummaries");
-
                     b.Navigation("Timesheets");
                 });
 #pragma warning restore 612, 618
