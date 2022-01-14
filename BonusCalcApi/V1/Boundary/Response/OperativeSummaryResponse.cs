@@ -25,5 +25,7 @@ namespace BonusCalcApi.V1.Boundary.Response
         public decimal ProjectedValue { get; set; }
 
         public decimal AverageUtilisation { get; set; }
+
+        public DateTime? ReportSentAt { get; set; }
     }
 }

@@ -32,6 +32,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private MockOperativeHelpers _operativeHelpers;
         private Mock<IGetOperativeSummaryUseCase> _getOperativeSummaryUseCaseMock;
         private Mock<IGetOperativeTimesheetUseCase> _getOperativeTimesheetUseCaseMock;
+        private Mock<IUpdateReportSentAtUseCase> _updateReportSentAtUseCaseMock;
         private Mock<IUpdateTimesheetUseCase> _updateTimesheetUseCaseMock;
 
         [SetUp]
@@ -44,6 +45,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _getOperativeSummaryUseCaseMock = new Mock<IGetOperativeSummaryUseCase>();
             _getOperativeTimesheetUseCaseMock = new Mock<IGetOperativeTimesheetUseCase>();
             _updateTimesheetUseCaseMock = new Mock<IUpdateTimesheetUseCase>();
+            _updateReportSentAtUseCaseMock = new Mock<IUpdateReportSentAtUseCase>();
             _operativeHelpers = new MockOperativeHelpers();
             _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
@@ -53,6 +55,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
                 _getOperativesUseCaseMock.Object,
                 _getOperativeSummaryUseCaseMock.Object,
                 _getOperativeTimesheetUseCaseMock.Object,
+                _updateReportSentAtUseCaseMock.Object,
                 _updateTimesheetUseCaseMock.Object
             );
 
@@ -329,6 +332,55 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Act
             var objectResult = await _classUnderTest.UpdateTimesheet(new TimesheetUpdate(), "123456", "week");
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task UpdateReportSentAtReturnsOk()
+        {
+            // Arrange
+            const string expectedOperativeId = "operative_id";
+            const string expectedWeekId = "week_id";
+            _operativeHelpers.ValidPrn(true);
+            _operativeHelpers.ValidDate(true);
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateReportSentAt(expectedOperativeId, expectedWeekId);
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            _updateReportSentAtUseCaseMock.Verify(x => x.ExecuteAsync(expectedOperativeId, expectedWeekId));
+        }
+
+        [Test]
+        public async Task UpdateReportSentAtReturnsBadRequestIfPayrollNumberIsInvalid()
+        {
+            // Arrange
+            _operativeHelpers.ValidPrn(false);
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateReportSentAt("bad", "week");
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task UpdateReportSentAtReturnsBadRequestIfWeekIsInvalid()
+        {
+            // Arrange
+            _operativeHelpers.ValidPrn(true);
+            _operativeHelpers.ValidDate(false);
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateReportSentAt("123456", "week");
             var statusCode = GetStatusCode(objectResult);
 
             // Assert
