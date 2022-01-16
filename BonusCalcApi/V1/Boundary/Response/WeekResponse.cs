@@ -17,6 +17,8 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public string ClosedBy { get; set; }
 
+        public DateTime? ReportsSentAt { get; set; }
+
         public List<OperativeSummaryResponse> OperativeSummaries { get; set; }
 
         public bool ShouldSerializeBonusPeriod() => BonusPeriod != null;

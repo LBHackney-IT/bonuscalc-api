@@ -25,6 +25,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private Fixture _fixture;
         private Mock<IGetWeekUseCase> _getWeekUseCaseMock;
         private Mock<IUpdateWeekUseCase> _updateWeekUseCaseMock;
+        private Mock<IUpdateReportsSentAtUseCase> _updateReportsSentAtUseCaseMock;
         private MockOperativeHelpers _operativeHelpers;
         private MockProblemDetailsFactory _problemDetailsFactoryMock;
 
@@ -37,12 +38,14 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _operativeHelpers = new MockOperativeHelpers();
             _getWeekUseCaseMock = new Mock<IGetWeekUseCase>();
             _updateWeekUseCaseMock = new Mock<IUpdateWeekUseCase>();
+            _updateReportsSentAtUseCaseMock = new Mock<IUpdateReportsSentAtUseCase>();
             _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
             _classUnderTest = new WeeksController(
                 _operativeHelpers.Object,
                 _getWeekUseCaseMock.Object,
-                _updateWeekUseCaseMock.Object
+                _updateWeekUseCaseMock.Object,
+                _updateReportsSentAtUseCaseMock.Object
             );
 
             // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
@@ -154,6 +157,37 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Act
             var objectResult = await _classUnderTest.UpdateWeek("00000000", updateRequest);
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task UpdateReportsSentAtReturnsOk()
+        {
+            // Arrange
+            const string expectedWeekId = "week_id";
+            _operativeHelpers.ValidDate(true);
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateReportsSentAt(expectedWeekId);
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            _updateReportsSentAtUseCaseMock.Verify(x => x.ExecuteAsync(expectedWeekId));
+        }
+
+        [Test]
+        public async Task UpdateReportsSentAtReturnsBadRequestIfWeekIsInvalid()
+        {
+            // Arrange
+            _operativeHelpers.ValidDate(false);
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateReportsSentAt("week");
             var statusCode = GetStatusCode(objectResult);
 
             // Assert

@@ -10,11 +10,13 @@ namespace BonusCalcApi.V1.UseCase
     {
         private readonly ITimesheetGateway _timesheetGateway;
         private readonly IDbSaver _dbSaver;
+
         public UpdateReportSentAtUseCase(ITimesheetGateway timesheetGateway, IDbSaver dbSaver)
         {
             _timesheetGateway = timesheetGateway;
             _dbSaver = dbSaver;
         }
+
         public async Task ExecuteAsync(string operativeId, string weekId)
         {
             var timesheet = await _timesheetGateway.GetOperativeTimesheetAsync(operativeId, weekId);
@@ -26,7 +28,6 @@ namespace BonusCalcApi.V1.UseCase
                 timesheet.ReportSentAt = DateTime.UtcNow;
                 await _dbSaver.SaveChangesAsync();
             }
-
         }
     }
 }
