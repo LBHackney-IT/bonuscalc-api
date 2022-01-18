@@ -32,7 +32,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private MockOperativeHelpers _operativeHelpers;
         private Mock<IGetOperativeSummaryUseCase> _getOperativeSummaryUseCaseMock;
         private Mock<IGetOperativeTimesheetUseCase> _getOperativeTimesheetUseCaseMock;
-        private Mock<IUpdateReportSentAtUseCase> _updateReportSentAtUseCaseMock;
+        private Mock<IUpdateOperativeReportSentAtUseCase> _updateOperativeReportSentAtUseCaseMock;
         private Mock<IUpdateTimesheetUseCase> _updateTimesheetUseCaseMock;
 
         [SetUp]
@@ -45,7 +45,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _getOperativeSummaryUseCaseMock = new Mock<IGetOperativeSummaryUseCase>();
             _getOperativeTimesheetUseCaseMock = new Mock<IGetOperativeTimesheetUseCase>();
             _updateTimesheetUseCaseMock = new Mock<IUpdateTimesheetUseCase>();
-            _updateReportSentAtUseCaseMock = new Mock<IUpdateReportSentAtUseCase>();
+            _updateOperativeReportSentAtUseCaseMock = new Mock<IUpdateOperativeReportSentAtUseCase>();
             _operativeHelpers = new MockOperativeHelpers();
             _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
@@ -55,7 +55,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
                 _getOperativesUseCaseMock.Object,
                 _getOperativeSummaryUseCaseMock.Object,
                 _getOperativeTimesheetUseCaseMock.Object,
-                _updateReportSentAtUseCaseMock.Object,
+                _updateOperativeReportSentAtUseCaseMock.Object,
                 _updateTimesheetUseCaseMock.Object
             );
 
@@ -354,7 +354,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.OK);
-            _updateReportSentAtUseCaseMock.Verify(x => x.ExecuteAsync(expectedOperativeId, expectedWeekId));
+            _updateOperativeReportSentAtUseCaseMock.Verify(x => x.ExecuteAsync(expectedOperativeId, expectedWeekId));
         }
 
         [Test]

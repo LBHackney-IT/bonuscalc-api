@@ -14,9 +14,9 @@ using NUnit.Framework;
 
 namespace BonusCalcApi.Tests.V1.UseCase
 {
-    public class UpdateReportSentAtUseCaseTests
+    public class UpdateOperativeReportSentAtUseCaseTests
     {
-        private UpdateReportSentAtUseCase _classUnderTest;
+        private UpdateOperativeReportSentAtUseCase _classUnderTest;
         private Fixture _fixture;
         private Mock<ITimesheetGateway> _timesheetGatewayMock;
 
@@ -27,7 +27,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
 
             _timesheetGatewayMock = new Mock<ITimesheetGateway>();
 
-            _classUnderTest = new UpdateReportSentAtUseCase(_timesheetGatewayMock.Object, InMemoryDb.DbSaver);
+            _classUnderTest = new UpdateOperativeReportSentAtUseCase(_timesheetGatewayMock.Object, InMemoryDb.DbSaver);
         }
 
         [TearDown]

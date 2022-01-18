@@ -24,7 +24,7 @@ namespace BonusCalcApi.V1.Controllers
         private readonly IGetOperativesUseCase _getOperativesUseCase;
         private readonly IGetOperativeSummaryUseCase _getOperativeSummaryUseCase;
         private readonly IGetOperativeTimesheetUseCase _getOperativeTimesheetUseCase;
-        private readonly IUpdateReportSentAtUseCase _updateReportSentAtUseCase;
+        private readonly IUpdateOperativeReportSentAtUseCase _updateOperativeReportSentAtUseCase;
         private readonly IUpdateTimesheetUseCase _updateTimesheetUseCase;
 
         public OperativesController(
@@ -33,7 +33,7 @@ namespace BonusCalcApi.V1.Controllers
             IGetOperativesUseCase getOperativesUseCase,
             IGetOperativeSummaryUseCase getOperativeSummaryUseCase,
             IGetOperativeTimesheetUseCase getOperativeTimesheetUseCase,
-            IUpdateReportSentAtUseCase updateReportSentAtUseCase,
+            IUpdateOperativeReportSentAtUseCase updateOperativeReportSentAtUseCase,
             IUpdateTimesheetUseCase updateTimesheetUseCase
         )
         {
@@ -42,7 +42,7 @@ namespace BonusCalcApi.V1.Controllers
             _getOperativesUseCase = getOperativesUseCase;
             _getOperativeSummaryUseCase = getOperativeSummaryUseCase;
             _getOperativeTimesheetUseCase = getOperativeTimesheetUseCase;
-            _updateReportSentAtUseCase = updateReportSentAtUseCase;
+            _updateOperativeReportSentAtUseCase = updateOperativeReportSentAtUseCase;
             _updateTimesheetUseCase = updateTimesheetUseCase;
         }
 
@@ -210,7 +210,7 @@ namespace BonusCalcApi.V1.Controllers
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
 
-            await _updateReportSentAtUseCase.ExecuteAsync(operativePayrollNumber, week);
+            await _updateOperativeReportSentAtUseCase.ExecuteAsync(operativePayrollNumber, week);
 
             return Ok();
         }

@@ -23,19 +23,19 @@ namespace BonusCalcApi.V1.Controllers
         private readonly IOperativeHelpers _operativeHelpers;
         private readonly IGetWeekUseCase _getWeekUseCase;
         private readonly IUpdateWeekUseCase _updateWeekUseCase;
-        private readonly IUpdateReportsSentAtUseCase _updateReportsSentAtUseCase;
+        private readonly IUpdateWeekReportsSentAtUseCase _updateWeekReportsSentAtUseCase;
 
         public WeeksController(
             IOperativeHelpers operativeHelpers,
             IGetWeekUseCase getWeekUseCase,
             IUpdateWeekUseCase updateWeekUseCase,
-            IUpdateReportsSentAtUseCase updateReportsSentAtUseCase
+            IUpdateWeekReportsSentAtUseCase updateWeekReportsSentAtUseCase
         )
         {
             _operativeHelpers = operativeHelpers;
             _getWeekUseCase = getWeekUseCase;
             _updateWeekUseCase = updateWeekUseCase;
-            _updateReportsSentAtUseCase = updateReportsSentAtUseCase;
+            _updateWeekReportsSentAtUseCase = updateWeekReportsSentAtUseCase;
         }
 
         [HttpGet]
@@ -107,7 +107,7 @@ namespace BonusCalcApi.V1.Controllers
                     StatusCodes.Status400BadRequest, "Bad Request"
                 );
 
-            await _updateReportsSentAtUseCase.ExecuteAsync(weekId);
+            await _updateWeekReportsSentAtUseCase.ExecuteAsync(weekId);
 
             return Ok();
         }
