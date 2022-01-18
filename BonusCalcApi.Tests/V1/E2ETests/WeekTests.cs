@@ -94,6 +94,23 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             Assert.That(response.ClosedBy, Is.EqualTo(update.ClosedBy));
         }
 
+        [Test]
+        public async Task CanUpdateReportsSentAt()
+        {
+            // Arrange
+            var now = DateTime.UtcNow;
+            var week = await SeedWeek();
+
+            // Act
+            var (postCode, _) = await Post<WeekResponse>($"/api/v1/weeks/2021-10-18/reports", null);
+            var (getCode, response) = await Get<WeekResponse>($"/api/v1/weeks/2021-10-18");
+
+            // Assert
+            postCode.Should().Be(HttpStatusCode.OK);
+            getCode.Should().Be(HttpStatusCode.OK);
+            response.ReportsSentAt.Should().BeOnOrAfter(now);
+        }
+
         private async Task<Week> SeedWeek()
         {
             var week = new Week
@@ -109,7 +126,8 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 },
                 StartAt = new DateTime(2021, 10, 17, 23, 0, 0, DateTimeKind.Utc),
                 Number = 12,
-                ClosedAt = null
+                ClosedAt = null,
+                ReportsSentAt = null
             };
 
             await Context.Weeks.AddAsync(week);

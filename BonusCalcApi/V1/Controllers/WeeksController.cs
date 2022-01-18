@@ -23,16 +23,19 @@ namespace BonusCalcApi.V1.Controllers
         private readonly IOperativeHelpers _operativeHelpers;
         private readonly IGetWeekUseCase _getWeekUseCase;
         private readonly IUpdateWeekUseCase _updateWeekUseCase;
+        private readonly IUpdateReportsSentAtUseCase _updateReportsSentAtUseCase;
 
         public WeeksController(
             IOperativeHelpers operativeHelpers,
             IGetWeekUseCase getWeekUseCase,
-            IUpdateWeekUseCase updateWeekUseCase
+            IUpdateWeekUseCase updateWeekUseCase,
+            IUpdateReportsSentAtUseCase updateReportsSentAtUseCase
         )
         {
             _operativeHelpers = operativeHelpers;
             _getWeekUseCase = getWeekUseCase;
             _updateWeekUseCase = updateWeekUseCase;
+            _updateReportsSentAtUseCase = updateReportsSentAtUseCase;
         }
 
         [HttpGet]
@@ -92,6 +95,23 @@ namespace BonusCalcApi.V1.Controllers
 
             return Ok(week.ToResponse());
         }
+
+        [HttpPost]
+        [Route("{weekId}/reports")]
+        public async Task<IActionResult> UpdateReportsSentAt([FromRoute][Required] string weekId)
+        {
+            if (!IsValidDate(weekId))
+                return Problem(
+                    "The requested week is invalid",
+                    $"/api/v1/weeks/{weekId}",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+
+            await _updateReportsSentAtUseCase.ExecuteAsync(weekId);
+
+            return Ok();
+        }
+
         private bool IsValidDate(string date)
         {
             return _operativeHelpers.IsValidDate(date);
