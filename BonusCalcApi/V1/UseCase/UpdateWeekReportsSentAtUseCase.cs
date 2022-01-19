@@ -6,12 +6,12 @@ using BonusCalcApi.V1.UseCase.Interfaces;
 
 namespace BonusCalcApi.V1.UseCase
 {
-    public class UpdateReportsSentAtUseCase : IUpdateReportsSentAtUseCase
+    public class UpdateWeekReportsSentAtUseCase : IUpdateWeekReportsSentAtUseCase
     {
         private readonly IWeekGateway _weekGateway;
         private readonly IDbSaver _dbSaver;
 
-        public UpdateReportsSentAtUseCase(IWeekGateway weekGateway, IDbSaver dbSaver)
+        public UpdateWeekReportsSentAtUseCase(IWeekGateway weekGateway, IDbSaver dbSaver)
         {
             _weekGateway = weekGateway;
             _dbSaver = dbSaver;

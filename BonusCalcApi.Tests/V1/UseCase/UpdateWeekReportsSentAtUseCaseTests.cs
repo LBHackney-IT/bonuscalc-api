@@ -14,9 +14,9 @@ using NUnit.Framework;
 
 namespace BonusCalcApi.Tests.V1.UseCase
 {
-    public class UpdateReportsSentAtUseCaseTests
+    public class UpdateWeekReportsSentAtUseCaseTests
     {
-        private UpdateReportsSentAtUseCase _classUnderTest;
+        private UpdateWeekReportsSentAtUseCase _classUnderTest;
         private Fixture _fixture;
         private Mock<IWeekGateway> _weekGatewayMock;
 
@@ -27,7 +27,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
 
             _weekGatewayMock = new Mock<IWeekGateway>();
 
-            _classUnderTest = new UpdateReportsSentAtUseCase(_weekGatewayMock.Object, InMemoryDb.DbSaver);
+            _classUnderTest = new UpdateWeekReportsSentAtUseCase(_weekGatewayMock.Object, InMemoryDb.DbSaver);
         }
 
         [TearDown]

@@ -6,12 +6,12 @@ using BonusCalcApi.V1.UseCase.Interfaces;
 
 namespace BonusCalcApi.V1.UseCase
 {
-    public class UpdateReportSentAtUseCase : IUpdateReportSentAtUseCase
+    public class UpdateOperativeReportSentAtUseCase : IUpdateOperativeReportSentAtUseCase
     {
         private readonly ITimesheetGateway _timesheetGateway;
         private readonly IDbSaver _dbSaver;
 
-        public UpdateReportSentAtUseCase(ITimesheetGateway timesheetGateway, IDbSaver dbSaver)
+        public UpdateOperativeReportSentAtUseCase(ITimesheetGateway timesheetGateway, IDbSaver dbSaver)
         {
             _timesheetGateway = timesheetGateway;
             _dbSaver = dbSaver;

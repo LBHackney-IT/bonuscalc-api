@@ -25,7 +25,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private Fixture _fixture;
         private Mock<IGetWeekUseCase> _getWeekUseCaseMock;
         private Mock<IUpdateWeekUseCase> _updateWeekUseCaseMock;
-        private Mock<IUpdateReportsSentAtUseCase> _updateReportsSentAtUseCaseMock;
+        private Mock<IUpdateWeekReportsSentAtUseCase> _updateWeekReportsSentAtUseCaseMock;
         private MockOperativeHelpers _operativeHelpers;
         private MockProblemDetailsFactory _problemDetailsFactoryMock;
 
@@ -38,14 +38,14 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _operativeHelpers = new MockOperativeHelpers();
             _getWeekUseCaseMock = new Mock<IGetWeekUseCase>();
             _updateWeekUseCaseMock = new Mock<IUpdateWeekUseCase>();
-            _updateReportsSentAtUseCaseMock = new Mock<IUpdateReportsSentAtUseCase>();
+            _updateWeekReportsSentAtUseCaseMock = new Mock<IUpdateWeekReportsSentAtUseCase>();
             _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
             _classUnderTest = new WeeksController(
                 _operativeHelpers.Object,
                 _getWeekUseCaseMock.Object,
                 _updateWeekUseCaseMock.Object,
-                _updateReportsSentAtUseCaseMock.Object
+                _updateWeekReportsSentAtUseCaseMock.Object
             );
 
             // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
@@ -177,11 +177,11 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.OK);
-            _updateReportsSentAtUseCaseMock.Verify(x => x.ExecuteAsync(expectedWeekId));
+            _updateWeekReportsSentAtUseCaseMock.Verify(x => x.ExecuteAsync(expectedWeekId));
         }
 
         [Test]
-        public async Task UpdateReportsSentAtReturnsBadRequestIfWeekIsInvalid()
+        public async Task UpdateWeekReportsSentAtReturnsBadRequestIfWeekIsInvalid()
         {
             // Arrange
             _operativeHelpers.ValidDate(false);
