@@ -29,7 +29,7 @@ To serve the application, run it using your IDE of choice, we use Visual Studio 
 
 When running locally the appropriate database connection details are still needed.
 
-##### Postgres
+#### Postgres
 For Postgres an approprate `CONNECTION_STRING` environment variable is needed,
 and if you want to use a local Postgres instance then that will of course need to be installed and running.
 
@@ -52,6 +52,27 @@ The application can also be served locally using docker:
     ```sh
     $ make build && make serve
     ```
+
+#### Seeding the database
+
+There are some CSV files and an import script that can be used to seed a local database to get up and running.
+
+To load these, do the following:
+
+1.  Ensure the database migrations have been fully applied:
+
+    ``` sh
+    $ dotnet ef database update
+    ```
+
+2.  `cd` into the the `data/seeds` directory and then run the `seed-database.sql` script using the `psql` utility, e.g:
+
+    ``` sh
+    $ cd data/seeds && psql <url> -f seed-database.sql
+    ```
+
+    Where `<url>` is the connection url for your development database, e.g. `postgresql://localhost/bonuscalc`.
+
 
 ### Release process
 
