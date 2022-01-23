@@ -18,7 +18,7 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public string OperativeName { get; set; }
 
-        public string WeekId { get; set; }
+        public WeekResponse Week { get; set; }
 
         public decimal Value { get; set; }
 

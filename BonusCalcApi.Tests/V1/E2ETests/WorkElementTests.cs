@@ -50,15 +50,22 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 WorkOrder = "99999999"
             };
 
+            var laterWorkElement = new WorkElementResponse()
+            {
+                WorkOrder = "23456789"
+            };
+
             var comparer = new WorkElementResponseComparer();
 
             // Act
-            var (code, response) = await Get<List<WorkElementResponse>>($"/api/v1/work/elements?query=12345678");
+            var (code, response) = await Get<List<WorkElementResponse>>($"/api/v1/work/elements?query=Somewhere");
 
             // Assert
             Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(response, Contains.Item(workElement).Using(comparer));
+            Assert.That(response, Contains.Item(laterWorkElement).Using(comparer));
             Assert.That(response, Does.Not.Contain(otherWorkElement).Using(comparer));
+            Assert.That(response, Is.Ordered.Descending.By("ClosedAt"));
         }
 
         private async Task SeedPayElements()
@@ -127,7 +134,20 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 {
                     Timesheet = timesheet,
                     PayElementType = payElementType,
+                    WorkOrder = "23456789",
+                    Address = "Somewhere Road",
+                    ClosedAt = new DateTime(2021, 10, 20, 11, 0, 0, DateTimeKind.Utc),
+                    Monday = 1.0M,
+                    Duration = 1.0M,
+                    Value = 60.0M,
+                    ReadOnly = true
+                },
+                new PayElement()
+                {
+                    Timesheet = timesheet,
+                    PayElementType = payElementType,
                     WorkOrder = "12345678",
+                    Address = "Somewhere Road",
                     ClosedAt = new DateTime(2021, 10, 18, 11, 0, 0, DateTimeKind.Utc),
                     Monday = 1.0M,
                     Duration = 1.0M,
@@ -139,6 +159,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                     Timesheet = timesheet,
                     PayElementType = payElementType,
                     WorkOrder = "99999999",
+                    Address = "Other Place",
                     ClosedAt = new DateTime(2021, 10, 19, 11, 0, 0, DateTimeKind.Utc),
                     Tuesday = 1.0M,
                     Duration = 1.0M,
