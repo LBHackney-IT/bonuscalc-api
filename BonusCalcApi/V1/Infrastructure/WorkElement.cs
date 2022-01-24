@@ -22,6 +22,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public string OperativeName { get; set; }
 
         public string WeekId { get; set; }
+        public Week Week { get; set; }
 
         public decimal Value { get; set; }
 

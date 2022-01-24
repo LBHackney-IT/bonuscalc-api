@@ -706,7 +706,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnName("value");
 
                     b.Property<string>("WeekId")
-                        .HasColumnType("text")
+                        .HasColumnType("character varying(10)")
                         .HasColumnName("week_id");
 
                     b.Property<string>("WorkOrder")
@@ -715,6 +715,9 @@ namespace V1.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_work_elements");
+
+                    b.HasIndex("WeekId")
+                        .HasDatabaseName("ix_work_elements_week_id");
 
                     b.ToView("work_elements");
                 });
@@ -833,6 +836,16 @@ namespace V1.Infrastructure.Migrations
                         .WithMany("WeeklySummaries")
                         .HasForeignKey("SummaryId")
                         .HasConstraintName("fk_weekly_summaries_summaries_summary_id");
+                });
+
+            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.WorkElement", b =>
+                {
+                    b.HasOne("BonusCalcApi.V1.Infrastructure.Week", "Week")
+                        .WithMany()
+                        .HasForeignKey("WeekId")
+                        .HasConstraintName("fk_work_elements_weeks_week_id");
+
+                    b.Navigation("Week");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BonusPeriod", b =>

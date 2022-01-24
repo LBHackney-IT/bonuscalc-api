@@ -203,7 +203,7 @@ namespace BonusCalcApi.V1.Factories
                 Description = workElement.Description,
                 OperativeId = workElement.OperativeId,
                 OperativeName = workElement.OperativeName,
-                WeekId = workElement.WeekId,
+                Week = workElement.Week.ToResponse(),
                 Value = workElement.Value,
                 ClosedAt = workElement.ClosedAt
             };
