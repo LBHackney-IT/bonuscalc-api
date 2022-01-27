@@ -197,7 +197,7 @@ namespace BonusCalcApi.V1.Factories
             return new WorkElementResponse
             {
                 Id = workElement.Id,
-                Type = workElement.Type,
+                PayElementType = workElement.PayElementType.ToResponse(),
                 WorkOrder = workElement.WorkOrder,
                 Address = workElement.Address,
                 Description = workElement.Description,

@@ -6,7 +6,7 @@ namespace BonusCalcApi.V1.Boundary.Response
     {
         public int Id { get; set; }
 
-        public string Type { get; set; }
+        public PayElementTypeResponse PayElementType { get; set; }
 
         public string WorkOrder { get; set; }
 

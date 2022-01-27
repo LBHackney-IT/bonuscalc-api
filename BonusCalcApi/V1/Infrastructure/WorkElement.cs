@@ -9,7 +9,8 @@ namespace BonusCalcApi.V1.Infrastructure
     {
         public int Id { get; set; }
 
-        public string Type { get; set; }
+        public int PayElementTypeId { get; set; }
+        public PayElementType PayElementType { get; set; }
 
         public string WorkOrder { get; set; }
 
