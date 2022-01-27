@@ -26,7 +26,7 @@ namespace BonusCalcApi.V1.Gateways
             return await _context.WorkElements
                 .Include(we => we.Week)
                 .ThenInclude(w => w.BonusPeriod)
-                .Where(we => we.SearchVector.Matches(query))
+                .Where(we => we.SearchVector.Matches(EF.Functions.PlainToTsQuery("simple", query)))
                 .OrderByDescending(we => we.ClosedAt)
                 .ToPagedListAsync(pageNumber, pageSize);
         }
