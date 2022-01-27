@@ -86,7 +86,7 @@ commands:
           name: Deploy lambda
           command: |
             cd ./BonusCalcApi/
-            sls deploy --stage <<parameters.stage>> --account <<parameters.aws-account>> --conceal
+            sls deploy --stage <<parameters.stage>> --conceal
   migrate-database:
     description: "Migrate database"
     parameters:
