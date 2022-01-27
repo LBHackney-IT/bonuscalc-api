@@ -95,7 +95,7 @@ namespace V1.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")
                         .HasColumnName("search_vector")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "simple")
                         .HasAnnotation("Npgsql:TsVectorProperties", new[] { "Id", "Name", "TradeId", "Section" });
 
                     b.Property<string>("Section")
@@ -289,7 +289,7 @@ namespace V1.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("tsvector")
                         .HasColumnName("search_vector")
-                        .HasAnnotation("Npgsql:TsVectorConfig", "english")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "simple")
                         .HasAnnotation("Npgsql:TsVectorProperties", new[] { "WorkOrder", "Address" });
 
                     b.Property<decimal>("Sunday")
