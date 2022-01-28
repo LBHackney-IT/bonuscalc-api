@@ -36,7 +36,7 @@ namespace BonusCalcApi.V1.Gateways
                 .Include(o => o.Trade)
                 .Include(o => o.Scheme)
                 .ThenInclude(s => s.PayBands)
-                .Where(o => o.SearchVector.Matches(query))
+                .Where(o => o.SearchVector.Matches(EF.Functions.PlainToTsQuery("simple", query)))
                 .OrderBy(o => o.Name)
                 .ToPagedListAsync(pageNumber, pageSize);
         }

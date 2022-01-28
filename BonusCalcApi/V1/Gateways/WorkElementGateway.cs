@@ -24,6 +24,7 @@ namespace BonusCalcApi.V1.Gateways
             int pageSize = Math.Clamp((size ?? 25), 1, 50);
 
             return await _context.WorkElements
+                .Include(we => we.PayElementType)
                 .Include(we => we.Week)
                 .ThenInclude(w => w.BonusPeriod)
                 .Where(we => we.SearchVector.Matches(EF.Functions.PlainToTsQuery("simple", query)))

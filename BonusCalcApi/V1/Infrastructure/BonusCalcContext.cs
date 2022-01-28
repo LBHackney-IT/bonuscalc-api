@@ -66,7 +66,7 @@ namespace BonusCalcApi.V1.Infrastructure
 
             modelBuilder.Entity<Operative>()
                 .HasGeneratedTsVectorColumn(
-                    o => o.SearchVector, "english",
+                    o => o.SearchVector, "simple",
                     o => new { o.Id, o.Name, o.TradeId, o.Section })
                 .HasIndex(pe => pe.SearchVector)
                 .HasMethod("GIN");
@@ -151,7 +151,7 @@ namespace BonusCalcApi.V1.Infrastructure
 
             modelBuilder.Entity<PayElement>()
                 .HasGeneratedTsVectorColumn(
-                    pe => pe.SearchVector, "english",
+                    pe => pe.SearchVector, "simple",
                     pe => new { pe.WorkOrder, pe.Address })
                 .HasIndex(pe => pe.SearchVector)
                 .HasMethod("GIN");
