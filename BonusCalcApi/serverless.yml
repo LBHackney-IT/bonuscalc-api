@@ -1,5 +1,7 @@
 service: bonuscalc-api
 
+frameworkVersion: '2'
+
 provider:
   name: aws
   runtime: dotnetcore3.1
