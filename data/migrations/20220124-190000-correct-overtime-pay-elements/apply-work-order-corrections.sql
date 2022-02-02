@@ -11,7 +11,8 @@ CREATE TEMPORARY TABLE work_order_corrections (
 );
 
 -- Import work order corrections
-\COPY work_order_corrections(work_order, status_code, address_line, description_of_work, closed_date, payroll_number, job_percentage, total_smv) FROM 'work_order_corrections.csv' CSV HEADER;
+\COPY work_order_corrections(work_order, status_code, address_line, description_of_work, closed_date, payroll_number, job_percentage, total_smv) FROM 'in_hours_work_order_corrections.csv' CSV HEADER;
+\COPY work_order_corrections(work_order, status_code, address_line, description_of_work, closed_date, payroll_number, job_percentage, total_smv) FROM 'out_of_hours_work_order_corrections.csv' CSV HEADER;
 
 -- Wrap the changes in a transaction to ensure they're applied as a whole
 BEGIN;
