@@ -101,10 +101,6 @@ resources:
 
 custom:
   vpc:
-    development:
-      subnetIds:
-        - subnet-0deabb5d8fb9c3446
-        - subnet-000b89c249f12a8ad
     staging:
       subnetIds:
         - subnet-0ea0020a44b98a2ca # housing-stg-private-eu-west-2a
