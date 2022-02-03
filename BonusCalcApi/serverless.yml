@@ -113,7 +113,7 @@ custom:
         - sg-0292b24504fdce1eb # allow_bonuscalc_db_traffic
     production:
       subnetIds:
-        - subnet-0beb266003a56ca82 # a-housing-production
-        - subnet-06a697d86a9b6ed01 # b-housing-production
+        - subnet-06a697d86a9b6ed01 # housing-prod-private-eu-west-2a
+        - subnet-0beb266003a56ca82 # housing-prod-private-eu-west-2b
       securityGroupIds:
         - sg-064b1c3ec1577380b # allow_bonuscalc_db_traffic
