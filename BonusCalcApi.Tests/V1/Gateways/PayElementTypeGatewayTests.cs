@@ -48,6 +48,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     NonProductive = true,
                     OutOfHours = false,
                     Overtime = false,
+                    SickLeave = false,
                     Selectable = true,
                     SmvPerHour = null
                 },
@@ -62,6 +63,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     NonProductive = true,
                     OutOfHours = false,
                     Overtime = false,
+                    SickLeave = false,
                     Selectable = true,
                     SmvPerHour = 60
                 },
@@ -76,6 +78,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     NonProductive = false,
                     OutOfHours = false,
                     Overtime = false,
+                    SickLeave = false,
                     Selectable = true,
                     SmvPerHour = null
                 },
@@ -90,6 +93,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     NonProductive = false,
                     OutOfHours = false,
                     Overtime = false,
+                    SickLeave = false,
+                    Selectable = false,
                     SmvPerHour = null
                 }
             };

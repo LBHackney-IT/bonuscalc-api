@@ -188,6 +188,10 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasDefaultValue(false);
 
             modelBuilder.Entity<PayElementType>()
+                .Property(pet => pet.SickLeave)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<PayElementType>()
                 .Property(pet => pet.Selectable)
                 .HasDefaultValue(false);
 

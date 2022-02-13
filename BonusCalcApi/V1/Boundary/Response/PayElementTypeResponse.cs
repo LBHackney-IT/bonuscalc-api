@@ -20,6 +20,8 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public bool Overtime { get; set; }
 
+        public bool SickLeave { get; set; }
+
         public bool Selectable { get; set; }
 
         public int? SmvPerHour { get; set; }
