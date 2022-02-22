@@ -15,6 +15,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public DbSet<PayBand> PayBands { get; set; }
         public DbSet<PayElement> PayElements { get; set; }
         public DbSet<PayElementType> PayElementTypes { get; set; }
+        public DbSet<Person> People { get; set; }
         public DbSet<Scheme> Schemes { get; set; }
         public DbSet<Timesheet> Timesheets { get; set; }
         public DbSet<Trade> Trades { get; set; }

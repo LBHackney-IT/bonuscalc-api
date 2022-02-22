@@ -21,6 +21,8 @@ namespace BonusCalcApi.V1.Gateways
         public async Task<Operative> GetOperativeAsync(string operativeId)
         {
             return await _context.Operatives
+                .Include(o => o.Manager)
+                .Include(o => o.Supervisor)
                 .Include(o => o.Trade)
                 .Include(o => o.Scheme)
                 .ThenInclude(s => s.PayBands.OrderBy(pb => pb.Band))

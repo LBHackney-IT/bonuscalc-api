@@ -7,6 +7,8 @@ namespace BonusCalcApi.V1.Boundary.Response
         public string Id { get; set; }
         public string Name { get; set; }
         public string EmailAddress { get; set; }
+        public PersonResponse Supervisor { get; set; }
+        public PersonResponse Manager { get; set; }
         public TradeResponse Trade { get; set; }
         public SchemeResponse Scheme { get; set; }
         public string Section { get; set; }
