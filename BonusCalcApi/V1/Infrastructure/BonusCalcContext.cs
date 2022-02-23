@@ -88,6 +88,16 @@ namespace BonusCalcApi.V1.Infrastructure
                 .WithMany(s => s.PayBands)
                 .HasForeignKey(pb => pb.SchemeId);
 
+            modelBuilder.Entity<PayBand>()
+                .Property(pb => pb.TotalValue)
+                .HasPrecision(10, 4)
+                .HasComputedColumnSql(@"value * 13", stored: true);
+
+            modelBuilder.Entity<PayBand>()
+                .Property(pb => pb.SmvPerHour)
+                .HasPrecision(20, 14)
+                .HasComputedColumnSql(@"value / 36", stored: true);
+
             modelBuilder.Entity<PayElement>()
                 .HasIndex(pe => pe.TimesheetId);
 
