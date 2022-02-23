@@ -8,6 +8,7 @@ namespace BonusCalcApi.V1.Boundary.Response
         public string Type { get; set; }
         public string Description { get; set; }
         public decimal ConversionFactor { get; set; }
+        public decimal MaxValue { get; set; }
         public List<PayBandResponse> PayBands { get; set; }
     }
 

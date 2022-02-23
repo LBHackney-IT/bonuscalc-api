@@ -164,6 +164,7 @@ namespace BonusCalcApi.V1.Factories
                 Type = scheme.Type,
                 Description = scheme.Description,
                 ConversionFactor = scheme.ConversionFactor,
+                MaxValue = scheme.MaxValue,
                 PayBands = scheme.PayBands.Select(pb => pb.ToResponse()).ToList()
             };
         }

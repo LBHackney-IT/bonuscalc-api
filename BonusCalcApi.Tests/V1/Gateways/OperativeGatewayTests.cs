@@ -54,7 +54,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 Id = 1,
                 Type = "SMV",
                 Description = "Reactive",
-                ConversionFactor = 1.0M
+                ConversionFactor = 1.0M,
+                MaxValue = 62868.0M
             };
 
             var manager = new Person

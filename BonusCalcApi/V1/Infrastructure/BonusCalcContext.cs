@@ -209,6 +209,11 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasPrecision(20, 14)
                 .HasDefaultValue(1.0);
 
+            modelBuilder.Entity<Scheme>()
+                .Property(s => s.MaxValue)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
+
             modelBuilder.Entity<Timesheet>()
                 .Property(t => t.Id)
                 .ValueGeneratedNever();

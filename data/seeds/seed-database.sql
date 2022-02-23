@@ -48,7 +48,7 @@ RESTART IDENTITY;
 \COPY weeks(id, bonus_period_id, start_at, number) FROM 'weeks.csv' CSV HEADER;
 
 -- Import schemes
-\COPY schemes(id, type, description, conversion_factor) FROM 'schemes.csv' CSV HEADER;
+\COPY schemes(id, type, description, conversion_factor, max_value) FROM 'schemes.csv' CSV HEADER;
 
 -- Import pay bands
 \COPY pay_bands(id, scheme_id, band, value) FROM 'pay_bands.csv' CSV HEADER;
