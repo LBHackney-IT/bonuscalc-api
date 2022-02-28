@@ -3,6 +3,7 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -10,9 +11,10 @@ using NpgsqlTypes;
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20220228072746_CreateOperativeProjectionsView")]
+    partial class CreateOperativeProjectionsView
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,11 +89,6 @@ namespace V1.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("trade");
-
-                    b.Property<decimal>("Utilisation")
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("utilisation");
 
                     b.HasKey("Id")
                         .HasName("pk_band_changes");
@@ -427,11 +424,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("character varying(17)")
                         .HasColumnName("timesheet_id");
 
-                    b.Property<string>("TradeCode")
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)")
-                        .HasColumnName("trade_code");
-
                     b.Property<decimal>("Tuesday")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(10, 4)
@@ -468,9 +460,6 @@ namespace V1.Infrastructure.Migrations
 
                     b.HasIndex("TimesheetId")
                         .HasDatabaseName("ix_pay_elements_timesheet_id");
-
-                    b.HasIndex("TradeCode")
-                        .HasDatabaseName("ix_pay_elements_trade_code");
 
                     b.HasIndex("WorkOrder")
                         .HasDatabaseName("ix_pay_elements_work_order");

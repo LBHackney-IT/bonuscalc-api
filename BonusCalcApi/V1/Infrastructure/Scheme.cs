@@ -18,6 +18,8 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public decimal ConversionFactor { get; set; }
 
+        public decimal MinValue { get; set; }
+
         public decimal MaxValue { get; set; }
 
         public List<Operative> Operatives { get; set; }

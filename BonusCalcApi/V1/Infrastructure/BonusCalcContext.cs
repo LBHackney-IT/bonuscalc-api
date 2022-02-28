@@ -1,14 +1,18 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
-
     public class BonusCalcContext : DbContext
     {
+        static BonusCalcContext()
+            => NpgsqlConnection.GlobalTypeMapper.MapEnum<BandChangeDecision>();
+
         public BonusCalcContext(DbContextOptions options) : base(options)
         {
         }
 
+        public DbSet<BandChange> BandChanges { get; set; }
         public DbSet<BonusPeriod> BonusPeriods { get; set; }
         public DbSet<Operative> Operatives { get; set; }
         public DbSet<OperativeSummary> OperativeSummaries { get; set; }
@@ -32,6 +36,34 @@ namespace BonusCalcApi.V1.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasPostgresEnum<BandChangeDecision>();
+
+            modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.MaxValue)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.BandValue)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.SickDuration)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.TotalValue)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.Utilisation)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<BandChange>()
+                .OwnsOne(bc => bc.Supervisor);
+
+            modelBuilder.Entity<BandChange>()
+                .OwnsOne(bc => bc.Manager);
+
             modelBuilder.Entity<BonusPeriod>()
                 .HasIndex(bp => bp.StartAt)
                 .IsUnique();
@@ -218,6 +250,11 @@ namespace BonusCalcApi.V1.Infrastructure
                 .Property(s => s.ConversionFactor)
                 .HasPrecision(20, 14)
                 .HasDefaultValue(1.0);
+
+            modelBuilder.Entity<Scheme>()
+                .Property(s => s.MinValue)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
 
             modelBuilder.Entity<Scheme>()
                 .Property(s => s.MaxValue)
