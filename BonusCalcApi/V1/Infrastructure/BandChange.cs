@@ -70,5 +70,9 @@ namespace BonusCalcApi.V1.Infrastructure
         public BandChangeApprover Manager { get; set; }
 
         public int? FinalBand { get; set; }
+
+        public decimal BalanceDuration { get; set; }
+
+        public decimal BalanceValue { get; set; }
     }
 }

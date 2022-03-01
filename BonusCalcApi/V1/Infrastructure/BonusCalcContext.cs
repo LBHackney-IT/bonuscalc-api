@@ -64,6 +64,16 @@ namespace BonusCalcApi.V1.Infrastructure
             modelBuilder.Entity<BandChange>()
                 .OwnsOne(bc => bc.Manager);
 
+            modelBuilder.Entity<BandChange>()
+                .Property(pb => pb.BalanceDuration)
+                .HasPrecision(10, 4)
+                .HasComputedColumnSql(@"ROUND(GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0) / 60, 4)", stored: true);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(pb => pb.BalanceValue)
+                .HasPrecision(10, 4)
+                .HasComputedColumnSql(@"GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0)", stored: true);
+
             modelBuilder.Entity<BonusPeriod>()
                 .HasIndex(bp => bp.StartAt)
                 .IsUnique();
