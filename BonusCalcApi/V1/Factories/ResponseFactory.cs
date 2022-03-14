@@ -47,6 +47,22 @@ namespace BonusCalcApi.V1.Factories
             };
         }
 
+        public static OutOfHoursSummaryResponse ToResponse(this OutOfHoursSummary outOfHoursSummary)
+        {
+            return new OutOfHoursSummaryResponse
+            {
+                Id = outOfHoursSummary.Id,
+                Name = outOfHoursSummary.Name,
+                Trade = new TradeResponse
+                {
+                    Id = outOfHoursSummary.TradeId,
+                    Description = outOfHoursSummary.TradeDescription
+                },
+                TradeCode = outOfHoursSummary.TradeCode,
+                TotalValue = outOfHoursSummary.TotalValue
+            };
+        }
+
         public static OvertimeSummaryResponse ToResponse(this OvertimeSummary overtimeSummary)
         {
             return new OvertimeSummaryResponse

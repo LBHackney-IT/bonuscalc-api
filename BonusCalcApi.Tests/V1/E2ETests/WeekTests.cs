@@ -44,6 +44,19 @@ namespace BonusCalcApi.Tests.V1.E2ETests
         }
     }
 
+    public class OutOfHoursSummaryResponseComparer : IEqualityComparer<OutOfHoursSummaryResponse>
+    {
+        public bool Equals(OutOfHoursSummaryResponse o1, OutOfHoursSummaryResponse o2)
+        {
+            return o2.Id == o1.Id && o2.Name == o1.Name;
+        }
+
+        public int GetHashCode(OutOfHoursSummaryResponse o)
+        {
+            return o.Id.GetHashCode();
+        }
+    }
+
     public class OvertimeSummaryResponseComparer : IEqualityComparer<OvertimeSummaryResponse>
     {
         public bool Equals(OvertimeSummaryResponse o1, OvertimeSummaryResponse o2)
@@ -122,6 +135,43 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             postCode.Should().Be(HttpStatusCode.OK);
             getCode.Should().Be(HttpStatusCode.OK);
             response.ReportsSentAt.Should().BeOnOrAfter(now);
+        }
+
+        [Test]
+        public async Task CanGetOutOfHoursSummaries()
+        {
+            // Arrange
+            await SeedOutOfHoursPayElements();
+
+            var outOfHoursSummary = new OutOfHoursSummaryResponse()
+            {
+                Id = "123456",
+                Name = "An Operative"
+            };
+
+            var otherOutOfHoursSummary = new OutOfHoursSummaryResponse()
+            {
+                Id = "118118",
+                Name = "Other Operative"
+            };
+
+            var laterOutOfHoursSummary = new OutOfHoursSummaryResponse()
+            {
+                Id = "123123",
+                Name = "Later Operative"
+            };
+
+            var comparer = new OutOfHoursSummaryResponseComparer();
+
+            // Act
+            var (code, response) = await Get<List<OutOfHoursSummaryResponse>>($"/api/v1/weeks/2021-10-18/out-of-hours");
+
+            // Assert
+            Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response, Contains.Item(outOfHoursSummary).Using(comparer));
+            Assert.That(response, Contains.Item(otherOutOfHoursSummary).Using(comparer));
+            Assert.That(response, Does.Not.Contain(laterOutOfHoursSummary).Using(comparer));
+            Assert.That(response, Is.Ordered.Ascending.By("Id"));
         }
 
         [Test]
@@ -225,6 +275,161 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             await Context.SaveChangesAsync();
 
             return operative;
+        }
+
+        private async Task SeedOutOfHoursPayElements()
+        {
+            var bonusPeriod = new BonusPeriod
+            {
+                Id = "2021-08-02",
+                StartAt = new DateTime(2021, 8, 1, 23, 0, 0, DateTimeKind.Utc),
+                Year = 2020,
+                Number = 3,
+                ClosedAt = null
+            };
+
+            var week = new Week
+            {
+                Id = "2021-10-18",
+                BonusPeriod = bonusPeriod,
+                StartAt = new DateTime(2021, 10, 17, 23, 0, 0, DateTimeKind.Utc),
+                Number = 12,
+                ClosedAt = null
+            };
+
+            var payElementType = new PayElementType
+            {
+                Id = 501,
+                Description = "OOH Job",
+                PayAtBand = false,
+                Paid = false,
+                Adjustment = false,
+                Productive = false,
+                NonProductive = false,
+                OutOfHours = true,
+                Overtime = false,
+                Selectable = false,
+                SmvPerHour = null
+            };
+
+            var scheme = new Scheme
+            {
+                Id = 1,
+                Type = "SMV",
+                Description = "Reactive",
+                ConversionFactor = 1.0M
+            };
+
+            var timesheets = new List<Timesheet>()
+            {
+                new Timesheet
+                {
+                    Id = "123456/2021-10-18",
+                    Week = week,
+                    Operative = new Operative
+                    {
+                        Id = "123456",
+                        Name = "An Operative",
+                        EmailAddress = "an.operative@hackney.gov.uk",
+                        Trade = new Trade
+                        {
+                            Id = "CP",
+                            Description = "Carpenter"
+                        },
+                        Scheme = scheme,
+                        Section = "H3007",
+                        SalaryBand = 5,
+                        Utilisation = 1.0M,
+                        FixedBand = false,
+                        IsArchived = false
+                    },
+                    PayElements = new List<PayElement>()
+                    {
+                        new PayElement
+                        {
+                            PayElementType = payElementType,
+                            Value = 20.0M,
+                            ReadOnly = true
+                        }
+                    }
+                },
+                new Timesheet
+                {
+                    Id = "118118/2021-10-18",
+                    Week = week,
+                    Operative = new Operative
+                    {
+                        Id = "118118",
+                        Name = "Other Operative",
+                        EmailAddress = "other.operative@hackney.gov.uk",
+                        Trade = new Trade
+                        {
+                            Id = "MT",
+                            Description = "Multi-Trade"
+                        },
+                        Scheme = scheme,
+                        Section = "H3002",
+                        SalaryBand = 5,
+                        Utilisation = 1.0M,
+                        FixedBand = false,
+                        IsArchived = false
+                    },
+                    PayElements = new List<PayElement>()
+                    {
+                        new PayElement
+                        {
+                            PayElementType = payElementType,
+                            Value = 20.0M,
+                            ReadOnly = true
+                        }
+                    }
+                },
+                new Timesheet
+                {
+                    Id = "123123/2021-10-25",
+                    Week = new Week
+                    {
+                        Id = "2021-10-25",
+                        BonusPeriod = bonusPeriod,
+                        StartAt = new DateTime(2021, 10, 24, 23, 0, 0, DateTimeKind.Utc),
+                        Number = 13,
+                        ClosedAt = null
+                    },
+                    Operative = new Operative
+                    {
+                        Id = "123123",
+                        Name = "Later Operative",
+                        EmailAddress = "later.operative@hackney.gov.uk",
+                        Trade = new Trade
+                        {
+                            Id = "PL",
+                            Description = "Plumber"
+                        },
+                        Scheme = scheme,
+                        Section = "H3009",
+                        SalaryBand = 5,
+                        Utilisation = 1.0M,
+                        FixedBand = false,
+                        IsArchived = false
+                    },
+                    PayElements = new List<PayElement>()
+                    {
+                        new PayElement
+                        {
+                            PayElementType = payElementType,
+                            Value = 20.0M,
+                            ReadOnly = true
+                        }
+                    }
+                }
+            };
+
+            await Context.BonusPeriods.AddAsync(bonusPeriod);
+            await Context.Weeks.AddAsync(week);
+            await Context.PayElementTypes.AddAsync(payElementType);
+            await Context.Schemes.AddAsync(scheme);
+            await Context.Timesheets.AddRangeAsync(timesheets);
+            await Context.SaveChangesAsync();
         }
 
         private async Task SeedOvertimePayElements()

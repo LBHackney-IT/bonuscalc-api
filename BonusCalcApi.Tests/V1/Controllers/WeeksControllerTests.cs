@@ -26,6 +26,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private Mock<IGetWeekUseCase> _getWeekUseCaseMock;
         private Mock<IUpdateWeekUseCase> _updateWeekUseCaseMock;
         private Mock<IUpdateWeekReportsSentAtUseCase> _updateWeekReportsSentAtUseCaseMock;
+        private Mock<IGetOutOfHoursSummariesUseCase> _getOutOfHoursSummariesUseCaseMock;
         private Mock<IGetOvertimeSummariesUseCase> _getOvertimeSummariesUseCaseMock;
         private MockOperativeHelpers _operativeHelpers;
         private MockProblemDetailsFactory _problemDetailsFactoryMock;
@@ -40,6 +41,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _getWeekUseCaseMock = new Mock<IGetWeekUseCase>();
             _updateWeekUseCaseMock = new Mock<IUpdateWeekUseCase>();
             _updateWeekReportsSentAtUseCaseMock = new Mock<IUpdateWeekReportsSentAtUseCase>();
+            _getOutOfHoursSummariesUseCaseMock = new Mock<IGetOutOfHoursSummariesUseCase>();
             _getOvertimeSummariesUseCaseMock = new Mock<IGetOvertimeSummariesUseCase>();
             _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
@@ -48,6 +50,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
                 _getWeekUseCaseMock.Object,
                 _updateWeekUseCaseMock.Object,
                 _updateWeekReportsSentAtUseCaseMock.Object,
+                _getOutOfHoursSummariesUseCaseMock.Object,
                 _getOvertimeSummariesUseCaseMock.Object
             );
 
@@ -191,6 +194,41 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Act
             var objectResult = await _classUnderTest.UpdateReportsSentAt("week");
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task GetOutOfHoursSummariesReturnsOk()
+        {
+            // Arrange
+            var expectedOutOfHoursSummaries = _fixture.CreateMany<OutOfHoursSummary>();
+            _operativeHelpers.ValidDate(true);
+            _getOutOfHoursSummariesUseCaseMock
+                .Setup(m => m.ExecuteAsync(It.IsAny<string>()))
+                .ReturnsAsync(expectedOutOfHoursSummaries);
+
+            // Act
+            var objectResult = await _classUnderTest.GetOutOfHoursSummaries("2021-10-18");
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<List<OutOfHoursSummaryResponse>>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Should().BeEquivalentTo(expectedOutOfHoursSummaries.Select(pe => pe.ToResponse()).ToList());
+        }
+
+        [Test]
+        public async Task GetOutOfHoursSummariesReturnsBadRequestIfWeekInvalid()
+        {
+            // Arrange
+            _operativeHelpers.ValidDate(false);
+
+            // Act
+            var objectResult = await _classUnderTest.GetOutOfHoursSummaries("00000000");
             var statusCode = GetStatusCode(objectResult);
 
             // Assert

@@ -12,6 +12,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public DbSet<BonusPeriod> BonusPeriods { get; set; }
         public DbSet<Operative> Operatives { get; set; }
         public DbSet<OperativeSummary> OperativeSummaries { get; set; }
+        public DbSet<OutOfHoursSummary> OutOfHoursSummaries { get; set; }
         public DbSet<OvertimeSummary> OvertimeSummaries { get; set; }
         public DbSet<PayBand> PayBands { get; set; }
         public DbSet<PayElement> PayElements { get; set; }
@@ -74,6 +75,10 @@ namespace BonusCalcApi.V1.Infrastructure
 
             modelBuilder.Entity<OperativeSummary>()
                 .ToView("operative_summaries")
+                .HasKey(os => new { os.Id, os.WeekId });
+
+            modelBuilder.Entity<OutOfHoursSummary>()
+                .ToView("out_of_hours_summaries")
                 .HasKey(os => new { os.Id, os.WeekId });
 
             modelBuilder.Entity<OvertimeSummary>()

@@ -24,6 +24,7 @@ namespace BonusCalcApi.V1.Controllers
         private readonly IGetWeekUseCase _getWeekUseCase;
         private readonly IUpdateWeekUseCase _updateWeekUseCase;
         private readonly IUpdateWeekReportsSentAtUseCase _updateWeekReportsSentAtUseCase;
+        private readonly IGetOutOfHoursSummariesUseCase _getOutOfHoursSummariesUseCase;
         private readonly IGetOvertimeSummariesUseCase _getOvertimeSummariesUseCase;
 
         public WeeksController(
@@ -31,6 +32,7 @@ namespace BonusCalcApi.V1.Controllers
             IGetWeekUseCase getWeekUseCase,
             IUpdateWeekUseCase updateWeekUseCase,
             IUpdateWeekReportsSentAtUseCase updateWeekReportsSentAtUseCase,
+            IGetOutOfHoursSummariesUseCase getOutOfHoursSummariesUseCase,
             IGetOvertimeSummariesUseCase getOvertimeSummariesUseCase
         )
         {
@@ -38,6 +40,7 @@ namespace BonusCalcApi.V1.Controllers
             _getWeekUseCase = getWeekUseCase;
             _updateWeekUseCase = updateWeekUseCase;
             _updateWeekReportsSentAtUseCase = updateWeekReportsSentAtUseCase;
+            _getOutOfHoursSummariesUseCase = getOutOfHoursSummariesUseCase;
             _getOvertimeSummariesUseCase = getOvertimeSummariesUseCase;
         }
 
@@ -113,6 +116,24 @@ namespace BonusCalcApi.V1.Controllers
             await _updateWeekReportsSentAtUseCase.ExecuteAsync(weekId);
 
             return Ok();
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<OutOfHoursSummaryResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Route("{weekId}/out-of-hours")]
+        public async Task<IActionResult> GetOutOfHoursSummaries([FromRoute][Required] string weekId)
+        {
+            if (!IsValidDate(weekId))
+                return Problem(
+                    "The requested week is invalid",
+                    $"/api/v1/weeks/{weekId}/out-of-hours",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+
+            var outOfHoursSummaries = await _getOutOfHoursSummariesUseCase.ExecuteAsync(weekId);
+            return Ok(outOfHoursSummaries.Select(os => os.ToResponse()).ToList());
         }
 
         [HttpGet]
