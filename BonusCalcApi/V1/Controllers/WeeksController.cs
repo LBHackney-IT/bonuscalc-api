@@ -24,18 +24,21 @@ namespace BonusCalcApi.V1.Controllers
         private readonly IGetWeekUseCase _getWeekUseCase;
         private readonly IUpdateWeekUseCase _updateWeekUseCase;
         private readonly IUpdateWeekReportsSentAtUseCase _updateWeekReportsSentAtUseCase;
+        private readonly IGetOvertimeSummariesUseCase _getOvertimeSummariesUseCase;
 
         public WeeksController(
             IOperativeHelpers operativeHelpers,
             IGetWeekUseCase getWeekUseCase,
             IUpdateWeekUseCase updateWeekUseCase,
-            IUpdateWeekReportsSentAtUseCase updateWeekReportsSentAtUseCase
+            IUpdateWeekReportsSentAtUseCase updateWeekReportsSentAtUseCase,
+            IGetOvertimeSummariesUseCase getOvertimeSummariesUseCase
         )
         {
             _operativeHelpers = operativeHelpers;
             _getWeekUseCase = getWeekUseCase;
             _updateWeekUseCase = updateWeekUseCase;
             _updateWeekReportsSentAtUseCase = updateWeekReportsSentAtUseCase;
+            _getOvertimeSummariesUseCase = getOvertimeSummariesUseCase;
         }
 
         [HttpGet]
@@ -110,6 +113,24 @@ namespace BonusCalcApi.V1.Controllers
             await _updateWeekReportsSentAtUseCase.ExecuteAsync(weekId);
 
             return Ok();
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<OvertimeSummaryResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Route("{weekId}/overtime")]
+        public async Task<IActionResult> GetOvertimeSummaries([FromRoute][Required] string weekId)
+        {
+            if (!IsValidDate(weekId))
+                return Problem(
+                    "The requested week is invalid",
+                    $"/api/v1/weeks/{weekId}/overtime",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+
+            var overtimeSummaries = await _getOvertimeSummariesUseCase.ExecuteAsync(weekId);
+            return Ok(overtimeSummaries.Select(os => os.ToResponse()).ToList());
         }
 
         private bool IsValidDate(string date)
