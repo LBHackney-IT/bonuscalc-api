@@ -155,7 +155,6 @@ namespace BonusCalcApi.V1.Factories
                 Duration = payElement.Duration,
                 Value = payElement.Value,
                 WorkOrder = payElement.WorkOrder,
-                TradeCode = payElement.TradeCode,
                 CostCode = payElement.CostCode,
                 ClosedAt = payElement.ClosedAt,
                 PayElementType = payElement.PayElementType.ToResponse()

@@ -21,9 +21,6 @@ namespace BonusCalcApi.V1.Infrastructure
         [StringLength(10)]
         public string WorkOrder { get; set; }
 
-        [StringLength(3)]
-        public string TradeCode { get; set; }
-
         [StringLength(5)]
         public string CostCode { get; set; }
 
@@ -61,7 +58,6 @@ namespace BonusCalcApi.V1.Infrastructure
             Duration = payElement.Duration;
             Value = payElement.Value;
             WorkOrder = payElement.WorkOrder;
-            TradeCode = payElement.TradeCode;
             CostCode = payElement.CostCode;
             PayElementTypeId = payElement.PayElementTypeId;
             ClosedAt = payElement.ClosedAt;

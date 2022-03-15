@@ -157,9 +157,6 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasIndex(pe => pe.WorkOrder);
 
             modelBuilder.Entity<PayElement>()
-                .HasIndex(pe => pe.TradeCode);
-
-            modelBuilder.Entity<PayElement>()
                 .HasIndex(pe => pe.CostCode);
 
             modelBuilder.Entity<PayElement>()

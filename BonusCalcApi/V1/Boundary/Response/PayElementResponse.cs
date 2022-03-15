@@ -10,8 +10,6 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public string WorkOrder { get; set; }
 
-        public string TradeCode { get; set; }
-
         public string CostCode { get; set; }
 
         public string Address { get; set; }
