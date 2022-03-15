@@ -192,6 +192,8 @@ namespace BonusCalcApi
             services.AddScoped<IBonusPeriodGateway, BonusPeriodGateway>();
             services.AddScoped<IOperativeGateway, OperativeGateway>();
             services.AddScoped<IOperativesGateway, OperativesGateway>();
+            services.AddScoped<IOutOfHoursSummaryGateway, OutOfHoursSummaryGateway>();
+            services.AddScoped<IOvertimeSummaryGateway, OvertimeSummaryGateway>();
             services.AddScoped<ITimesheetGateway, TimesheetGateway>();
             services.AddScoped<IPayElementTypeGateway, PayElementTypeGateway>();
             services.AddScoped<ISchemeGateway, SchemeGateway>();
@@ -207,6 +209,8 @@ namespace BonusCalcApi
             services.AddTransient<IGetOperativesUseCase, GetOperativesUseCase>();
             services.AddTransient<IGetOperativeTimesheetUseCase, GetOperativeTimesheetUseCase>();
             services.AddTransient<IGetOperativeSummaryUseCase, GetOperativeSummaryUseCase>();
+            services.AddTransient<IGetOutOfHoursSummariesUseCase, GetOutOfHoursSummariesUseCase>();
+            services.AddTransient<IGetOvertimeSummariesUseCase, GetOvertimeSummariesUseCase>();
             services.AddTransient<IGetPayElementTypeUseCase, GetPayElementTypeUseCase>();
             services.AddTransient<IGetSchemesUseCase, GetSchemesUseCase>();
             services.AddTransient<IGetWeekUseCase, GetWeekUseCase>();

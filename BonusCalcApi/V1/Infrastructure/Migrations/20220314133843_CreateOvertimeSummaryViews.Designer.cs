@@ -3,6 +3,7 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -10,9 +11,10 @@ using NpgsqlTypes;
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20220314133843_CreateOvertimeSummaryViews")]
+    partial class CreateOvertimeSummaryViews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,74 +204,6 @@ namespace V1.Infrastructure.Migrations
                         .HasDatabaseName("ix_operative_summaries_week_id");
 
                     b.ToView("operative_summaries");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OutOfHoursSummary", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
-
-                    b.Property<string>("WeekId")
-                        .HasColumnType("text")
-                        .HasColumnName("week_id");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<decimal>("TotalValue")
-                        .HasColumnType("numeric")
-                        .HasColumnName("total_value");
-
-                    b.Property<string>("TradeCode")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_code");
-
-                    b.Property<string>("TradeDescription")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_description");
-
-                    b.Property<string>("TradeId")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_id");
-
-                    b.HasKey("Id", "WeekId")
-                        .HasName("pk_out_of_hours_summaries");
-
-                    b.ToView("out_of_hours_summaries");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OvertimeSummary", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
-
-                    b.Property<string>("WeekId")
-                        .HasColumnType("text")
-                        .HasColumnName("week_id");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<decimal>("TotalValue")
-                        .HasColumnType("numeric")
-                        .HasColumnName("total_value");
-
-                    b.Property<string>("TradeDescription")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_description");
-
-                    b.Property<string>("TradeId")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_id");
-
-                    b.HasKey("Id", "WeekId")
-                        .HasName("pk_overtime_summaries");
-
-                    b.ToView("overtime_summaries");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayBand", b =>
