@@ -83,7 +83,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 OutOfHours = false,
                 Overtime = false,
                 Selectable = true,
-                SmvPerHour = null
+                SmvPerHour = null,
+                CostCode = null
             };
 
             var timesheet = new Timesheet
