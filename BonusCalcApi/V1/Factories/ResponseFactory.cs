@@ -86,6 +86,7 @@ namespace BonusCalcApi.V1.Factories
                     Id = overtimeSummary.TradeId,
                     Description = overtimeSummary.TradeDescription
                 },
+                CostCode = overtimeSummary.CostCode,
                 TotalValue = overtimeSummary.TotalValue
             };
         }

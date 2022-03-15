@@ -126,7 +126,7 @@ namespace BonusCalcApi.V1.Infrastructure
 
             modelBuilder.Entity<OvertimeSummary>()
                 .ToView("overtime_summaries")
-                .HasKey(os => new { os.Id, os.WeekId });
+                .HasKey(os => new { os.Id, os.WeekId, os.CostCode });
 
             modelBuilder.Entity<PayBand>()
                 .Property(pb => pb.Id)
