@@ -158,6 +158,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             payElement.Value.Should().Be(expectedPayElement.Value);
             payElement.WorkOrder.Should().Be(expectedPayElement.WorkOrder);
             payElement.TradeCode.Should().Be(expectedPayElement.TradeCode);
+            payElement.CostCode.Should().Be(expectedPayElement.CostCode);
             payElement.ClosedAt.Should().Be(expectedPayElement.ClosedAt);
         }
 
@@ -168,6 +169,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 .Without(pe => pe.Id)
                 .Without(pe => pe.WorkOrder)
                 .Without(pe => pe.TradeCode)
+                .Without(pe => pe.CostCode)
                 .With(pe => pe.PayElementTypeId, payElementsTypes.GetRandom().Id)
                 .Create();
             return newPayElement;

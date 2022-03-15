@@ -12,6 +12,8 @@ namespace BonusCalcApi.V1.Boundary.Request
 
         public string TradeCode { get; set; }
 
+        public string CostCode { get; set; }
+
         public string Address { get; set; }
 
         public string Comment { get; set; }
