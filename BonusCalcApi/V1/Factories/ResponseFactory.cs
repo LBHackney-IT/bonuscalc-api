@@ -70,7 +70,7 @@ namespace BonusCalcApi.V1.Factories
                     Id = outOfHoursSummary.TradeId,
                     Description = outOfHoursSummary.TradeDescription
                 },
-                TradeCode = outOfHoursSummary.TradeCode,
+                CostCode = outOfHoursSummary.CostCode,
                 TotalValue = outOfHoursSummary.TotalValue
             };
         }

@@ -122,7 +122,7 @@ namespace BonusCalcApi.V1.Infrastructure
 
             modelBuilder.Entity<OutOfHoursSummary>()
                 .ToView("out_of_hours_summaries")
-                .HasKey(os => new { os.Id, os.WeekId });
+                .HasKey(os => new { os.Id, os.WeekId, os.CostCode });
 
             modelBuilder.Entity<OvertimeSummary>()
                 .ToView("overtime_summaries")
