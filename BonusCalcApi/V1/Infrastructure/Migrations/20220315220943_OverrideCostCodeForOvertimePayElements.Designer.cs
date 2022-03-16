@@ -3,6 +3,7 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -10,114 +11,16 @@ using NpgsqlTypes;
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20220315220943_OverrideCostCodeForOvertimePayElements")]
+    partial class OverrideCostCodeForOvertimePayElements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasPostgresEnum(null, "band_change_decision", new[] { "approved", "rejected" })
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BandChange", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(17)
-                        .HasColumnType("character varying(17)")
-                        .HasColumnName("id");
-
-                    b.Property<decimal>("BalanceDuration")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("balance_duration")
-                        .HasComputedColumnSql("ROUND(GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0) / 60, 4)", true);
-
-                    b.Property<decimal>("BalanceValue")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("balance_value")
-                        .HasComputedColumnSql("GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0)", true);
-
-                    b.Property<decimal>("BandValue")
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("band_value");
-
-                    b.Property<string>("BonusPeriodId")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("bonus_period_id");
-
-                    b.Property<int?>("FinalBand")
-                        .HasColumnType("integer")
-                        .HasColumnName("final_band");
-
-                    b.Property<bool>("FixedBand")
-                        .HasColumnType("boolean")
-                        .HasColumnName("fixed_band");
-
-                    b.Property<decimal>("MaxValue")
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("max_value");
-
-                    b.Property<string>("OperativeId")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("character varying(6)")
-                        .HasColumnName("operative_id");
-
-                    b.Property<int>("ProjectedBand")
-                        .HasColumnType("integer")
-                        .HasColumnName("projected_band");
-
-                    b.Property<int>("SalaryBand")
-                        .HasColumnType("integer")
-                        .HasColumnName("salary_band");
-
-                    b.Property<string>("Scheme")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("scheme");
-
-                    b.Property<decimal>("SickDuration")
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("sick_duration");
-
-                    b.Property<decimal>("TotalValue")
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("total_value");
-
-                    b.Property<string>("Trade")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("trade");
-
-                    b.Property<decimal>("Utilisation")
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("utilisation");
-
-                    b.HasKey("Id")
-                        .HasName("pk_band_changes");
-
-                    b.HasIndex("BonusPeriodId")
-                        .HasDatabaseName("ix_band_changes_bonus_period_id");
-
-                    b.HasIndex("OperativeId")
-                        .HasDatabaseName("ix_band_changes_operative_id");
-
-                    b.ToTable("band_changes");
-                });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BonusPeriod", b =>
                 {
@@ -176,11 +79,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_archived");
 
-                    b.Property<string>("ManagerId")
-                        .HasMaxLength(6)
-                        .HasColumnType("character varying(6)")
-                        .HasColumnName("manager_id");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -208,11 +106,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("character varying(10)")
                         .HasColumnName("section");
 
-                    b.Property<string>("SupervisorId")
-                        .HasMaxLength(6)
-                        .HasColumnType("character varying(6)")
-                        .HasColumnName("supervisor_id");
-
                     b.Property<string>("TradeId")
                         .IsRequired()
                         .HasMaxLength(3)
@@ -233,18 +126,12 @@ namespace V1.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("ix_operatives_email_address");
 
-                    b.HasIndex("ManagerId")
-                        .HasDatabaseName("ix_operatives_manager_id");
-
                     b.HasIndex("SchemeId")
                         .HasDatabaseName("ix_operatives_scheme_id");
 
                     b.HasIndex("SearchVector")
                         .HasDatabaseName("ix_operatives_search_vector")
                         .HasMethod("GIN");
-
-                    b.HasIndex("SupervisorId")
-                        .HasDatabaseName("ix_operatives_supervisor_id");
 
                     b.HasIndex("TradeId")
                         .HasDatabaseName("ix_operatives_trade_id");
@@ -404,20 +291,6 @@ namespace V1.Infrastructure.Migrations
                     b.Property<int?>("SchemeId")
                         .HasColumnType("integer")
                         .HasColumnName("scheme_id");
-
-                    b.Property<decimal>("SmvPerHour")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasPrecision(20, 14)
-                        .HasColumnType("numeric(20,14)")
-                        .HasColumnName("smv_per_hour")
-                        .HasComputedColumnSql("value / 36", true);
-
-                    b.Property<decimal>("TotalValue")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("total_value")
-                        .HasComputedColumnSql("value * 13", true);
 
                     b.Property<decimal>("Value")
                         .HasColumnType("numeric")
@@ -625,12 +498,6 @@ namespace V1.Infrastructure.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("selectable");
 
-                    b.Property<bool>("SickLeave")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("sick_leave");
-
                     b.Property<int?>("SmvPerHour")
                         .HasColumnType("integer")
                         .HasColumnName("smv_per_hour");
@@ -643,30 +510,6 @@ namespace V1.Infrastructure.Migrations
                         .HasDatabaseName("ix_pay_element_types_description");
 
                     b.ToTable("pay_element_types");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Person", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(6)
-                        .HasColumnType("character varying(6)")
-                        .HasColumnName("id");
-
-                    b.Property<string>("EmailAddress")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("email_address");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_people");
-
-                    b.ToTable("people");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Scheme", b =>
@@ -687,20 +530,6 @@ namespace V1.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("description");
-
-                    b.Property<decimal>("MaxValue")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasDefaultValue(0m)
-                        .HasColumnName("max_value");
-
-                    b.Property<decimal>("MinValue")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasDefaultValue(0m)
-                        .HasColumnName("min_value");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -983,123 +812,12 @@ namespace V1.Infrastructure.Migrations
                     b.ToView("work_elements");
                 });
 
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BandChange", b =>
-                {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.BonusPeriod", "BonusPeriod")
-                        .WithMany()
-                        .HasForeignKey("BonusPeriodId")
-                        .HasConstraintName("fk_band_changes_bonus_periods_bonus_period_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Operative", "Operative")
-                        .WithMany()
-                        .HasForeignKey("OperativeId")
-                        .HasConstraintName("fk_band_changes_operatives_operative_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("BonusCalcApi.V1.Infrastructure.BandChangeApprover", "Manager", b1 =>
-                        {
-                            b1.Property<string>("BandChangeId")
-                                .HasColumnType("character varying(17)")
-                                .HasColumnName("id");
-
-                            b1.Property<BandChangeDecision>("Decision")
-                                .HasColumnType("band_change_decision")
-                                .HasColumnName("manager_decision");
-
-                            b1.Property<string>("EmailAddress")
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("manager_email_address");
-
-                            b1.Property<string>("Name")
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("manager_name");
-
-                            b1.Property<string>("Reason")
-                                .HasColumnType("text")
-                                .HasColumnName("manager_reason");
-
-                            b1.Property<int>("SalaryBand")
-                                .HasColumnType("integer")
-                                .HasColumnName("manager_salary_band");
-
-                            b1.HasKey("BandChangeId")
-                                .HasName("pk_band_changes");
-
-                            b1.ToTable("band_changes");
-
-                            b1.WithOwner()
-                                .HasForeignKey("BandChangeId")
-                                .HasConstraintName("fk_band_changes_band_changes_id");
-                        });
-
-                    b.OwnsOne("BonusCalcApi.V1.Infrastructure.BandChangeApprover", "Supervisor", b1 =>
-                        {
-                            b1.Property<string>("BandChangeId")
-                                .HasColumnType("character varying(17)")
-                                .HasColumnName("id");
-
-                            b1.Property<BandChangeDecision>("Decision")
-                                .HasColumnType("band_change_decision")
-                                .HasColumnName("supervisor_decision");
-
-                            b1.Property<string>("EmailAddress")
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("supervisor_email_address");
-
-                            b1.Property<string>("Name")
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("supervisor_name");
-
-                            b1.Property<string>("Reason")
-                                .HasColumnType("text")
-                                .HasColumnName("supervisor_reason");
-
-                            b1.Property<int>("SalaryBand")
-                                .HasColumnType("integer")
-                                .HasColumnName("supervisor_salary_band");
-
-                            b1.HasKey("BandChangeId")
-                                .HasName("pk_band_changes");
-
-                            b1.ToTable("band_changes");
-
-                            b1.WithOwner()
-                                .HasForeignKey("BandChangeId")
-                                .HasConstraintName("fk_band_changes_band_changes_id");
-                        });
-
-                    b.Navigation("BonusPeriod");
-
-                    b.Navigation("Manager");
-
-                    b.Navigation("Operative");
-
-                    b.Navigation("Supervisor");
-                });
-
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Operative", b =>
                 {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Person", "Manager")
-                        .WithMany()
-                        .HasForeignKey("ManagerId")
-                        .HasConstraintName("fk_operatives_people_manager_id");
-
                     b.HasOne("BonusCalcApi.V1.Infrastructure.Scheme", "Scheme")
                         .WithMany("Operatives")
                         .HasForeignKey("SchemeId")
                         .HasConstraintName("fk_operatives_schemes_scheme_id");
-
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Person", "Supervisor")
-                        .WithMany()
-                        .HasForeignKey("SupervisorId")
-                        .HasConstraintName("fk_operatives_people_supervisor_id");
 
                     b.HasOne("BonusCalcApi.V1.Infrastructure.Trade", "Trade")
                         .WithMany("Operatives")
@@ -1108,11 +826,7 @@ namespace V1.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Manager");
-
                     b.Navigation("Scheme");
-
-                    b.Navigation("Supervisor");
 
                     b.Navigation("Trade");
                 });

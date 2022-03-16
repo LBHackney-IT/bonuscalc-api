@@ -73,7 +73,7 @@ namespace BonusCalcApi.Tests.V1.Factories
             payElementResponse.Duration.Should().Be(payElement.Duration);
             payElementResponse.Value.Should().Be(payElement.Value);
             payElementResponse.WorkOrder.Should().Be(payElement.WorkOrder);
-            payElementResponse.TradeCode.Should().Be(payElement.TradeCode);
+            payElementResponse.CostCode.Should().Be(payElement.CostCode);
             payElementResponse.ClosedAt.Should().Be(payElement.ClosedAt);
             ValidatePayElementType(payElementResponse.PayElementType, payElement.PayElementType);
         }
@@ -90,6 +90,7 @@ namespace BonusCalcApi.Tests.V1.Factories
             payElementTypeResponse.Overtime.Should().Be(payElementType.Overtime);
             payElementTypeResponse.Selectable.Should().Be(payElementType.Selectable);
             payElementTypeResponse.SmvPerHour.Should().Be(payElementType.SmvPerHour);
+            payElementTypeResponse.CostCode.Should().Be(payElementType.CostCode);
         }
 
         private static void ValidateWeek(WeekResponse weekResponse, Week week)

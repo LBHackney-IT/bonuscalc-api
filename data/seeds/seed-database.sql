@@ -128,7 +128,7 @@ VALUES (
 \COPY trades(id, description) FROM 'trades.csv' CSV HEADER;
 
 -- Import pay element types
-\COPY pay_element_types(id, description, pay_at_band, paid, adjustment, productive, non_productive, out_of_hours, overtime, selectable, smv_per_hour, sick_leave) FROM 'pay_element_types.csv' CSV HEADER;
+\COPY pay_element_types(id, description, pay_at_band, paid, adjustment, productive, non_productive, out_of_hours, overtime, selectable, smv_per_hour, sick_leave, cost_code) FROM 'pay_element_types.csv' CSV HEADER;
 
 -- Import people
 \COPY people(id, name, email_address) FROM 'people.csv' CSV HEADER;

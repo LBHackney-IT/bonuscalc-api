@@ -25,5 +25,7 @@ namespace BonusCalcApi.V1.Boundary.Response
         public bool Selectable { get; set; }
 
         public int? SmvPerHour { get; set; }
+
+        public string CostCode { get; set; }
     }
 }

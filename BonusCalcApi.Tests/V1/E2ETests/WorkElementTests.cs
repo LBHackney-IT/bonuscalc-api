@@ -82,7 +82,8 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 OutOfHours = false,
                 Overtime = false,
                 Selectable = true,
-                SmvPerHour = null
+                SmvPerHour = null,
+                CostCode = null
             };
 
             var timesheet = new Timesheet

@@ -50,7 +50,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Overtime = false,
                     SickLeave = false,
                     Selectable = true,
-                    SmvPerHour = null
+                    SmvPerHour = null,
+                    CostCode = null
                 },
                 new PayElementType
                 {
@@ -65,7 +66,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Overtime = false,
                     SickLeave = false,
                     Selectable = true,
-                    SmvPerHour = 60
+                    SmvPerHour = 60,
+                    CostCode = null
                 },
                 new PayElementType
                 {
@@ -80,7 +82,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Overtime = false,
                     SickLeave = false,
                     Selectable = true,
-                    SmvPerHour = null
+                    SmvPerHour = null,
+                    CostCode = null
                 },
                 new PayElementType
                 {
@@ -95,7 +98,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Overtime = false,
                     SickLeave = false,
                     Selectable = false,
-                    SmvPerHour = null
+                    SmvPerHour = null,
+                    CostCode = null
                 }
             };
 

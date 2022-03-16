@@ -70,7 +70,7 @@ namespace BonusCalcApi.V1.Factories
                     Id = outOfHoursSummary.TradeId,
                     Description = outOfHoursSummary.TradeDescription
                 },
-                TradeCode = outOfHoursSummary.TradeCode,
+                CostCode = outOfHoursSummary.CostCode,
                 TotalValue = outOfHoursSummary.TotalValue
             };
         }
@@ -86,6 +86,7 @@ namespace BonusCalcApi.V1.Factories
                     Id = overtimeSummary.TradeId,
                     Description = overtimeSummary.TradeDescription
                 },
+                CostCode = overtimeSummary.CostCode,
                 TotalValue = overtimeSummary.TotalValue
             };
         }
@@ -154,7 +155,7 @@ namespace BonusCalcApi.V1.Factories
                 Duration = payElement.Duration,
                 Value = payElement.Value,
                 WorkOrder = payElement.WorkOrder,
-                TradeCode = payElement.TradeCode,
+                CostCode = payElement.CostCode,
                 ClosedAt = payElement.ClosedAt,
                 PayElementType = payElement.PayElementType.ToResponse()
             };
@@ -174,7 +175,8 @@ namespace BonusCalcApi.V1.Factories
                 OutOfHours = payElementType.OutOfHours,
                 Overtime = payElementType.Overtime,
                 Selectable = payElementType.Selectable,
-                SmvPerHour = payElementType.SmvPerHour
+                SmvPerHour = payElementType.SmvPerHour,
+                CostCode = payElementType.CostCode
             };
         }
 

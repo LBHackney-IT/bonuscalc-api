@@ -12,6 +12,8 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public string TradeDescription { get; set; }
 
+        public string CostCode { get; set; }
+
         public decimal TotalValue { get; set; }
     }
 }

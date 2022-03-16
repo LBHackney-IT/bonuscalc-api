@@ -94,7 +94,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 OutOfHours = false,
                 Overtime = true,
                 Selectable = false,
-                SmvPerHour = null
+                SmvPerHour = null,
+                CostCode = null
             };
 
             var operative = new Operative

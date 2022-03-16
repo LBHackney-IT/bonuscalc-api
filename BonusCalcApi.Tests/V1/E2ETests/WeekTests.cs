@@ -310,7 +310,8 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 OutOfHours = true,
                 Overtime = false,
                 Selectable = false,
-                SmvPerHour = null
+                SmvPerHour = null,
+                CostCode = null
             };
 
             var scheme = new Scheme
@@ -465,7 +466,8 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 OutOfHours = false,
                 Overtime = true,
                 Selectable = false,
-                SmvPerHour = null
+                SmvPerHour = null,
+                CostCode = null
             };
 
             var scheme = new Scheme

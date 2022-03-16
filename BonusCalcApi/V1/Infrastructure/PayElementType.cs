@@ -32,6 +32,9 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public int? SmvPerHour { get; set; }
 
+        [StringLength(5)]
+        public string CostCode { get; set; }
+
         public List<PayElement> PayElements { get; set; }
     }
 }

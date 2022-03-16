@@ -22,7 +22,7 @@ namespace BonusCalcApi.V1.Factories
                 Duration = payElementUpdate.Duration,
                 Value = payElementUpdate.Value,
                 WorkOrder = payElementUpdate.WorkOrder,
-                TradeCode = payElementUpdate.TradeCode,
+                CostCode = payElementUpdate.CostCode,
                 ClosedAt = payElementUpdate.ClosedAt,
                 PayElementTypeId = payElementUpdate.PayElementTypeId
             };
