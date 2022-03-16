@@ -17,6 +17,14 @@ namespace BonusCalcApi.V1.Infrastructure
         [StringLength(100)]
         public string EmailAddress { get; set; }
 
+        [StringLength(6)]
+        public string SupervisorId { get; set; }
+        public Person Supervisor { get; set; }
+
+        [StringLength(6)]
+        public string ManagerId { get; set; }
+        public Person Manager { get; set; }
+
         [Required]
         [StringLength(3)]
         public string TradeId { get; set; }

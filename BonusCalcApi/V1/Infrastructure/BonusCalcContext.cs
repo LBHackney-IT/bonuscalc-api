@@ -1,14 +1,18 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
-
     public class BonusCalcContext : DbContext
     {
+        static BonusCalcContext()
+            => NpgsqlConnection.GlobalTypeMapper.MapEnum<BandChangeDecision>();
+
         public BonusCalcContext(DbContextOptions options) : base(options)
         {
         }
 
+        public DbSet<BandChange> BandChanges { get; set; }
         public DbSet<BonusPeriod> BonusPeriods { get; set; }
         public DbSet<Operative> Operatives { get; set; }
         public DbSet<OperativeSummary> OperativeSummaries { get; set; }
@@ -17,6 +21,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public DbSet<PayBand> PayBands { get; set; }
         public DbSet<PayElement> PayElements { get; set; }
         public DbSet<PayElementType> PayElementTypes { get; set; }
+        public DbSet<Person> People { get; set; }
         public DbSet<Scheme> Schemes { get; set; }
         public DbSet<Timesheet> Timesheets { get; set; }
         public DbSet<Trade> Trades { get; set; }
@@ -33,6 +38,44 @@ namespace BonusCalcApi.V1.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasPostgresEnum<BandChangeDecision>();
+
+            modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.MaxValue)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.BandValue)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.SickDuration)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.TotalValue)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.Utilisation)
+                .HasPrecision(10, 4);
+
+            modelBuilder.Entity<BandChange>()
+                .OwnsOne(bc => bc.Supervisor);
+
+            modelBuilder.Entity<BandChange>()
+                .OwnsOne(bc => bc.Manager);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(pb => pb.BalanceDuration)
+                .HasPrecision(10, 4)
+                .HasComputedColumnSql(@"ROUND(GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0) / 60, 4)", stored: true);
+
+            modelBuilder.Entity<BandChange>()
+                .Property(pb => pb.BalanceValue)
+                .HasPrecision(10, 4)
+                .HasComputedColumnSql(@"GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0)", stored: true);
+
             modelBuilder.Entity<BonusPeriod>()
                 .HasIndex(bp => bp.StartAt)
                 .IsUnique();
@@ -96,6 +139,16 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasOne(pb => pb.Scheme)
                 .WithMany(s => s.PayBands)
                 .HasForeignKey(pb => pb.SchemeId);
+
+            modelBuilder.Entity<PayBand>()
+                .Property(pb => pb.TotalValue)
+                .HasPrecision(10, 4)
+                .HasComputedColumnSql(@"value * 13", stored: true);
+
+            modelBuilder.Entity<PayBand>()
+                .Property(pb => pb.SmvPerHour)
+                .HasPrecision(20, 14)
+                .HasComputedColumnSql(@"value / 36", stored: true);
 
             modelBuilder.Entity<PayElement>()
                 .HasIndex(pe => pe.TimesheetId);
@@ -198,6 +251,10 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasDefaultValue(false);
 
             modelBuilder.Entity<PayElementType>()
+                .Property(pet => pet.SickLeave)
+                .HasDefaultValue(false);
+
+            modelBuilder.Entity<PayElementType>()
                 .Property(pet => pet.Selectable)
                 .HasDefaultValue(false);
 
@@ -213,6 +270,16 @@ namespace BonusCalcApi.V1.Infrastructure
                 .Property(s => s.ConversionFactor)
                 .HasPrecision(20, 14)
                 .HasDefaultValue(1.0);
+
+            modelBuilder.Entity<Scheme>()
+                .Property(s => s.MinValue)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
+
+            modelBuilder.Entity<Scheme>()
+                .Property(s => s.MaxValue)
+                .HasPrecision(10, 4)
+                .HasDefaultValue(0.0);
 
             modelBuilder.Entity<Timesheet>()
                 .Property(t => t.Id)

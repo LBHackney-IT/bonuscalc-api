@@ -54,7 +54,22 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 Id = 1,
                 Type = "SMV",
                 Description = "Reactive",
-                ConversionFactor = 1.0M
+                ConversionFactor = 1.0M,
+                MaxValue = 62868.0M
+            };
+
+            var manager = new Person
+            {
+                Id = "800001",
+                Name = "A Manager",
+                EmailAddress = "a.manager@hackney.gov.uk"
+            };
+
+            var supervisor = new Person
+            {
+                Id = "810001",
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk"
             };
 
             var operative = new Operative
@@ -62,6 +77,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 Id = "123456",
                 Name = "An Operative",
                 EmailAddress = "an.operative@hackney.gov.uk",
+                Manager = manager,
+                Supervisor = supervisor,
                 Trade = trade,
                 Scheme = scheme,
                 Section = "H3007",
@@ -71,6 +88,8 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 IsArchived = false
             };
 
+            await BonusCalcContext.People.AddAsync(manager);
+            await BonusCalcContext.People.AddAsync(supervisor);
             await BonusCalcContext.Trades.AddAsync(trade);
             await BonusCalcContext.Schemes.AddAsync(scheme);
             await BonusCalcContext.Operatives.AddAsync(operative);

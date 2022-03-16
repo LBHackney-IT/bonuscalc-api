@@ -253,7 +253,8 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                     Id = 1,
                     Type = "SMV",
                     Description = "Reactive",
-                    ConversionFactor = 1.0M
+                    ConversionFactor = 1.0M,
+                    MaxValue = 62868.0M
                 },
                 Section = "H3007",
                 SalaryBand = 5,

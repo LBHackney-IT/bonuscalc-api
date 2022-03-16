@@ -14,6 +14,8 @@ namespace BonusCalcApi.V1.Factories
                 Id = operative.Id,
                 Name = operative.Name,
                 EmailAddress = operative.EmailAddress,
+                Manager = operative.Manager?.ToResponse(),
+                Supervisor = operative.Supervisor?.ToResponse(),
                 Trade = operative.Trade.ToResponse(),
                 Scheme = operative.Scheme.ToResponse(),
                 Section = operative.Section,
@@ -21,6 +23,16 @@ namespace BonusCalcApi.V1.Factories
                 Utilisation = operative.Utilisation,
                 FixedBand = operative.FixedBand,
                 IsArchived = operative.IsArchived
+            };
+        }
+
+        public static PersonResponse ToResponse(this Person person)
+        {
+            return new PersonResponse
+            {
+                Id = person.Id,
+                Name = person.Name,
+                EmailAddress = person.EmailAddress
             };
         }
 
@@ -183,6 +195,7 @@ namespace BonusCalcApi.V1.Factories
                 Type = scheme.Type,
                 Description = scheme.Description,
                 ConversionFactor = scheme.ConversionFactor,
+                MaxValue = scheme.MaxValue,
                 PayBands = scheme.PayBands.Select(pb => pb.ToResponse()).ToList()
             };
         }

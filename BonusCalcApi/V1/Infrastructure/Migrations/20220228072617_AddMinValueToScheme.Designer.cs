@@ -3,6 +3,7 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -10,9 +11,10 @@ using NpgsqlTypes;
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20220228072617_AddMinValueToScheme")]
+    partial class AddMinValueToScheme
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,20 +29,6 @@ namespace V1.Infrastructure.Migrations
                         .HasMaxLength(17)
                         .HasColumnType("character varying(17)")
                         .HasColumnName("id");
-
-                    b.Property<decimal>("BalanceDuration")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("balance_duration")
-                        .HasComputedColumnSql("ROUND(GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0) / 60, 4)", true);
-
-                    b.Property<decimal>("BalanceValue")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("balance_value")
-                        .HasComputedColumnSql("GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0)", true);
 
                     b.Property<decimal>("BandValue")
                         .HasPrecision(10, 4)
@@ -101,11 +89,6 @@ namespace V1.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("trade");
-
-                    b.Property<decimal>("Utilisation")
-                        .HasPrecision(10, 4)
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("utilisation");
 
                     b.HasKey("Id")
                         .HasName("pk_band_changes");
@@ -319,74 +302,6 @@ namespace V1.Infrastructure.Migrations
                     b.ToView("operative_summaries");
                 });
 
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OutOfHoursSummary", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
-
-                    b.Property<string>("WeekId")
-                        .HasColumnType("text")
-                        .HasColumnName("week_id");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<decimal>("TotalValue")
-                        .HasColumnType("numeric")
-                        .HasColumnName("total_value");
-
-                    b.Property<string>("TradeCode")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_code");
-
-                    b.Property<string>("TradeDescription")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_description");
-
-                    b.Property<string>("TradeId")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_id");
-
-                    b.HasKey("Id", "WeekId")
-                        .HasName("pk_out_of_hours_summaries");
-
-                    b.ToView("out_of_hours_summaries");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OvertimeSummary", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
-
-                    b.Property<string>("WeekId")
-                        .HasColumnType("text")
-                        .HasColumnName("week_id");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<decimal>("TotalValue")
-                        .HasColumnType("numeric")
-                        .HasColumnName("total_value");
-
-                    b.Property<string>("TradeDescription")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_description");
-
-                    b.Property<string>("TradeId")
-                        .HasColumnType("text")
-                        .HasColumnName("trade_id");
-
-                    b.HasKey("Id", "WeekId")
-                        .HasName("pk_overtime_summaries");
-
-                    b.ToView("overtime_summaries");
-                });
-
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayBand", b =>
                 {
                     b.Property<int>("Id")
@@ -509,11 +424,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("character varying(17)")
                         .HasColumnName("timesheet_id");
 
-                    b.Property<string>("TradeCode")
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)")
-                        .HasColumnName("trade_code");
-
                     b.Property<decimal>("Tuesday")
                         .ValueGeneratedOnAdd()
                         .HasPrecision(10, 4)
@@ -550,9 +460,6 @@ namespace V1.Infrastructure.Migrations
 
                     b.HasIndex("TimesheetId")
                         .HasDatabaseName("ix_pay_elements_timesheet_id");
-
-                    b.HasIndex("TradeCode")
-                        .HasDatabaseName("ix_pay_elements_trade_code");
 
                     b.HasIndex("WorkOrder")
                         .HasDatabaseName("ix_pay_elements_work_order");

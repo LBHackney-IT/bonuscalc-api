@@ -1,3 +1,3 @@
-"id","type","description","conversion_factor"
-1,"SMV","Planned",1
-2,"SMV","Reactive",1
+"id","type","description","conversion_factor","max_value"
+1,"SMV","Planned",1,60372
+2,"SMV","Reactive",1,62868

@@ -34,20 +34,92 @@ TRUNCATE TABLE
   pay_bands,
   pay_element_types,
   pay_elements,
+  people,
   schemes,
   timesheets,
   trades,
   weeks
 RESTART IDENTITY;
 
--- Import bonus periods
-\COPY bonus_periods(id, start_at, year, number) FROM 'bonus_periods.csv' CSV HEADER;
+-- Generate current bonus period:
+INSERT INTO bonus_periods (id, start_at, year, number)
+VALUES (
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'),
+  (SELECT DATE_PART('year', CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91)),
+  (SELECT (4 + ((CURRENT_DATE - '2021-11-01') / 91)) % 4)
+);
 
--- Import weeks
-\COPY weeks(id, bonus_period_id, start_at, number) FROM 'weeks.csv' CSV HEADER;
+-- Generate weeks
+INSERT INTO weeks (id, bonus_period_id, start_at, number)
+VALUES (
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 1
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 7),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 7, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 2
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 14),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 14, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 3
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 21),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 21, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 4
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 28),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 28, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 5
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 35),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 35, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 6
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 42),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 42, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 7
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 49),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 49, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 8
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 56),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 56, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 9
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 63),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 63, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 10
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 70),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 70, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 11
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 77),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 77, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 12
+),
+(
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 84),
+  (SELECT CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91),
+  (SELECT TO_TIMESTAMP(TO_CHAR(CURRENT_DATE - (CURRENT_DATE - '2021-11-01') % 91 + 84, 'YYYY-MM-DD'), 'YYYY-MM-DD') AT TIME ZONE 'UTC'), 13
+);
 
 -- Import schemes
-\COPY schemes(id, type, description, conversion_factor) FROM 'schemes.csv' CSV HEADER;
+\COPY schemes(id, type, description, conversion_factor, max_value) FROM 'schemes.csv' CSV HEADER;
 
 -- Import pay bands
 \COPY pay_bands(id, scheme_id, band, value) FROM 'pay_bands.csv' CSV HEADER;
@@ -56,10 +128,13 @@ RESTART IDENTITY;
 \COPY trades(id, description) FROM 'trades.csv' CSV HEADER;
 
 -- Import pay element types
-\COPY pay_element_types(id, description, pay_at_band, paid, adjustment, productive, non_productive, out_of_hours, overtime, selectable, smv_per_hour) FROM 'pay_element_types.csv' CSV HEADER;
+\COPY pay_element_types(id, description, pay_at_band, paid, adjustment, productive, non_productive, out_of_hours, overtime, selectable, smv_per_hour, sick_leave) FROM 'pay_element_types.csv' CSV HEADER;
+
+-- Import people
+\COPY people(id, name, email_address) FROM 'people.csv' CSV HEADER;
 
 -- Import operatives
-\COPY operatives(id, name, trade_id, section, scheme_id, salary_band, fixed_band, utilisation, is_archived) FROM 'operatives.csv' CSV HEADER;
+\COPY operatives(id, name, trade_id, section, scheme_id, salary_band, fixed_band, utilisation, is_archived, manager_id, supervisor_id) FROM 'operatives.csv' CSV HEADER;
 
 -- Generate timesheets for the period
 INSERT INTO timesheets (id, operative_id, week_id, utilisation)

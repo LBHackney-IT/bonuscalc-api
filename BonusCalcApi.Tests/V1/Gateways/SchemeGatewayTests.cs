@@ -43,6 +43,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Type = "SMV",
                     Description = "Planned",
                     ConversionFactor = 1.0M,
+                    MaxValue = 60372.0M,
                     PayBands = new List<PayBand>()
                     {
                         new PayBand { Id = 11, Band = 1, Value = 2160.0M },
@@ -62,6 +63,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                     Type = "SMV",
                     Description = "Reactive",
                     ConversionFactor = 1.0M,
+                    MaxValue = 62868.0M,
                     PayBands = new List<PayBand>()
                     {
                         new PayBand { Id = 21, Band = 1, Value = 2160.0M },

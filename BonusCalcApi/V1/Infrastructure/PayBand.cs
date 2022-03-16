@@ -13,5 +13,9 @@ namespace BonusCalcApi.V1.Infrastructure
         public int Band { get; set; }
 
         public decimal Value { get; set; }
+
+        public decimal TotalValue { get; set; }
+
+        public decimal SmvPerHour { get; set; }
     }
 }
