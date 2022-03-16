@@ -29,6 +29,7 @@ BEGIN;
 
 -- Remove any existing data
 TRUNCATE TABLE
+  band_changes,
   bonus_periods,
   operatives,
   pay_bands,
