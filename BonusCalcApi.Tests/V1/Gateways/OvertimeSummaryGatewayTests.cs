@@ -141,7 +141,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                         new PayElement()
                         {
                             PayElementType = payElementType,
-                            Value = 21.6M,
+                            Value = 21.98M,
                             ReadOnly = true
                         }
                     }
@@ -163,7 +163,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                         new PayElement()
                         {
                             PayElementType = payElementType,
-                            Value = 21.6M,
+                            Value = 21.98M,
                             ReadOnly = true
                         }
                     }
