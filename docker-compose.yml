@@ -27,8 +27,8 @@ services:
     build:
       context: .
       dockerfile: BonusCalcApi.Tests/Dockerfile
-    args:
-      - SONAR_TOKEN=${SONAR_TOKEN}
+      args:
+        - SONAR_TOKEN=${SONAR_TOKEN}
     environment:
       - DB_HOST=test-database
       - DB_PORT=5432
