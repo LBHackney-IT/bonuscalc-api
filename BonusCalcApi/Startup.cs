@@ -26,7 +26,6 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Sentry.AspNetCore;
-using RepairsApi.V2.Gateways;
 
 namespace BonusCalcApi
 {
@@ -120,38 +119,11 @@ namespace BonusCalcApi
 
             ConfigureDbContext(services);
 
-            AddHttpClients(services);
-
             RegisterGateways(services);
             RegisterUseCases(services);
             RegisterHelpers(services);
 
-            services.Configure<OperativesGatewayOptions>(Configuration.GetSection(OperativesGatewayOptions.OpGatewayOptionsName));
             services.AddTransient<IDbSaver, DbSaver>();
-        }
-
-        private void AddHttpClients(IServiceCollection services)
-        {
-            var ogo = ConfigureOptions();
-
-            AddClient(services, HttpClientNames.Repairs, ogo.RepairsHubBaseUrl, ogo.RepairsHubApiKey);
-        }
-
-        private static void AddClient(IServiceCollection services, string clientName, Uri uri, string key)
-        {
-            services.AddHttpClient(clientName, c =>
-            {
-                c.BaseAddress = uri;
-                c.DefaultRequestHeaders.Add("Authorization", key);
-            });
-        }
-
-        private OperativesGatewayOptions ConfigureOptions()
-        {
-            OperativesGatewayOptions ogo = new OperativesGatewayOptions();
-            Configuration.Bind(nameof(OperativesGatewayOptions), ogo);
-
-            return ogo;
         }
 
         private void ConfigureDbContext(IServiceCollection services)
@@ -188,10 +160,8 @@ namespace BonusCalcApi
 
         private static void RegisterGateways(IServiceCollection services)
         {
-            services.AddScoped<IApiGateway, ApiGateway>();
             services.AddScoped<IBonusPeriodGateway, BonusPeriodGateway>();
             services.AddScoped<IOperativeGateway, OperativeGateway>();
-            services.AddScoped<IOperativesGateway, OperativesGateway>();
             services.AddScoped<IOutOfHoursSummaryGateway, OutOfHoursSummaryGateway>();
             services.AddScoped<IOvertimeSummaryGateway, OvertimeSummaryGateway>();
             services.AddScoped<ITimesheetGateway, TimesheetGateway>();
