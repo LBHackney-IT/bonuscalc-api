@@ -15,7 +15,7 @@ namespace BonusCalcApi.V1.Exceptions
         public ApiException(int statusCode, string message)
             : this(message)
         {
-            this.StatusCode = (int) statusCode;
+            this.StatusCode = statusCode;
         }
 
         public ApiException(string message) : base(message) { }
