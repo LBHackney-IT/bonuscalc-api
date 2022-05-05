@@ -14,13 +14,6 @@ RUN dotnet tool install -v quiet --global dotnet-coverage
 RUN dotnet tool install -v quiet --global dotnet-sonarscanner
 ENV PATH="$PATH:/root/.dotnet/tools"
 
-RUN dotnet sonarscanner begin \
-    /k:"LBHackney-IT_bonuscalc-api" \
-    /o:"lbhackney-it" \
-    /d:sonar.host.url=https://sonarcloud.io \
-    /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml \
-    /d:sonar.login="${SONAR_TOKEN}"
-
 # Copy csproj and restore as distinct layers
 COPY ./BonusCalcApi.sln ./
 COPY ./BonusCalcApi/BonusCalcApi.csproj ./BonusCalcApi/
@@ -33,8 +26,8 @@ RUN dotnet restore ./BonusCalcApi.Tests/BonusCalcApi.Tests.csproj
 COPY . .
 
 RUN dotnet build -c debug -o out BonusCalcApi.Tests/BonusCalcApi.Tests.csproj
-RUN dotnet build -c Release -o out BonusCalcApi/BonusCalcApi.csproj
+RUN dotnet build -c debug -o out BonusCalcApi/BonusCalcApi.csproj
 
-CMD dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
-
-RUN dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
+CMD dotnet sonarscanner begin /k:"LBHackney-IT_bonuscalc-api" /o:"lbhackney-it" /d:sonar.host.url=https://sonarcloud.io /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.login="${SONAR_TOKEN}" && \
+    dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml' && \
+    dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
