@@ -211,10 +211,7 @@ namespace BonusCalcApi
                 app.UseHsts();
             }
 
-            // TODO
-            // If you DON'T use the renaming script, PLEASE replace with your own API name manually
             app.UseXRay("bonuscalc-api");
-
 
             //Get All ApiVersions,
             var api = app.ApplicationServices.GetService<IApiVersionDescriptionProvider>();
