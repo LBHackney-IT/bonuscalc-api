@@ -44,6 +44,8 @@ _ReSharper*/
 Ankh.NoLoad
 
 #Other
+coverage.xml
+.sonarqube
 .svn
 
 # Include DLLs if they're in the NuGet packages directory

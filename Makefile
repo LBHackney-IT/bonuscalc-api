@@ -27,6 +27,15 @@ lint:
 	dotnet tool install -v quiet -g dotnet-format || true
 	dotnet format
 
+.PHONY: scan
+scan:
+	dotnet tool install -v quiet -g dotnet-coverage || true
+	dotnet tool install -v quiet -g dotnet-sonarscanner || true
+	dotnet sonarscanner begin /k:"LBHackney-IT_bonuscalc-api" /o:"lbhackney-it" /d:sonar.host.url=https://sonarcloud.io /d:sonar.login="${SONAR_TOKEN}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+	dotnet build --no-incremental
+	dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
+	dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
+
 .PHONY: stop
 stop:
 	docker-compose down
