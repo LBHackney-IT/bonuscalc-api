@@ -25,6 +25,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             _mockOperativeGateway = new Mock<IOperativeGateway>();
             _classUnderTest = new GetOperativeUseCase(_mockOperativeGateway.Object);
         }
+
         [Test]
         public async Task GetOperative()
         {

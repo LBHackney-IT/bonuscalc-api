@@ -14,5 +14,8 @@ namespace BonusCalcApi.V1.Boundary.Response
         public decimal Utilisation { get; set; }
         public bool FixedBand { get; set; }
         public bool IsArchived { get; set; }
+
+        public bool ShouldSerializeTrade() => Trade != null;
+        public bool ShouldSerializeScheme() => Scheme != null;
     }
 }
