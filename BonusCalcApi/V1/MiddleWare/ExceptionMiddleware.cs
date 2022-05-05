@@ -25,10 +25,6 @@ namespace BonusCalcApi.V1.MiddleWare
             {
                 await httpContext.SetResponse(404, e.Message);
             }
-            catch (ApiException e)
-            {
-                await httpContext.SetResponse(502, $"{e.Message}. Upstream Sent {e.StatusCode}");
-            }
             catch (NotSupportedException e)
             {
                 await httpContext.SetResponse(400, e.Message);

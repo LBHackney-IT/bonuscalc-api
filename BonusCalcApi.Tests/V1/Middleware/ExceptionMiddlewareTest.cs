@@ -61,7 +61,6 @@ namespace BonusCalcApi.Tests.V1.Middleware
         static object[] _cases =
         {
             new object[] { new ResourceNotFoundException("not found message"), 404, "not found message" },
-            new object[] { new ApiException(400, "api message"), 502, "api message. Upstream Sent 400" },
             new object[] { new NotSupportedException("not supported message"), 400, "not supported message" },
             new object[] { new UnauthorizedAccessException("un authorised message"), 401, "un authorised message" },
         };
