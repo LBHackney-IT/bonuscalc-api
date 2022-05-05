@@ -21,12 +21,17 @@ namespace BonusCalcApi.V1.UseCase
         {
             var timesheet = await _timesheetGateway.GetOperativeTimesheetAsync(operativeId, weekId);
 
-            if (timesheet is null) ThrowHelper.ThrowNotFound($"Timesheet not found for operative: {operativeId} and week: {weekId}");
-
-            if (timesheet.ReportSentAt is null)
+            if (timesheet is null)
             {
-                timesheet.ReportSentAt = DateTime.UtcNow;
-                await _dbSaver.SaveChangesAsync();
+                ThrowHelper.ThrowNotFound($"Timesheet not found for operative: {operativeId} and week: {weekId}");
+            }
+            else
+            {
+                if (timesheet.ReportSentAt is null)
+                {
+                    timesheet.ReportSentAt = DateTime.UtcNow;
+                    await _dbSaver.SaveChangesAsync();
+                }
             }
         }
     }
