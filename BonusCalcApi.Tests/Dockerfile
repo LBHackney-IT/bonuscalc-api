@@ -10,10 +10,16 @@ WORKDIR /app
 
 # Enable sonarcloud
 RUN apt-get update && apt-get install -y openjdk-11-jdk
-RUN dotnet tool install --global dotnet-sonarscanner
+RUN dotnet tool install -v quiet --global dotnet-coverage
+RUN dotnet tool install -v quiet --global dotnet-sonarscanner
 ENV PATH="$PATH:/root/.dotnet/tools"
 
-RUN dotnet sonarscanner begin /k:"LBHackney-IT_bonuscalc-api" /o:"lbhackney-it" /d:sonar.host.url=https://sonarcloud.io /d:sonar.login="${SONAR_TOKEN}"
+RUN dotnet sonarscanner begin \
+    /k:"LBHackney-IT_bonuscalc-api" \
+    /o:"lbhackney-it" \
+    /d:sonar.host.url=https://sonarcloud.io \
+    /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml \
+    /d:sonar.login="${SONAR_TOKEN}"
 
 # Copy csproj and restore as distinct layers
 COPY ./BonusCalcApi.sln ./
@@ -29,6 +35,6 @@ COPY . .
 RUN dotnet build -c debug -o out BonusCalcApi.Tests/BonusCalcApi.Tests.csproj
 RUN dotnet build -c Release -o out BonusCalcApi/BonusCalcApi.csproj
 
-CMD dotnet test
+CMD dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
 
 RUN dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
