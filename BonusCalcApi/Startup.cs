@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -138,6 +140,7 @@ namespace BonusCalcApi
             );
         }
 
+        [SuppressMessage("SonarCube", "S4792", Justification = "Reviewed configuration")]
         private static void ConfigureLogging(IServiceCollection services, IConfiguration configuration)
         {
             // We rebuild the logging stack so as to ensure the console logger is not used in production.
