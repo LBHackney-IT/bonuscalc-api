@@ -24,8 +24,7 @@ test: test-db build-test
 
 .PHONY: lint
 lint:
-	-dotnet tool install -g dotnet-format
-	dotnet tool update -g dotnet-format
+	dotnet tool install -v quiet -g dotnet-format || true
 	dotnet format
 
 .PHONY: stop
