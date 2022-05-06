@@ -15,5 +15,9 @@ coverlet ./BonusCalcApi.Tests/bin/Debug/netcoreapp3.1/BonusCalcApi.Tests.dll \
     -f=opencover \
     -o="coverage.xml"
 
+status=$?
+
 dotnet sonarscanner end \
     /d:sonar.login="${SONAR_TOKEN}"
+
+exit $status
