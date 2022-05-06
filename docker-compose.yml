@@ -37,6 +37,8 @@ services:
       - DB_DATABASE=testdb
     depends_on:
       - test-database
+    volumes:
+      - sonarqube:/app/.sonarqube
 
   test-database:
     image: postgres:12
@@ -46,3 +48,6 @@ services:
       - database.env
     volumes:
       - ./database:/docker-entrypoint-initdb.d
+
+volumes:
+  sonarqube:
