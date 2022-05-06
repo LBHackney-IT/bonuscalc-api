@@ -26,7 +26,7 @@ RUN dotnet restore ./BonusCalcApi.Tests/BonusCalcApi.Tests.csproj
 COPY . .
 
 RUN dotnet build -c debug -o out BonusCalcApi.Tests/BonusCalcApi.Tests.csproj
-RUN dotnet build -c debug -o out BonusCalcApi/BonusCalcApi.csproj
+RUN dotnet build -c Release -o out BonusCalcApi/BonusCalcApi.csproj
 
 CMD dotnet sonarscanner begin /k:"LBHackney-IT_bonuscalc-api" /o:"lbhackney-it" /d:sonar.host.url=https://sonarcloud.io /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml /d:sonar.login="${SONAR_TOKEN}" && \
     dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml' && \
