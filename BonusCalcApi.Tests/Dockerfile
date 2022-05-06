@@ -1,10 +1,7 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
-# disable microsoft telematry
+# disable microsoft telemetry
 ENV DOTNET_CLI_TELEMETRY_OPTOUT='true'
-
-ARG SONAR_TOKEN
-ENV SONAR_TOKEN=$SONAR_TOKEN
 
 WORKDIR /app
 
