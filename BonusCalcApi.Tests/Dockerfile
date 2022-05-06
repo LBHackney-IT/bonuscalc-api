@@ -10,8 +10,8 @@ WORKDIR /app
 
 # Enable sonarcloud
 RUN apt-get update && apt-get install -y openjdk-11-jdk
-RUN dotnet tool install -v quiet --global dotnet-coverage
-RUN dotnet tool install -v quiet --global dotnet-sonarscanner
+RUN dotnet tool install -v quiet --global coverlet.console --version 1.7.2
+RUN dotnet tool install -v quiet --global dotnet-sonarscanner --version 5.5.3
 ENV PATH="$PATH:/root/.dotnet/tools"
 
 # Copy csproj and restore as distinct layers
