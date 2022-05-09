@@ -34,8 +34,8 @@ services:
       - DB_PASSWORD=mypassword
       - DB_DATABASE=testdb
       - SONAR_TOKEN=${SONAR_TOKEN}
-      - CIRCLE_BRANCH=${CIRCLE_BRANCH}
-      - CIRCLE_PULL_REQUEST=${CIRCLE_PULL_REQUEST}
+      - CIRCLE_BRANCH=${CIRCLE_BRANCH:-}
+      - CIRCLE_PULL_REQUEST=${CIRCLE_PULL_REQUEST:-}
     depends_on:
       - test-database
     volumes:
