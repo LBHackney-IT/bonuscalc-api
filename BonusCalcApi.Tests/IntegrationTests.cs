@@ -14,7 +14,7 @@ using NUnit.Framework;
 
 namespace BonusCalcApi.Tests
 {
-    public class IntegrationTests<TStartup> where TStartup : class
+    abstract public class IntegrationTests<TStartup> where TStartup : class
     {
         protected HttpClient Client { get; private set; }
         protected BonusCalcContext Context => _factory.Context;

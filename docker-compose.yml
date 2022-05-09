@@ -27,16 +27,19 @@ services:
     build:
       context: .
       dockerfile: BonusCalcApi.Tests/Dockerfile
-      args:
-        - SONAR_TOKEN=${SONAR_TOKEN}
     environment:
       - DB_HOST=test-database
       - DB_PORT=5432
       - DB_USERNAME=postgres
       - DB_PASSWORD=mypassword
       - DB_DATABASE=testdb
+      - SONAR_TOKEN=${SONAR_TOKEN}
+      - CIRCLE_BRANCH=${CIRCLE_BRANCH:-}
+      - CIRCLE_PULL_REQUEST=${CIRCLE_PULL_REQUEST:-}
     depends_on:
       - test-database
+    volumes:
+      - sonarqube:/app/.sonarqube
 
   test-database:
     image: postgres:12
@@ -46,3 +49,6 @@ services:
       - database.env
     volumes:
       - ./database:/docker-entrypoint-initdb.d
+
+volumes:
+  sonarqube:

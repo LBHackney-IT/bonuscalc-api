@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 
 namespace BonusCalcApi.V1.Exceptions
 {
+    [Serializable]
     public class ResourceNotFoundException : Exception
     {
         public ResourceNotFoundException()

@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace BonusCalcApi.Tests
 {
     [TestFixture]
-    public class DatabaseTests
+    abstract public class DatabaseTests
     {
         private IDbContextTransaction _transaction;
         protected BonusCalcContext BonusCalcContext { get; private set; }

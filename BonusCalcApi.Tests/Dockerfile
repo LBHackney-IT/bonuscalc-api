@@ -1,19 +1,15 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
-# disable microsoft telematry
+# disable microsoft telemetry
 ENV DOTNET_CLI_TELEMETRY_OPTOUT='true'
-
-ARG SONAR_TOKEN
-ENV SONAR_TOKEN=$SONAR_TOKEN
 
 WORKDIR /app
 
 # Enable sonarcloud
 RUN apt-get update && apt-get install -y openjdk-11-jdk
-RUN dotnet tool install --global dotnet-sonarscanner
+RUN dotnet tool install -v quiet --global coverlet.console --version 1.7.2
+RUN dotnet tool install -v quiet --global dotnet-sonarscanner --version 5.5.3
 ENV PATH="$PATH:/root/.dotnet/tools"
-
-RUN dotnet sonarscanner begin /k:"LBHackney-IT_bonuscalc-api" /o:"lbhackney-it" /d:sonar.host.url=https://sonarcloud.io /d:sonar.login="${SONAR_TOKEN}"
 
 # Copy csproj and restore as distinct layers
 COPY ./BonusCalcApi.sln ./
@@ -29,6 +25,4 @@ COPY . .
 RUN dotnet build -c debug -o out BonusCalcApi.Tests/BonusCalcApi.Tests.csproj
 RUN dotnet build -c Release -o out BonusCalcApi/BonusCalcApi.csproj
 
-CMD dotnet test
-
-RUN dotnet sonarscanner end /d:sonar.login="${SONAR_TOKEN}"
+CMD /app/ci.sh
