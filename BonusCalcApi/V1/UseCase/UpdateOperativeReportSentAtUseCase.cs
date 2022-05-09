@@ -25,13 +25,10 @@ namespace BonusCalcApi.V1.UseCase
             {
                 ThrowHelper.ThrowNotFound($"Timesheet not found for operative: {operativeId} and week: {weekId}");
             }
-            else
+            else if (timesheet.ReportSentAt is null)
             {
-                if (timesheet.ReportSentAt is null)
-                {
-                    timesheet.ReportSentAt = DateTime.UtcNow;
-                    await _dbSaver.SaveChangesAsync();
-                }
+                timesheet.ReportSentAt = DateTime.UtcNow;
+                await _dbSaver.SaveChangesAsync();
             }
         }
     }

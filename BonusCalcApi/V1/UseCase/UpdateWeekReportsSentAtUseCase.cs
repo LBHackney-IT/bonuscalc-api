@@ -25,13 +25,10 @@ namespace BonusCalcApi.V1.UseCase
             {
                 ThrowHelper.ThrowNotFound($"Week not found for: {weekId}");
             }
-            else
+            else if (week.ReportsSentAt is null)
             {
-                if (week.ReportsSentAt is null)
-                {
-                    week.ReportsSentAt = DateTime.UtcNow;
-                    await _dbSaver.SaveChangesAsync();
-                }
+                week.ReportsSentAt = DateTime.UtcNow;
+                await _dbSaver.SaveChangesAsync();
             }
         }
     }
