@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Exceptions;
 using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
@@ -26,7 +27,7 @@ namespace BonusCalcApi.V1.UseCase
 
             if (bonusPeriod is null)
             {
-                ThrowHelper.ThrowNotFound($"Open bonus period not found");
+                throw new ResourceNotFoundException($"Open bonus period not found");
             }
             else
             {
