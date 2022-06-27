@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Infrastructure;

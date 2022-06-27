@@ -11,7 +11,6 @@ using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase;
 using FluentAssertions;
-using FluentAssertions.Common;
 using Moq;
 using NUnit.Framework;
 

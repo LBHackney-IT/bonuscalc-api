@@ -1,5 +1,3 @@
-using AutoFixture;
-using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
 using FluentAssertions;

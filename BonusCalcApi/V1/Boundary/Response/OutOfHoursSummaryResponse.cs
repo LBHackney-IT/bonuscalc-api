@@ -1,5 +1,3 @@
-using System;
-
 namespace BonusCalcApi.V1.Boundary.Response
 {
     public class OutOfHoursSummaryResponse

@@ -1,6 +1,5 @@
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Factories;
-using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

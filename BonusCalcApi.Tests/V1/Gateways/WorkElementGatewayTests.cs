@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
-using FluentAssertions;
 using NUnit.Framework;
 
 namespace BonusCalcApi.Tests.V1.Gateways

@@ -1,16 +1,8 @@
-using System;
-using System.Data.Common;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Hosting;
-using Microsoft.VisualStudio.TestPlatform.CoreUtilities.Helpers;
-using Npgsql;
 
 namespace BonusCalcApi.Tests
 {

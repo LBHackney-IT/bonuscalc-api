@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -9,7 +8,6 @@ using BonusCalcApi.V1.Boundary.Request;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Controllers.Helpers;
 using BonusCalcApi.V1.Factories;
-using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
 
 namespace BonusCalcApi.V1.Controllers

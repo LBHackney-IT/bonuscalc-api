@@ -1,15 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using AutoFixture;
-using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Boundary.Response;
-using BonusCalcApi.V1.Factories;
 using BonusCalcApi.V1.Infrastructure;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
 namespace BonusCalcApi.Tests.V1.E2ETests

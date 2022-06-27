@@ -12,7 +12,6 @@ using Moq;
 using NUnit.Framework;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Controllers;
-using BonusCalcApi.V1.Controllers.Helpers;
 using BonusCalcApi.V1.Factories;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;

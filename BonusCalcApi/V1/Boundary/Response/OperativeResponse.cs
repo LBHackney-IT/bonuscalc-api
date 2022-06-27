@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace BonusCalcApi.V1.Boundary.Response
 {
     public class OperativeResponse
