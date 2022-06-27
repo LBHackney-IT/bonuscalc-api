@@ -38,8 +38,8 @@ namespace BonusCalcApi
             AWSSDKHandler.RegisterXRayForAllServices();
         }
 
-        public IConfiguration Configuration { get; }
-        private static List<ApiVersionDescription> _apiVersions { get; set; }
+        private IConfiguration Configuration { get; }
+        private static List<ApiVersionDescription> ApiVersions { get; set; }
         private const string ApiName = "BonusCalc";
 
         // This method gets called by the runtime. Use this method to add services to the container.
