@@ -130,6 +130,9 @@ namespace BonusCalcApi
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
                                 ?? Configuration.GetValue<string>("DatabaseConnectionString");
 
+            // TODO: Track down where DateTimeKind.Unspecified is being used and remove this
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             services.AddDbContext<BonusCalcContext>(
                 opt => opt
                     .UseNpgsql(connectionString)
