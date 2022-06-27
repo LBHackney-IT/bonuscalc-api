@@ -30,11 +30,11 @@ namespace BonusCalcApi.V1.Controllers
         [Route("current")]
         public async Task<IActionResult> GetCurrentBonusPeriods([FromQuery] DateTime? date)
         {
-            var bonusPeriods = await _getCurrentBonusPeriodsUseCase.ExecuteAsync(ensureValidDate(date));
+            var bonusPeriods = await _getCurrentBonusPeriodsUseCase.ExecuteAsync(EnsureValidDate(date));
             return Ok(bonusPeriods.Select(bp => bp.ToResponse()).ToList());
         }
 
-        private static DateTime ensureValidDate(DateTime? date)
+        private static DateTime EnsureValidDate(DateTime? date)
         {
             return (date ?? DateTime.UtcNow);
         }
