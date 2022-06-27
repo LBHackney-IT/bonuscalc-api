@@ -7,25 +7,32 @@ build:
 	docker-compose build bonuscalc-api
 
 .PHONY: build-test
-build-test:
+build-test: build
 	docker-compose build bonuscalc-api-test
 
 .PHONY: serve
-serve: build
+serve: build migrate-dev-db
 	docker-compose up -d bonuscalc-api
 
 .PHONY: shell
 shell: build
-	docker-compose run bonuscalc-api bash
+	docker-compose run --rm bonuscalc-api bash
 
 .PHONY: test
-test: test-db build-test
-	docker-compose up bonuscalc-api-test
+test: test-db build-test migrate-test-db
+	docker-compose run --rm bonuscalc-api-test
 
 .PHONY: lint
 lint:
-	dotnet tool install -v quiet -g dotnet-format || true
 	dotnet format
+
+.PHONY: migrate-dev-db
+migrate-dev-db: dev-db
+	docker-compose run --rm bonuscalc-api dotnet ef database update -p BonusCalcApi -c BonusCalcApi.V1.Infrastructure.BonusCalcContext
+
+.PHONY: migrate-test-db
+migrate-test-db: test-db
+	docker-compose run --rm bonuscalc-api-test dotnet ef database update -p BonusCalcApi -c BonusCalcApi.V1.Infrastructure.BonusCalcContext
 
 .PHONY: stop
 stop:

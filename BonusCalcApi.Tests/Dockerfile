@@ -5,6 +5,12 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT='true'
 
 WORKDIR /app
 
+# Install dotnet-ef tool to run migrations
+RUN dotnet tool install --global dotnet-ef --version 5.0.10
+
+# Ensure dotnet tools are in the path
+ENV PATH="$PATH:/root/.dotnet/tools"
+
 # Enable sonarcloud
 RUN apt-get update && apt-get install -y openjdk-11-jdk
 RUN dotnet tool install -v quiet --global coverlet.console --version 1.7.2
