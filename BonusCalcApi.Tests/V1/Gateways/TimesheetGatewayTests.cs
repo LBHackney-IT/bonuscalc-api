@@ -20,7 +20,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesTimesheetFromDB()
+        public async Task RetrievesTimesheetFromDb()
         {
             // Arrange
             var operative = await AddOperative();
@@ -35,7 +35,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesNonExistentTimesheetFromDB()
+        public async Task RetrievesNonExistentTimesheetFromDb()
         {
             // Act
             var result = await _classUnderTest.GetOperativeTimesheetAsync("000000", "2000-01-01");

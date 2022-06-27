@@ -32,7 +32,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesWorkElementsFromDB()
+        public async Task RetrievesWorkElementsFromDb()
         {
             // Arrange
             await AddPayElements();
@@ -58,7 +58,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesEmptyResultsFromDB()
+        public async Task RetrievesEmptyResultsFromDb()
         {
             // Act
             var result = await _classUnderTest.GetWorkElementsAsync("00000000", 1, 25);

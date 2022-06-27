@@ -19,7 +19,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesSchemesFromDB()
+        public async Task RetrievesSchemesFromDb()
         {
             // Arrange
             var schemes = await AddSchemes();

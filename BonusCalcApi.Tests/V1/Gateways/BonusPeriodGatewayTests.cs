@@ -22,7 +22,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesCurrentBonusPeriodsFromDB()
+        public async Task RetrievesCurrentBonusPeriodsFromDb()
         {
             // Arrange
             var bonusPeriods = await AddBonusPeriods();
