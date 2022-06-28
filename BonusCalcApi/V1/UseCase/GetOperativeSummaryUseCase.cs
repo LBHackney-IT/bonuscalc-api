@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;

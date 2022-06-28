@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
@@ -19,7 +18,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesOperativeFromDB()
+        public async Task RetrievesOperativeFromDb()
         {
             // Arrange
             var operative = await AddOperative();
@@ -32,7 +31,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesNonExistentOperativeFromDB()
+        public async Task RetrievesNonExistentOperativeFromDb()
         {
             // Act
             var result = await _classUnderTest.GetOperativeAsync("000000");

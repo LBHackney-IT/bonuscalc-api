@@ -2,7 +2,6 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Moq;
 
 namespace BonusCalcApi.Tests
 {

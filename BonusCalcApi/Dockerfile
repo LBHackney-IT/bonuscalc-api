@@ -1,6 +1,12 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+FROM mcr.microsoft.com/dotnet/sdk:6.0
 
 WORKDIR /app
+
+# Install dotnet-ef tool to run migrations
+RUN dotnet tool install --global dotnet-ef --version 6.0.6
+
+# Ensure dotnet tools are in the path
+ENV PATH="$PATH:/root/.dotnet/tools"
 
 # Copy csproj and restore as distinct layers
 COPY ./BonusCalcApi.sln ./

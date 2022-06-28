@@ -3,12 +3,10 @@ using System.Threading.Tasks;
 using AutoFixture;
 using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Exceptions;
-using BonusCalcApi.V1.Factories;
 using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase;
 using FluentAssertions;
-using FluentAssertions.Common;
 using Moq;
 using NUnit.Framework;
 

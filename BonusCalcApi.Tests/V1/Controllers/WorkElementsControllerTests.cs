@@ -2,16 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using AutoFixture;
-using BonusCalcApi.Tests.V1.Controllers.Mocks;
-using BonusCalcApi.Tests.V1.Helpers.Mocks;
-using BonusCalcApi.V1.Boundary.Request;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Controllers;
-using BonusCalcApi.V1.Controllers.Helpers;
 using BonusCalcApi.V1.Factories;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
@@ -21,27 +19,19 @@ namespace BonusCalcApi.Tests.V1.Controllers
     [TestFixture]
     public class WorkElementsControllerTests : ControllerTests
     {
-        private readonly Fixture _fixture = new Fixture();
-
+        private readonly Fixture _fixture = FixtureHelpers.Fixture;
         private Mock<IGetWorkElementsUseCase> _getWorkElementsUseCaseMock;
-        private MockProblemDetailsFactory _problemDetailsFactoryMock;
-
         private WorkElementsController _classUnderTest;
 
         [SetUp]
         public void SetUp()
         {
             _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
-
             _getWorkElementsUseCaseMock = new Mock<IGetWorkElementsUseCase>();
-            _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
             _classUnderTest = new WorkElementsController(
                 _getWorkElementsUseCaseMock.Object
             );
-
-            // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
-            _classUnderTest.ProblemDetailsFactory = _problemDetailsFactoryMock.Object;
         }
 
         [Test]
@@ -71,10 +61,11 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Act
             var objectResult = await _classUnderTest.GetWorkElements("", null, null);
             var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.BadRequest);
-            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+            result.Status.Should().Be((int) HttpStatusCode.BadRequest);
         }
     }
 }

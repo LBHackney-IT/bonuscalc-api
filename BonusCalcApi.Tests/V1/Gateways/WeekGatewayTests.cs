@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
@@ -20,7 +19,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesWeekFromDB()
+        public async Task RetrievesWeekFromDb()
         {
             // Arrange
             var week = await AddWeek();
@@ -33,7 +32,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesNonExistentWeekFromDB()
+        public async Task RetrievesNonExistentWeekFromDb()
         {
             // Act
             var result = await _classUnderTest.GetWeekAsync("2000-01-01");

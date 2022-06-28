@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using NpgsqlTypes;
 
 namespace BonusCalcApi.V1.Infrastructure

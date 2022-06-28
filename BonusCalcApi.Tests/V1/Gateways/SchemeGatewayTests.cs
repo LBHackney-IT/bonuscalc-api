@@ -1,5 +1,3 @@
-using AutoFixture;
-using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
 using FluentAssertions;
@@ -21,7 +19,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesSchemesFromDB()
+        public async Task RetrievesSchemesFromDb()
         {
             // Arrange
             var schemes = await AddSchemes();

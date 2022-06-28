@@ -1,5 +1,3 @@
-using AutoFixture;
-using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Factories;
 using BonusCalcApi.V1.Infrastructure;

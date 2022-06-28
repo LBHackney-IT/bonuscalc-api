@@ -19,7 +19,7 @@ dotnet sonarscanner begin "${args[@]}"
 
 dotnet build --no-incremental
 
-coverlet ./BonusCalcApi.Tests/bin/Debug/netcoreapp3.1/BonusCalcApi.Tests.dll \
+coverlet ./BonusCalcApi.Tests/bin/Debug/net6.0/BonusCalcApi.Tests.dll \
   --target "dotnet" \
   --targetargs "test --no-build" \
   -f=opencover \

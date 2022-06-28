@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using NUnit.Framework;
-using System.Security.Claims;
 
 namespace BonusCalcApi.Tests.V1.Controllers
 {

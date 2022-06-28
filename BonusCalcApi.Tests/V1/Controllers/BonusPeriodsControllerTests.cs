@@ -1,10 +1,7 @@
-using AutoFixture;
-using BonusCalcApi.Tests.V1.Controllers.Mocks;
 using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Controllers;
 using BonusCalcApi.V1.Factories;
-using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
 using FluentAssertions;
 using Moq;
@@ -20,9 +17,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
     [TestFixture]
     public class BonusPeriodsControllerTests : ControllerTests
     {
-        private Fixture _fixture;
         private Mock<IGetCurrentBonusPeriodsUseCase> _getCurrentBonusPeriodsUseCaseMock;
-        private MockProblemDetailsFactory _problemDetailsFactoryMock;
         private DateTime _currentDate;
 
         private BonusPeriodsController _classUnderTest;
@@ -30,15 +25,10 @@ namespace BonusCalcApi.Tests.V1.Controllers
         [SetUp]
         public void SetUp()
         {
-            _fixture = FixtureHelpers.Fixture;
             _getCurrentBonusPeriodsUseCaseMock = new Mock<IGetCurrentBonusPeriodsUseCase>();
-            _problemDetailsFactoryMock = new MockProblemDetailsFactory();
             _currentDate = new DateTime(2021, 12, 5, 16, 0, 0, DateTimeKind.Utc);
 
             _classUnderTest = new BonusPeriodsController(_getCurrentBonusPeriodsUseCaseMock.Object);
-
-            // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
-            _classUnderTest.ProblemDetailsFactory = _problemDetailsFactoryMock.Object;
         }
 
         [Test]

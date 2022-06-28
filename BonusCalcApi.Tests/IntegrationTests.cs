@@ -1,15 +1,12 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using Newtonsoft.Json;
-using Npgsql;
 using NUnit.Framework;
 
 namespace BonusCalcApi.Tests

@@ -21,6 +21,7 @@ services:
       - database.env
     volumes:
       - ./database:/docker-entrypoint-initdb.d
+      - db:/var/lib/postgresql/data
 
   bonuscalc-api-test:
     image: bonuscalc-api-test
@@ -28,6 +29,7 @@ services:
       context: .
       dockerfile: BonusCalcApi.Tests/Dockerfile
     environment:
+      - CONNECTION_STRING=Host=test-database;Port=5432;Database=testdb;Username=postgres;Password=mypassword
       - DB_HOST=test-database
       - DB_PORT=5432
       - DB_USERNAME=postgres
@@ -51,4 +53,5 @@ services:
       - ./database:/docker-entrypoint-initdb.d
 
 volumes:
+  db:
   sonarqube:

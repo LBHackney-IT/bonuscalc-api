@@ -20,7 +20,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesSummaryFromDB()
+        public async Task RetrievesSummaryFromDb()
         {
             // Arrange
             var operative = await AddOperative();
@@ -97,7 +97,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesNonExistentSummaryFromDB()
+        public async Task RetrievesNonExistentSummaryFromDb()
         {
             // Act
             var result = await _classUnderTest.GetOperativeSummaryAsync("000000", "2000-01-01");

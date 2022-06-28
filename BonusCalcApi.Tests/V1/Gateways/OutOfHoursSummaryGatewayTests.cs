@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
-using FluentAssertions;
 using NUnit.Framework;
 
 namespace BonusCalcApi.Tests.V1.Gateways
@@ -34,7 +32,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesOperativeSummariesFromDB()
+        public async Task RetrievesOperativeSummariesFromDb()
         {
             // Arrange
             await AddPayElements();
@@ -62,7 +60,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task RetrievesEmptyResultsFromDB()
+        public async Task RetrievesEmptyResultsFromDb()
         {
             // Act
             var result = await _classUnderTest.GetOutOfHoursSummariesAsync("2021-10-18");

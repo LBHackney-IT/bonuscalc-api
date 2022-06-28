@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using BonusCalcApi.V1.Controllers;
-using BonusCalcApi.V1.Infrastructure;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

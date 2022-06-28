@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Factories;
-using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
 
 namespace BonusCalcApi.V1.Controllers
@@ -32,11 +30,11 @@ namespace BonusCalcApi.V1.Controllers
         [Route("current")]
         public async Task<IActionResult> GetCurrentBonusPeriods([FromQuery] DateTime? date)
         {
-            var bonusPeriods = await _getCurrentBonusPeriodsUseCase.ExecuteAsync(ensureValidDate(date));
+            var bonusPeriods = await _getCurrentBonusPeriodsUseCase.ExecuteAsync(EnsureValidDate(date));
             return Ok(bonusPeriods.Select(bp => bp.ToResponse()).ToList());
         }
 
-        private static DateTime ensureValidDate(DateTime? date)
+        private static DateTime EnsureValidDate(DateTime? date)
         {
             return (date ?? DateTime.UtcNow);
         }
