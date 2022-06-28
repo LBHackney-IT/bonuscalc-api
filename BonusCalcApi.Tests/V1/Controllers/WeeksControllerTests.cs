@@ -1,5 +1,4 @@
 using AutoFixture;
-using BonusCalcApi.Tests.V1.Controllers.Mocks;
 using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.Tests.V1.Helpers.Mocks;
 using BonusCalcApi.V1.Boundary.Request;
@@ -15,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BonusCalcApi.Tests.V1.Controllers
 {
@@ -28,8 +28,6 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private Mock<IGetOutOfHoursSummariesUseCase> _getOutOfHoursSummariesUseCaseMock;
         private Mock<IGetOvertimeSummariesUseCase> _getOvertimeSummariesUseCaseMock;
         private MockOperativeHelpers _operativeHelpers;
-        private MockProblemDetailsFactory _problemDetailsFactoryMock;
-
         private WeeksController _classUnderTest;
 
         [SetUp]
@@ -42,7 +40,6 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _updateWeekReportsSentAtUseCaseMock = new Mock<IUpdateWeekReportsSentAtUseCase>();
             _getOutOfHoursSummariesUseCaseMock = new Mock<IGetOutOfHoursSummariesUseCase>();
             _getOvertimeSummariesUseCaseMock = new Mock<IGetOvertimeSummariesUseCase>();
-            _problemDetailsFactoryMock = new MockProblemDetailsFactory();
 
             _classUnderTest = new WeeksController(
                 _operativeHelpers.Object,
@@ -52,9 +49,6 @@ namespace BonusCalcApi.Tests.V1.Controllers
                 _getOutOfHoursSummariesUseCaseMock.Object,
                 _getOvertimeSummariesUseCaseMock.Object
             );
-
-            // .NET 3.1 doesn't set ProblemDetailsFactory so we need to mock it
-            _classUnderTest.ProblemDetailsFactory = _problemDetailsFactoryMock.Object;
         }
 
         [Test]
@@ -88,10 +82,11 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Act
             var objectResult = await _classUnderTest.GetWeek(expectedWeek.Id);
             var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.NotFound);
-            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.NotFound);
+            result.Status.Should().Be((int) HttpStatusCode.NotFound);
         }
 
         [Test]
@@ -103,10 +98,11 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Act
             var objectResult = await _classUnderTest.GetWeek("00000000");
             var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.BadRequest);
-            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+            result.Status.Should().Be((int) HttpStatusCode.BadRequest);
         }
 
         [Test]
@@ -147,10 +143,11 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Act
             var objectResult = await _classUnderTest.UpdateWeek(expectedWeek.Id, updateRequest);
             var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.NotFound);
-            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.NotFound);
+            result.Status.Should().Be((int) HttpStatusCode.NotFound);
         }
 
         [Test]
@@ -163,10 +160,11 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Act
             var objectResult = await _classUnderTest.UpdateWeek("00000000", updateRequest);
             var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.BadRequest);
-            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+            result.Status.Should().Be((int) HttpStatusCode.BadRequest);
         }
 
         [Test]
@@ -194,10 +192,11 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Act
             var objectResult = await _classUnderTest.UpdateReportsSentAt("week");
             var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.BadRequest);
-            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+            result.Status.Should().Be((int) HttpStatusCode.BadRequest);
         }
 
         [Test]
@@ -229,10 +228,11 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Act
             var objectResult = await _classUnderTest.GetOutOfHoursSummaries("00000000");
             var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.BadRequest);
-            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+            result.Status.Should().Be((int) HttpStatusCode.BadRequest);
         }
 
         [Test]
@@ -264,10 +264,11 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Act
             var objectResult = await _classUnderTest.GetOvertimeSummaries("00000000");
             var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.BadRequest);
-            _problemDetailsFactoryMock.VerifyStatusCode(HttpStatusCode.BadRequest);
+            result.Status.Should().Be((int) HttpStatusCode.BadRequest);
         }
     }
 }
