@@ -7,6 +7,7 @@ using AutoFixture;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Controllers;
 using BonusCalcApi.V1.Factories;
@@ -18,7 +19,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
     [TestFixture]
     public class WorkElementsControllerTests : ControllerTests
     {
-        private readonly Fixture _fixture = new Fixture();
+        private readonly Fixture _fixture = FixtureHelpers.Fixture;
         private Mock<IGetWorkElementsUseCase> _getWorkElementsUseCaseMock;
         private WorkElementsController _classUnderTest;
 

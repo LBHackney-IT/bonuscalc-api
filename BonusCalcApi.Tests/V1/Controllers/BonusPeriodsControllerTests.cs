@@ -1,4 +1,3 @@
-using AutoFixture;
 using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Controllers;
@@ -18,7 +17,6 @@ namespace BonusCalcApi.Tests.V1.Controllers
     [TestFixture]
     public class BonusPeriodsControllerTests : ControllerTests
     {
-        private Fixture _fixture;
         private Mock<IGetCurrentBonusPeriodsUseCase> _getCurrentBonusPeriodsUseCaseMock;
         private DateTime _currentDate;
 
@@ -27,7 +25,6 @@ namespace BonusCalcApi.Tests.V1.Controllers
         [SetUp]
         public void SetUp()
         {
-            _fixture = FixtureHelpers.Fixture;
             _getCurrentBonusPeriodsUseCaseMock = new Mock<IGetCurrentBonusPeriodsUseCase>();
             _currentDate = new DateTime(2021, 12, 5, 16, 0, 0, DateTimeKind.Utc);
 

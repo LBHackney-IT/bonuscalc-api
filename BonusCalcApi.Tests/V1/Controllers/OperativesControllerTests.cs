@@ -21,7 +21,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
     [TestFixture]
     public class OperativesControllerTests : ControllerTests
     {
-        private readonly Fixture _fixture = new Fixture();
+        private readonly Fixture _fixture = FixtureHelpers.Fixture;
 
         private Mock<IGetOperativeUseCase> _getOperativeUseCaseMock;
         private Mock<IGetOperativesUseCase> _getOperativesUseCaseMock;

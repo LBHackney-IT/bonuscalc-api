@@ -2,17 +2,41 @@ using System;
 using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.Dsl;
+using AutoFixture.Kernel;
 using BonusCalcApi.V1.Infrastructure;
 
 namespace BonusCalcApi.Tests.V1.Helpers
 {
     public static class FixtureHelpers
     {
+        internal class UtcRandomDateTimeSequenceGenerator : ISpecimenBuilder
+        {
+            private readonly ISpecimenBuilder _innerRandomDateTimeSequenceGenerator;
+
+            internal UtcRandomDateTimeSequenceGenerator()
+            {
+                this._innerRandomDateTimeSequenceGenerator =
+                    new RandomDateTimeSequenceGenerator();
+            }
+
+            public object Create(object request, ISpecimenContext context)
+            {
+                var result =
+                    this._innerRandomDateTimeSequenceGenerator.Create(request, context);
+
+                if (result is NoSpecimen)
+                    return result;
+
+                return ((DateTime) result).ToUniversalTime();
+            }
+        }
+
         public static Fixture Fixture => CreateFixture();
         private static Fixture CreateFixture()
         {
             var fixture = new Fixture();
             fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+            fixture.Customizations.Add(new UtcRandomDateTimeSequenceGenerator());
             return fixture;
         }
 
