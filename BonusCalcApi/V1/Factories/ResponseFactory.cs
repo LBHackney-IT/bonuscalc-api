@@ -47,6 +47,7 @@ namespace BonusCalcApi.V1.Factories
                     Description = operativeSummary.TradeDescription
                 },
                 SchemeId = operativeSummary.SchemeId,
+                IsArchived = operativeSummary.IsArchived,
                 ProductiveValue = operativeSummary.ProductiveValue,
                 NonProductiveDuration = operativeSummary.NonProductiveDuration,
                 NonProductiveValue = operativeSummary.NonProductiveValue,

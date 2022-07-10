@@ -18,6 +18,32 @@ namespace BonusCalcApi.Tests.V1.Factories
         }
 
         [Test]
+        public void OperativeSummaryResponseMapsCorrectly()
+        {
+            // Arrange
+            var record = _fixture.Create<OperativeSummary>();
+
+            // Act
+            var response = record.ToResponse();
+
+            // Assert
+            response.Id.Should().Be(record.Id);
+            response.Name.Should().Be(record.Name);
+            response.Trade.Id.Should().Be(record.TradeId);
+            response.Trade.Description.Should().Be(record.TradeDescription);
+            response.SchemeId.Should().Be(record.SchemeId);
+            response.IsArchived.Should().Be(record.IsArchived);
+            response.ProductiveValue.Should().Be(record.ProductiveValue);
+            response.NonProductiveDuration.Should().Be(record.NonProductiveDuration);
+            response.NonProductiveValue.Should().Be(record.NonProductiveValue);
+            response.TotalValue.Should().Be(record.TotalValue);
+            response.Utilisation.Should().Be(record.Utilisation);
+            response.ProjectedValue.Should().Be(record.ProjectedValue);
+            response.AverageUtilisation.Should().Be(record.AverageUtilisation);
+            response.ReportSentAt.Should().Be(record.ReportSentAt);
+        }
+
+        [Test]
         public void TimesheetResponseMapsCorrectly()
         {
             // Arrange

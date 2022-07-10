@@ -12,6 +12,8 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public int SchemeId { get; set; }
 
+        public bool IsArchived { get; set; }
+
         public decimal ProductiveValue { get; set; }
 
         public decimal NonProductiveDuration { get; set; }
