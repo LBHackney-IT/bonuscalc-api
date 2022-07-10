@@ -27,11 +27,11 @@ lint:
 	dotnet format
 
 .PHONY: migrate-dev-db
-migrate-dev-db: dev-db
+migrate-dev-db: build dev-db
 	docker-compose run --rm bonuscalc-api dotnet ef database update -p BonusCalcApi -c BonusCalcApi.V1.Infrastructure.BonusCalcContext
 
 .PHONY: migrate-test-db
-migrate-test-db: test-db
+migrate-test-db: build-test test-db
 	docker-compose run --rm bonuscalc-api-test dotnet ef database update -p BonusCalcApi -c BonusCalcApi.V1.Infrastructure.BonusCalcContext
 
 .PHONY: stop

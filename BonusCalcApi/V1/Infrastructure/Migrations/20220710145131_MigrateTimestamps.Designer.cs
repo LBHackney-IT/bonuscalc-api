@@ -3,6 +3,7 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,10 @@ using NpgsqlTypes;
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20220710145131_MigrateTimestamps")]
+    partial class MigrateTimestamps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,10 +271,6 @@ namespace V1.Infrastructure.Migrations
                     b.Property<decimal>("AverageUtilisation")
                         .HasColumnType("numeric")
                         .HasColumnName("average_utilisation");
-
-                    b.Property<bool>("IsArchived")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_archived");
 
                     b.Property<string>("Name")
                         .HasColumnType("text")
