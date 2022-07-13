@@ -15,6 +15,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public DbSet<BandChange> BandChanges { get; set; }
         public DbSet<BonusPeriod> BonusPeriods { get; set; }
         public DbSet<Operative> Operatives { get; set; }
+        public DbSet<OperativeProjection> OperativeProjections { get; set; }
         public DbSet<OperativeSummary> OperativeSummaries { get; set; }
         public DbSet<OutOfHoursSummary> OutOfHoursSummaries { get; set; }
         public DbSet<OvertimeSummary> OvertimeSummaries { get; set; }
@@ -115,6 +116,10 @@ namespace BonusCalcApi.V1.Infrastructure
                     o => new { o.Id, o.Name, o.TradeId, o.Section })
                 .HasIndex(pe => pe.SearchVector)
                 .HasMethod("GIN");
+
+            modelBuilder.Entity<OperativeProjection>()
+                .ToView("operative_projections")
+                .HasKey(op => op.Id);
 
             modelBuilder.Entity<OperativeSummary>()
                 .ToView("operative_summaries")
@@ -328,8 +333,7 @@ namespace BonusCalcApi.V1.Infrastructure
                 .ToView("weekly_summaries")
                 .HasKey(ws => ws.Id);
 
-            modelBuilder
-                .Entity<WorkElement>()
+            modelBuilder.Entity<WorkElement>()
                 .ToView("work_elements")
                 .HasKey(wo => wo.Id);
 

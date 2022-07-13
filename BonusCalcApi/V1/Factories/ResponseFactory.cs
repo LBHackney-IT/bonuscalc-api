@@ -6,6 +6,30 @@ namespace BonusCalcApi.V1.Factories
 {
     public static class ResponseFactory
     {
+        public static OperativeProjectionResponse ToResponse(this OperativeProjection projection)
+        {
+            return new OperativeProjectionResponse
+            {
+                Id = projection.Id,
+                OperativeId = projection.Operative?.Id,
+                OperativeName = projection.Operative?.Name,
+                Trade = projection.Trade,
+                Scheme = projection.Scheme,
+                BandValue = projection.BandValue,
+                MaxValue = projection.MaxValue,
+                SickDuration = projection.SickDuration,
+                TotalValue = projection.TotalValue,
+                Utilisation = projection.Utilisation,
+                FixedBand = projection.FixedBand,
+                SalaryBand = projection.SalaryBand,
+                ProjectedBand = projection.ProjectedBand,
+                SupervisorName = projection.SupervisorName,
+                SupervisorEmailAddress = projection.SupervisorEmailAddress,
+                ManagerName = projection.ManagerName,
+                ManagerEmailAddress = projection.ManagerEmailAddress
+            };
+        }
+
         public static OperativeResponse ToResponse(this Operative operative)
         {
             return new OperativeResponse
@@ -15,8 +39,8 @@ namespace BonusCalcApi.V1.Factories
                 EmailAddress = operative.EmailAddress,
                 Manager = operative.Manager?.ToResponse(),
                 Supervisor = operative.Supervisor?.ToResponse(),
-                Trade = operative.Trade.ToResponse(),
-                Scheme = operative.Scheme.ToResponse(),
+                Trade = operative.Trade?.ToResponse(),
+                Scheme = operative.Scheme?.ToResponse(),
                 Section = operative.Section,
                 SalaryBand = operative.SalaryBand,
                 Utilisation = operative.Utilisation,

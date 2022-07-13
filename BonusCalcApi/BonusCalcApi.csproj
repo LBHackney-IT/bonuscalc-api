@@ -44,7 +44,7 @@
       <Value>**/V1/Infrastructure/Migrations/*,**/V1/UseCase/TestOpsErrorException.cs</Value>
     </SonarQubeSetting>
     <SonarQubeSetting Include="sonar.cpd.exclusions">
-      <Value>**/V1/Infrastructure/Migrations/*</Value>
+      <Value>**/V1/Infrastructure/Migrations/*,**/V1/Boundary/Request/*,**/V1/Boundary/Response/*</Value>
     </SonarQubeSetting>
   </ItemGroup>
 </Project>

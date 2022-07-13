@@ -8,5 +8,6 @@ namespace BonusCalcApi.V1.Gateways.Interfaces
     public interface IBonusPeriodGateway
     {
         public Task<IEnumerable<BonusPeriod>> GetCurrentBonusPeriodsAsync(DateTime currentDate);
+        public Task<BonusPeriod> GetEarliestOpenBonusPeriod();
     }
 }

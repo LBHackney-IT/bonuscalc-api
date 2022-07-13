@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Boundary.Request;
+using BonusCalcApi.V1.Exceptions;
 using BonusCalcApi.V1.Factories;
 using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;
@@ -23,7 +24,10 @@ namespace BonusCalcApi.V1.UseCase
         {
             var existingTimesheet = await _timesheetGateway.GetOperativeTimesheetAsync(operativeId, weekId);
 
-            if (existingTimesheet is null) ThrowHelper.ThrowNotFound($"Timesheet not found for operative: {operativeId} and week: {weekId}");
+            if (existingTimesheet is null)
+            {
+                throw new ResourceNotFoundException($"Timesheet not found for operative: {operativeId} and week: {weekId}");
+            }
 
             existingTimesheet!.PayElements ??= new List<PayElement>();
 
@@ -38,7 +42,11 @@ namespace BonusCalcApi.V1.UseCase
                 {
                     var existingPayElement = existingTimesheet!.PayElements.SingleOrDefault(pe => pe.Id == payElement.Id);
 
-                    if (existingPayElement is null) ThrowHelper.ThrowNotFound($"Pay element not found {payElement.Id}");
+                    if (existingPayElement is null)
+                    {
+                        throw new ResourceNotFoundException($"Pay element not found {payElement.Id}");
+                    }
+
                     existingPayElement?.UpdateFrom(payElement);
                 }
 

@@ -60,6 +60,22 @@ namespace BonusCalcApi.Tests.V1.Gateways
             result.Should().BeEmpty();
         }
 
+        [Test]
+        public async Task RetrievesEarliestOpenBonusPeriod()
+        {
+            // Arrange
+            await AddClosedBonusPeriod();
+            await AddFutureBonusPeriod();
+
+            var bonusPeriod = await AddBonusPeriod();
+
+            // Act
+            var result = await _classUnderTest.GetEarliestOpenBonusPeriod();
+
+            // Assert
+            result.Should().BeEquivalentTo(bonusPeriod);
+        }
+
         private async Task<IEnumerable<BonusPeriod>> AddBonusPeriods()
         {
             var bonusPeriods = new List<BonusPeriod>()
@@ -88,6 +104,33 @@ namespace BonusCalcApi.Tests.V1.Gateways
             await BonusCalcContext.SaveChangesAsync();
 
             return bonusPeriods;
+        }
+
+        private async Task<BonusPeriod> AddBonusPeriod()
+        {
+            var bonusPeriod = new BonusPeriod
+            {
+                Id = "2021-11-01",
+                StartAt = new DateTime(2021, 11, 1, 0, 0, 0, DateTimeKind.Utc),
+                Year = 2021,
+                Number = 4,
+                ClosedAt = null,
+                Weeks = new List<Week>()
+                {
+                    new Week
+                    {
+                        Id = "2021-11-01",
+                        StartAt = new DateTime(2021, 11, 1, 0, 0, 0, DateTimeKind.Utc),
+                        Number = 1,
+                        ClosedAt = null
+                    }
+                }
+            };
+
+            await BonusCalcContext.BonusPeriods.AddAsync(bonusPeriod);
+            await BonusCalcContext.SaveChangesAsync();
+
+            return bonusPeriod;
         }
 
         private async Task AddClosedBonusPeriod()

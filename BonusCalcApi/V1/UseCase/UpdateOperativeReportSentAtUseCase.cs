@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Exceptions;
 using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
@@ -23,7 +24,7 @@ namespace BonusCalcApi.V1.UseCase
 
             if (timesheet is null)
             {
-                ThrowHelper.ThrowNotFound($"Timesheet not found for operative: {operativeId} and week: {weekId}");
+                throw new ResourceNotFoundException($"Timesheet not found for operative: {operativeId} and week: {weekId}");
             }
             else if (timesheet.ReportSentAt is null)
             {

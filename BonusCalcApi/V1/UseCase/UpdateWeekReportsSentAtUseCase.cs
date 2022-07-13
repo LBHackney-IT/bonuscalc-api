@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Exceptions;
 using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
@@ -23,7 +24,7 @@ namespace BonusCalcApi.V1.UseCase
 
             if (week is null)
             {
-                ThrowHelper.ThrowNotFound($"Week not found for: {weekId}");
+                throw new ResourceNotFoundException($"Week not found for: {weekId}");
             }
             else if (week.ReportsSentAt is null)
             {

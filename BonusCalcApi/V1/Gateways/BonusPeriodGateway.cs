@@ -25,5 +25,14 @@ namespace BonusCalcApi.V1.Gateways
                 .OrderBy(bp => bp.StartAt)
                 .ToListAsync();
         }
+
+        public async Task<BonusPeriod> GetEarliestOpenBonusPeriod()
+        {
+            return await _context.BonusPeriods
+                .Include(bp => bp.Weeks.OrderBy(w => w.StartAt))
+                .Where(bp => bp.ClosedAt == null)
+                .OrderBy(bp => bp.StartAt)
+                .FirstOrDefaultAsync();
+        }
     }
 }

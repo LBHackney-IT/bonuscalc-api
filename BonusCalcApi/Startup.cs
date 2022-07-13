@@ -162,6 +162,7 @@ namespace BonusCalcApi
         {
             services.AddScoped<IBonusPeriodGateway, BonusPeriodGateway>();
             services.AddScoped<IOperativeGateway, OperativeGateway>();
+            services.AddScoped<IOperativeProjectionGateway, OperativeProjectionGateway>();
             services.AddScoped<IOutOfHoursSummaryGateway, OutOfHoursSummaryGateway>();
             services.AddScoped<IOvertimeSummaryGateway, OvertimeSummaryGateway>();
             services.AddScoped<ITimesheetGateway, TimesheetGateway>();
@@ -175,8 +176,10 @@ namespace BonusCalcApi
         private static void RegisterUseCases(IServiceCollection services)
         {
             services.AddTransient<IGetCurrentBonusPeriodsUseCase, GetCurrentBonusPeriodsUseCase>();
+            services.AddTransient<IGetBonusPeriodForChangesUseCase, GetBonusPeriodForChangesUseCase>();
             services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
             services.AddTransient<IGetOperativesUseCase, GetOperativesUseCase>();
+            services.AddTransient<IGetProjectedChangesUseCase, GetProjectedChangesUseCase>();
             services.AddTransient<IGetOperativeTimesheetUseCase, GetOperativeTimesheetUseCase>();
             services.AddTransient<IGetOperativeSummaryUseCase, GetOperativeSummaryUseCase>();
             services.AddTransient<IGetOutOfHoursSummariesUseCase, GetOutOfHoursSummariesUseCase>();
