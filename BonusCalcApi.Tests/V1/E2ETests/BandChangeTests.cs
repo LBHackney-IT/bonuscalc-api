@@ -28,7 +28,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             await SeedBonusPeriods();
 
             // Act
-            var (code, response) = await Get<BonusPeriodResponse>($"/api/v1/changes/period");
+            var (code, response) = await Get<BonusPeriodResponse>($"/api/v1/band-changes/period");
 
             // Assert
             Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
@@ -42,7 +42,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             await SeedProjections();
 
             // Act
-            var (code, response) = await Get<List<OperativeProjectionResponse>>($"/api/v1/changes/projected");
+            var (code, response) = await Get<List<OperativeProjectionResponse>>($"/api/v1/band-changes/projected");
 
             // Assert
             Assert.That(code, Is.EqualTo(HttpStatusCode.OK));

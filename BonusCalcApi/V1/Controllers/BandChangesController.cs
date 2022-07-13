@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace BonusCalcApi.V1.Controllers
 {
     [ApiController]
-    [Route("api/v1/changes")]
+    [Route("api/v1/band-changes")]
     [Produces("application/json")]
     [ApiVersion("1.0")]
     public class BandChangesController : BaseController
@@ -42,7 +42,7 @@ namespace BonusCalcApi.V1.Controllers
             {
                 return Problem(
                     "There is no open bonus period",
-                    $"/api/v1/changes/period",
+                    $"/api/v1/band-changes/period",
                     StatusCodes.Status404NotFound, "Not Found"
                 );
             }
@@ -66,7 +66,7 @@ namespace BonusCalcApi.V1.Controllers
             {
                 return Problem(
                     "There is no open bonus period",
-                    $"/api/v1/changes/period",
+                    $"/api/v1/band-changes/period",
                     StatusCodes.Status404NotFound, "Not Found"
                 );
             }
