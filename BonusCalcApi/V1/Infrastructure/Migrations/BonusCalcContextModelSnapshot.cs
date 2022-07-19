@@ -256,6 +256,90 @@ namespace V1.Infrastructure.Migrations
                     b.ToTable("operatives", (string)null);
                 });
 
+            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OperativeProjection", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("id");
+
+                    b.Property<decimal>("BandValue")
+                        .HasColumnType("numeric")
+                        .HasColumnName("band_value");
+
+                    b.Property<string>("BonusPeriodId")
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("bonus_period_id");
+
+                    b.Property<bool>("FixedBand")
+                        .HasColumnType("boolean")
+                        .HasColumnName("fixed_band");
+
+                    b.Property<string>("ManagerEmailAddress")
+                        .HasColumnType("text")
+                        .HasColumnName("manager_email_address");
+
+                    b.Property<string>("ManagerName")
+                        .HasColumnType("text")
+                        .HasColumnName("manager_name");
+
+                    b.Property<decimal>("MaxValue")
+                        .HasColumnType("numeric")
+                        .HasColumnName("max_value");
+
+                    b.Property<string>("OperativeId")
+                        .HasColumnType("character varying(6)")
+                        .HasColumnName("operative_id");
+
+                    b.Property<int>("ProjectedBand")
+                        .HasColumnType("integer")
+                        .HasColumnName("projected_band");
+
+                    b.Property<int>("SalaryBand")
+                        .HasColumnType("integer")
+                        .HasColumnName("salary_band");
+
+                    b.Property<string>("Scheme")
+                        .HasColumnType("text")
+                        .HasColumnName("scheme");
+
+                    b.Property<decimal>("SickDuration")
+                        .HasColumnType("numeric")
+                        .HasColumnName("sick_duration");
+
+                    b.Property<string>("SupervisorEmailAddress")
+                        .HasColumnType("text")
+                        .HasColumnName("supervisor_email_address");
+
+                    b.Property<string>("SupervisorName")
+                        .HasColumnType("text")
+                        .HasColumnName("supervisor_name");
+
+                    b.Property<decimal>("TotalValue")
+                        .HasColumnType("numeric")
+                        .HasColumnName("total_value");
+
+                    b.Property<string>("Trade")
+                        .HasColumnType("text")
+                        .HasColumnName("trade");
+
+                    b.Property<decimal>("Utilisation")
+                        .HasColumnType("numeric")
+                        .HasColumnName("utilisation");
+
+                    b.HasKey("Id")
+                        .HasName("pk_operative_projections");
+
+                    b.HasIndex("BonusPeriodId")
+                        .HasDatabaseName("ix_operative_projections_bonus_period_id");
+
+                    b.HasIndex("OperativeId")
+                        .HasDatabaseName("ix_operative_projections_operative_id");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("operative_projections");
+                });
+
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OperativeSummary", b =>
                 {
                     b.Property<string>("Id")
@@ -1005,7 +1089,7 @@ namespace V1.Infrastructure.Migrations
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BandChange", b =>
                 {
                     b.HasOne("BonusCalcApi.V1.Infrastructure.BonusPeriod", "BonusPeriod")
-                        .WithMany()
+                        .WithMany("BandChanges")
                         .HasForeignKey("BonusPeriodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -1134,6 +1218,23 @@ namespace V1.Infrastructure.Migrations
                     b.Navigation("Trade");
                 });
 
+            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OperativeProjection", b =>
+                {
+                    b.HasOne("BonusCalcApi.V1.Infrastructure.BonusPeriod", "BonusPeriod")
+                        .WithMany()
+                        .HasForeignKey("BonusPeriodId")
+                        .HasConstraintName("fk_operative_projections_bonus_periods_bonus_period_id");
+
+                    b.HasOne("BonusCalcApi.V1.Infrastructure.Operative", "Operative")
+                        .WithMany()
+                        .HasForeignKey("OperativeId")
+                        .HasConstraintName("fk_operative_projections_operatives_operative_id");
+
+                    b.Navigation("BonusPeriod");
+
+                    b.Navigation("Operative");
+                });
+
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OperativeSummary", b =>
                 {
                     b.HasOne("BonusCalcApi.V1.Infrastructure.Week", null)
@@ -1252,6 +1353,8 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BonusPeriod", b =>
                 {
+                    b.Navigation("BandChanges");
+
                     b.Navigation("Weeks");
                 });
 

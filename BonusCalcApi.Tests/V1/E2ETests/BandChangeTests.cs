@@ -62,6 +62,20 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             Assert.That(response[0].ProjectedBand, Is.EqualTo(1));
         }
 
+        [Test]
+        public async Task CanStartBandChangeProcess()
+        {
+            // Arrange
+            await SeedProjections();
+
+            // Act
+            var (code, response) = await Post<BonusPeriodResponse>($"/api/v1/band-changes/start", null);
+
+            // Assert
+            var bandChanges = await Context.BandChanges.ToListAsync();
+            Assert.That(bandChanges.Count, Is.GreaterThan(0));
+        }
+
         private async Task SeedBonusPeriods()
         {
             var bonusPeriods = new List<BonusPeriod>()

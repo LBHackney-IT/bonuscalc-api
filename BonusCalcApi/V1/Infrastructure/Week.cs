@@ -30,5 +30,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public List<Timesheet> Timesheets { get; set; }
 
         public List<OperativeSummary> OperativeSummaries { get; set; }
+
+        public bool IsOpen => ClosedAt == null;
     }
 }

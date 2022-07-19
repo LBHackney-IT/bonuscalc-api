@@ -27,6 +27,37 @@ namespace BonusCalcApi.V1.Infrastructure
 
     public class BandChange
     {
+        public BandChange()
+        {
+        }
+
+        public BandChange(OperativeProjection projection)
+        {
+            Id = projection.Id;
+            BonusPeriodId = projection.BonusPeriodId;
+            OperativeId = projection.OperativeId;
+            Trade = projection.Trade;
+            Scheme = projection.Scheme;
+            BandValue = projection.BandValue;
+            MaxValue = projection.MaxValue;
+            SickDuration = projection.SickDuration;
+            TotalValue = projection.TotalValue;
+            Utilisation = projection.Utilisation;
+            FixedBand = projection.FixedBand;
+            SalaryBand = projection.SalaryBand;
+            ProjectedBand = projection.ProjectedBand;
+            Supervisor = new BandChangeApprover
+            {
+                Name = projection.SupervisorName,
+                EmailAddress = projection.SupervisorEmailAddress
+            };
+            Manager = new BandChangeApprover
+            {
+                Name = projection.ManagerName,
+                EmailAddress = projection.ManagerEmailAddress
+            };
+        }
+
         [Key]
         [StringLength(17)]
         public string Id { get; set; }

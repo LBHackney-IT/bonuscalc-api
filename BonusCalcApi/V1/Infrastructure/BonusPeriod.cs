@@ -19,5 +19,9 @@ namespace BonusCalcApi.V1.Infrastructure
         public DateTime? ClosedAt { get; set; }
 
         public List<Week> Weeks { get; set; }
+
+        public List<BandChange> BandChanges { get; set; }
+
+        public bool IsClosed => ClosedAt != null;
     }
 }

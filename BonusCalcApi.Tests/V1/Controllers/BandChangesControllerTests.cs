@@ -23,6 +23,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private Fixture _fixture;
         private Mock<IGetBonusPeriodForChangesUseCase> _getBonusPeriodForChangesUseCaseMock;
         private Mock<IGetProjectedChangesUseCase> _getProjectedChangesUseCaseMock;
+        private Mock<IStartBandChangeProcessUseCase> _startBandChangeProcessUseCaseMock;
 
         private BandChangesController _classUnderTest;
 
@@ -32,10 +33,12 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _fixture = FixtureHelpers.Fixture;
             _getBonusPeriodForChangesUseCaseMock = new Mock<IGetBonusPeriodForChangesUseCase>();
             _getProjectedChangesUseCaseMock = new Mock<IGetProjectedChangesUseCase>();
+            _startBandChangeProcessUseCaseMock = new Mock<IStartBandChangeProcessUseCase>();
 
             _classUnderTest = new BandChangesController(
                 _getBonusPeriodForChangesUseCaseMock.Object,
-                _getProjectedChangesUseCaseMock.Object
+                _getProjectedChangesUseCaseMock.Object,
+                _startBandChangeProcessUseCaseMock.Object
             );
         }
 
@@ -115,6 +118,65 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.NotFound);
             result.Status.Should().Be((int) HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task StartBandChange()
+        {
+            // Arrange
+            var bonusPeriod = _fixture.Build<BonusPeriod>()
+                .Without(bp => bp.Weeks)
+                .Create();
+
+            _startBandChangeProcessUseCaseMock
+                .Setup(x => x.ExecuteAsync())
+                .ReturnsAsync(bonusPeriod);
+
+            // Act
+            var objectResult = await _classUnderTest.StartBandChanges();
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<BonusPeriodResponse>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Id.Should().Be(bonusPeriod.Id);
+        }
+
+        [Test]
+        public async Task StartBandChangesChangesReturnsNotFoundIfBonusPeriodNotOpen()
+        {
+            // Arrange
+            _startBandChangeProcessUseCaseMock
+                .Setup(x => x.ExecuteAsync())
+                .ThrowsAsync(new ResourceNotFoundException("Open bonus period not found"));
+
+            // Act
+            var objectResult = await _classUnderTest.StartBandChanges();
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            result.Status.Should().Be((int) HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task StartBandChangesChangesReturnsUnprocessableEntityIfBonusPeriodInvalid()
+        {
+            // Arrange
+            _startBandChangeProcessUseCaseMock
+                .Setup(x => x.ExecuteAsync())
+                .ThrowsAsync(new ResourceNotProcessableException("Bonus period has already been closed"));
+
+            // Act
+            var objectResult = await _classUnderTest.StartBandChanges();
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.UnprocessableEntity);
+            result.Status.Should().Be((int) HttpStatusCode.UnprocessableEntity);
+            result.Detail.Should().Be("Bonus period has already been closed");
         }
     }
 }

@@ -19,14 +19,17 @@ namespace BonusCalcApi.V1.Controllers
     {
         private readonly IGetBonusPeriodForChangesUseCase _getBonusPeriodForChangesUseCase;
         private readonly IGetProjectedChangesUseCase _getProjectedChangesUseCase;
+        private readonly IStartBandChangeProcessUseCase _startBandChangeProcessUseCase;
 
         public BandChangesController(
             IGetBonusPeriodForChangesUseCase getBonusPeriodForChangesUseCase,
-            IGetProjectedChangesUseCase getProjectedChangesUseCase
+            IGetProjectedChangesUseCase getProjectedChangesUseCase,
+            IStartBandChangeProcessUseCase startBandChangeProcessUseCase
         )
         {
             _getBonusPeriodForChangesUseCase = getBonusPeriodForChangesUseCase;
             _getProjectedChangesUseCase = getProjectedChangesUseCase;
+            _startBandChangeProcessUseCase = startBandChangeProcessUseCase;
         }
 
         [HttpGet]
@@ -37,7 +40,7 @@ namespace BonusCalcApi.V1.Controllers
         public async Task<IActionResult> GetBonusPeriod()
         {
             try {
-            var bonusPeriod = await _getBonusPeriodForChangesUseCase.ExecuteAsync();
+                var bonusPeriod = await _getBonusPeriodForChangesUseCase.ExecuteAsync();
                 return Ok(bonusPeriod.ToResponse());
             }
             catch (ResourceNotFoundException)
@@ -68,6 +71,37 @@ namespace BonusCalcApi.V1.Controllers
                     "There is no open bonus period",
                     $"/api/v1/band-changes/projected",
                     StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(BonusPeriodResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Route("start")]
+        public async Task<IActionResult> StartBandChanges()
+        {
+            try
+            {
+                var bonusPeriod = await _startBandChangeProcessUseCase.ExecuteAsync();
+                return Ok(bonusPeriod.ToResponse());
+            }
+            catch (ResourceNotFoundException)
+            {
+                return Problem(
+                    "There is no open bonus period",
+                    $"/api/v1/band-changes/start",
+                    StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+            catch (ResourceNotProcessableException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/band-changes/start",
+                    StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity"
                 );
             }
         }

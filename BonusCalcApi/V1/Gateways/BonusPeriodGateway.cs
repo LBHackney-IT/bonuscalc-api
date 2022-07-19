@@ -30,6 +30,7 @@ namespace BonusCalcApi.V1.Gateways
         {
             return await _context.BonusPeriods
                 .Include(bp => bp.Weeks.OrderBy(w => w.StartAt))
+                .Include(bp => bp.BandChanges.OrderBy(bc => bc.OperativeId))
                 .Where(bp => bp.ClosedAt == null)
                 .OrderBy(bp => bp.StartAt)
                 .FirstOrDefaultAsync();
