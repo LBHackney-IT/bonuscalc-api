@@ -17,7 +17,7 @@ namespace BonusCalcApi.V1.UseCase
 
         public async Task<BonusPeriod> ExecuteAsync()
         {
-            var bonusPeriod = await _bonusPeriodGateway.GetEarliestOpenBonusPeriod();
+            var bonusPeriod = await _bonusPeriodGateway.GetEarliestOpenBonusPeriodAsync();
 
             if (bonusPeriod is null)
             {

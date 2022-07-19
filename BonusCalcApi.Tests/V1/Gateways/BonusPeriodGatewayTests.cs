@@ -70,7 +70,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
             var bonusPeriod = await AddBonusPeriod();
 
             // Act
-            var result = await _classUnderTest.GetEarliestOpenBonusPeriod();
+            var result = await _classUnderTest.GetEarliestOpenBonusPeriodAsync();
 
             // Assert
             result.Should().BeEquivalentTo(bonusPeriod);

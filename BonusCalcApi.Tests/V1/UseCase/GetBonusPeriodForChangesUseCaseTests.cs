@@ -36,7 +36,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var expectedBonusPeriod = _fixture.Create<BonusPeriod>();
 
             _mockBonusPeriodGateway
-                .Setup(x => x.GetEarliestOpenBonusPeriod())
+                .Setup(x => x.GetEarliestOpenBonusPeriodAsync())
                 .ReturnsAsync(expectedBonusPeriod);
 
             // Act
@@ -51,7 +51,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
         {
             // Arrange
             _mockBonusPeriodGateway
-                .Setup(x => x.GetEarliestOpenBonusPeriod())
+                .Setup(x => x.GetEarliestOpenBonusPeriodAsync())
                 .ReturnsAsync(null as BonusPeriod);
 
             // Act
