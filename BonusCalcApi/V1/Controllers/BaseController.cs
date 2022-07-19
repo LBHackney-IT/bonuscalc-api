@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
 namespace BonusCalcApi.V1.Controllers
@@ -25,16 +26,19 @@ namespace BonusCalcApi.V1.Controllers
             return correlationId.First();
         }
 
-        public static void ConfigureJsonSerializer()
+        private static void ConfigureJsonSerializer()
         {
             JsonConvert.DefaultSettings = () =>
             {
-                var settings = new JsonSerializerSettings();
-                settings.Formatting = Formatting.Indented;
-                settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                var settings = new JsonSerializerSettings
+                    {
+                        Formatting = Formatting.Indented,
+                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                        DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                        DateFormatHandling = DateFormatHandling.IsoDateFormat
+                    };
 
-                settings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                settings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                settings.Converters.Add(new StringEnumConverter());
 
                 return settings;
             };

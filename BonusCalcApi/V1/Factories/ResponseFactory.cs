@@ -149,6 +149,41 @@ namespace BonusCalcApi.V1.Factories
             };
         }
 
+        public static BandChangeApproverResponse ToResponse(this BandChangeApprover approver)
+        {
+            return new BandChangeApproverResponse
+            {
+                Name = approver.Name,
+                EmailAddress = approver.EmailAddress,
+                Decision = approver.Decision,
+                Reason = approver.Reason,
+                SalaryBand = approver.SalaryBand
+            };
+        }
+
+        public static BandChangeResponse ToResponse(this BandChange bandChange)
+        {
+            return new BandChangeResponse
+            {
+                Id = bandChange.Id,
+                OperativeId = bandChange.Operative?.Id,
+                OperativeName = bandChange.Operative?.Name,
+                Trade = bandChange.Trade,
+                Scheme = bandChange.Scheme,
+                BandValue = bandChange.BandValue,
+                MaxValue = bandChange.MaxValue,
+                SickDuration = bandChange.SickDuration,
+                TotalValue = bandChange.TotalValue,
+                Utilisation = bandChange.Utilisation,
+                FixedBand = bandChange.FixedBand,
+                SalaryBand = bandChange.SalaryBand,
+                ProjectedBand = bandChange.ProjectedBand,
+                Supervisor = bandChange.Supervisor.ToResponse(),
+                Manager = bandChange.Manager.ToResponse(),
+                FinalBand = bandChange.FinalBand
+            };
+        }
+
         public static BonusPeriodResponse ToResponse(this BonusPeriod bonusPeriod)
         {
             return new BonusPeriodResponse

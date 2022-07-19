@@ -18,6 +18,51 @@ namespace BonusCalcApi.Tests.V1.Factories
         }
 
         [Test]
+        public void BandChangeApproverResponseMapsCorrectly()
+        {
+            // Arrange
+            var approver = _fixture.Create<BandChangeApprover>();
+
+            // Act
+            var response = approver.ToResponse();
+
+            // Assert
+            response.Name.Should().Be(approver.Name);
+            response.EmailAddress.Should().Be(approver.EmailAddress);
+            response.Decision.Should().Be(approver.Decision);
+            response.Reason.Should().Be(approver.Reason);
+            response.SalaryBand.Should().Be(approver.SalaryBand);
+        }
+
+        [Test]
+        public void BandChangeResponseMapsCorrectly()
+        {
+            // Arrange
+            var bandChange = _fixture.Create<BandChange>();
+
+            // Act
+            var response = bandChange.ToResponse();
+
+            // Assert
+            response.Id.Should().Be(bandChange.Id);
+            response.OperativeId.Should().Be(bandChange.Operative.Id);
+            response.OperativeName.Should().Be(bandChange.Operative.Name);
+            response.Trade.Should().Be(bandChange.Trade);
+            response.Scheme.Should().Be(bandChange.Scheme);
+            response.BandValue.Should().Be(bandChange.BandValue);
+            response.MaxValue.Should().Be(bandChange.MaxValue);
+            response.SickDuration.Should().Be(bandChange.SickDuration);
+            response.TotalValue.Should().Be(bandChange.TotalValue);
+            response.Utilisation.Should().Be(bandChange.Utilisation);
+            response.FixedBand.Should().Be(bandChange.FixedBand);
+            response.SalaryBand.Should().Be(bandChange.SalaryBand);
+            response.ProjectedBand.Should().Be(bandChange.ProjectedBand);
+            response.Supervisor.Should().BeEquivalentTo(bandChange.Supervisor);
+            response.Manager.Should().BeEquivalentTo(bandChange.Manager);
+            response.FinalBand.Should().Be(bandChange.FinalBand);
+        }
+
+        [Test]
         public void OperativeSummaryResponseMapsCorrectly()
         {
             // Arrange

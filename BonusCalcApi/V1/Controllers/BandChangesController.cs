@@ -1,4 +1,3 @@
-using System;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Exceptions;
 using BonusCalcApi.V1.Factories;
@@ -20,16 +19,19 @@ namespace BonusCalcApi.V1.Controllers
         private readonly IGetBonusPeriodForChangesUseCase _getBonusPeriodForChangesUseCase;
         private readonly IGetProjectedChangesUseCase _getProjectedChangesUseCase;
         private readonly IStartBandChangeProcessUseCase _startBandChangeProcessUseCase;
+        private readonly IGetBandChangesUseCase _getBandChangesUseCase;
 
         public BandChangesController(
             IGetBonusPeriodForChangesUseCase getBonusPeriodForChangesUseCase,
             IGetProjectedChangesUseCase getProjectedChangesUseCase,
-            IStartBandChangeProcessUseCase startBandChangeProcessUseCase
+            IStartBandChangeProcessUseCase startBandChangeProcessUseCase,
+            IGetBandChangesUseCase getBandChangesUseCase
         )
         {
             _getBonusPeriodForChangesUseCase = getBonusPeriodForChangesUseCase;
             _getProjectedChangesUseCase = getProjectedChangesUseCase;
             _startBandChangeProcessUseCase = startBandChangeProcessUseCase;
+            _getBandChangesUseCase = getBandChangesUseCase;
         }
 
         [HttpGet]
@@ -102,6 +104,27 @@ namespace BonusCalcApi.V1.Controllers
                     e.Message,
                     $"/api/v1/band-changes/start",
                     StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity"
+                );
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<BandChangeResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetBandChanges()
+        {
+            try
+            {
+                var bandChanges = await _getBandChangesUseCase.ExecuteAsync();
+                return Ok(bandChanges.Select(bc => bc.ToResponse()).ToList());
+            }
+            catch (ResourceNotFoundException)
+            {
+                return Problem(
+                    "There is no open bonus period",
+                    $"/api/v1/band-changes",
+                    StatusCodes.Status404NotFound, "Not Found"
                 );
             }
         }

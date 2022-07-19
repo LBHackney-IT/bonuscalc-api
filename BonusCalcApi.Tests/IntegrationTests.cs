@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace BonusCalcApi.Tests
 {
-    abstract public class IntegrationTests<TStartup> where TStartup : class
+    public abstract class IntegrationTests<TStartup> where TStartup : class
     {
         protected HttpClient Client { get; private set; }
         protected BonusCalcContext Context => _factory.Context;
@@ -35,6 +35,9 @@ namespace BonusCalcApi.Tests
             Client = _factory.CreateClient();
             _factory.Context.Database.Migrate();
             _transaction = _factory.Context.Database.BeginTransaction();
+
+            // Empty trades table for tests
+            _factory.Context.Trades.RemoveRange(_factory.Context.Trades);
         }
 
         [TearDown]

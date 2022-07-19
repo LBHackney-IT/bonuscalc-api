@@ -1,0 +1,28 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using BonusCalcApi.V1.Gateways.Interfaces;
+using BonusCalcApi.V1.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+
+namespace BonusCalcApi.V1.Gateways
+{
+    public class BandChangeGateway : IBandChangeGateway
+    {
+        private readonly BonusCalcContext _context;
+
+        public BandChangeGateway(BonusCalcContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IEnumerable<BandChange>> GetBandChangesAsync(string bonusPeriodId)
+        {
+            return await _context.BandChanges
+                .Include(bc => bc.Operative)
+                .Where(bc => bc.BonusPeriodId == bonusPeriodId)
+                .OrderBy(bc => bc.OperativeId)
+                .ToListAsync();
+        }
+    }
+}

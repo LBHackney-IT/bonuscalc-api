@@ -1,14 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using AutoFixture;
-using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Boundary.Response;
-using BonusCalcApi.V1.Factories;
 using BonusCalcApi.V1.Infrastructure;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -69,11 +64,25 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             await SeedProjections();
 
             // Act
-            var (code, response) = await Post<BonusPeriodResponse>($"/api/v1/band-changes/start", null);
+            await Post<BonusPeriodResponse>($"/api/v1/band-changes/start", null);
 
             // Assert
             var bandChanges = await Context.BandChanges.ToListAsync();
             Assert.That(bandChanges.Count, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public async Task CanGetBandChanges()
+        {
+            // Arrange
+            await SeedBandChanges();
+
+            // Act
+            var (code, response) = await Get<List<BandChangeResponse>>($"/api/v1/band-changes");
+
+            // Assert
+            Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.Count, Is.EqualTo(1));
         }
 
         private async Task SeedBonusPeriods()
@@ -397,6 +406,98 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             await Context.PayElementTypes.AddRangeAsync(payElementTypes);
             await Context.PayElements.AddRangeAsync(payElements);
 
+            await Context.SaveChangesAsync();
+        }
+
+        private async Task SeedBandChanges()
+        {
+             var trade = new Trade
+            {
+                Id = "EL",
+                Description = "Electrician"
+            };
+
+            var scheme = new Scheme
+            {
+                Id = 1,
+                Type = "SMV",
+                Description = "Reactive",
+                ConversionFactor = 1.0M,
+                MaxValue = 62868.0M
+            };
+
+            var manager = new Person
+            {
+                Id = "800001",
+                Name = "A Manager",
+                EmailAddress = "a.manager@hackney.gov.uk"
+            };
+
+            var supervisor = new Person
+            {
+                Id = "810001",
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk"
+            };
+
+            var operative = new Operative
+            {
+                Id = "123456",
+                Name = "An Operative",
+                EmailAddress = "an.operative@hackney.gov.uk",
+                Manager = manager,
+                Supervisor = supervisor,
+                Trade = trade,
+                Scheme = scheme,
+                Section = "H3007",
+                SalaryBand = 5,
+                Utilisation = 1.0M,
+                FixedBand = false,
+                IsArchived = false
+            };
+
+            var bonusPeriod = new BonusPeriod
+            {
+                Id = "2021-08-02",
+                StartAt = new DateTime(2021, 8, 1, 23, 0, 0, DateTimeKind.Utc),
+                Year = 2021,
+                Number = 3,
+                ClosedAt = null
+            };
+
+            var bandChanges = new List<BandChange>
+            {
+                new BandChange
+                {
+                    Id = "123456/2021-08-02",
+                    BonusPeriodId = "2021-08-02",
+                    OperativeId = "123456",
+                    Trade = "Electrician (EL)",
+                    Scheme = "Reactive",
+                    BandValue = 50544.0M,
+                    MaxValue = 62868.0M,
+                    SickDuration = 0.0M,
+                    TotalValue = 51140.9748M,
+                    Utilisation = 1.0M,
+                    FixedBand = false,
+                    SalaryBand = 7,
+                    ProjectedBand = 6,
+                    Supervisor = new BandChangeApprover
+                    {
+                        Name = "A Supervisor",
+                        EmailAddress = "a.supervisor@hackney.gov.uk"
+                    },
+                    Manager = new BandChangeApprover
+                    {
+                        Name = "A Manager",
+                        EmailAddress = "a.manager@hackney.gov.uk"
+                    }
+                }
+            };
+
+            await Context.BonusPeriods.AddAsync(bonusPeriod);
+            await Context.Operatives.AddAsync(operative);
+            await Context.BandChanges.AddRangeAsync(bandChanges);
             await Context.SaveChangesAsync();
         }
     }

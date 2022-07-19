@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.ComponentModel.DataAnnotations;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum BandChangeDecision
     {
         Approved,
@@ -18,11 +21,11 @@ namespace BonusCalcApi.V1.Infrastructure
         [StringLength(100)]
         public string EmailAddress { get; set; }
 
-        public BandChangeDecision Decision { get; set; }
+        public BandChangeDecision? Decision { get; set; }
 
         public string Reason { get; set; }
 
-        public int SalaryBand { get; set; }
+        public int? SalaryBand { get; set; }
     }
 
     public class BandChange
@@ -49,12 +52,16 @@ namespace BonusCalcApi.V1.Infrastructure
             Supervisor = new BandChangeApprover
             {
                 Name = projection.SupervisorName,
-                EmailAddress = projection.SupervisorEmailAddress
+                EmailAddress = projection.SupervisorEmailAddress,
+                Decision = null,
+                SalaryBand = null
             };
             Manager = new BandChangeApprover
             {
                 Name = projection.ManagerName,
-                EmailAddress = projection.ManagerEmailAddress
+                EmailAddress = projection.ManagerEmailAddress,
+                Decision = null,
+                SalaryBand = null
             };
         }
 
@@ -96,8 +103,10 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public int ProjectedBand { get; set; }
 
+        [Required]
         public BandChangeApprover Supervisor { get; set; }
 
+        [Required]
         public BandChangeApprover Manager { get; set; }
 
         public int? FinalBand { get; set; }
