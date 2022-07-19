@@ -94,12 +94,12 @@ namespace BonusCalcApi.Tests.V1.UseCase
         [Test]
         public async Task ThrowsWhenNoBonusPeriodOpen()
         {
-            // Act
+            // Arrange
             _bonusPeriodGatewayMock
                 .Setup(x => x.GetEarliestOpenBonusPeriodAsync())
                 .ReturnsAsync(null as BonusPeriod);
 
-            // Arrange
+            // Act
             var act = async () => await _classUnderTest.ExecuteAsync();
 
             // Assert
@@ -137,6 +137,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             await act.Should().ThrowAsync<ResourceNotProcessableException>();
             InMemoryDb.DbSaver.VerifySaveNotCalled();
         }
+
         [Test]
         public async Task ThrowsWhenBonusPeriodIsClosed()
         {

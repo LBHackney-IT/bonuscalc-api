@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Boundary.Request;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -83,6 +84,75 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             // Assert
             Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(response.Count, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task SupervisorCanApproveBandChange()
+        {
+            // Arrange
+            await SeedBandChanges();
+
+            var request = new BandChangeRequest
+            {
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk",
+                Decision = BandChangeDecision.Approved,
+                Reason = null,
+                SalaryBand = 6
+            };
+
+            // Act
+            var (code, response) = await Post<BandChangeResponse>($"/api/v1/band-changes/123456/supervisor", request);
+            var supervisor = response.Supervisor;
+
+            // Assert
+            Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(supervisor.Name, Is.EqualTo("A Supervisor"));
+            Assert.That(supervisor.EmailAddress, Is.EqualTo("a.supervisor@hackney.gov.uk"));
+            Assert.That(supervisor.Decision, Is.EqualTo(BandChangeDecision.Approved));
+            Assert.That(supervisor.Reason, Is.Null);
+            Assert.That(supervisor.SalaryBand, Is.EqualTo(6));
+            Assert.That(response.FinalBand, Is.EqualTo(6));
+        }
+
+        [Test]
+        public async Task ManagerCanRejectBandChange()
+        {
+            // Arrange
+            await SeedBandChanges();
+
+            var supervisorRequest = new BandChangeRequest
+            {
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk",
+                Decision = BandChangeDecision.Approved,
+                Reason = null,
+                SalaryBand = 6
+            };
+
+            await Post<BandChangeResponse>($"/api/v1/band-changes/123456/supervisor", supervisorRequest);
+
+            var managerRequest = new BandChangeRequest
+            {
+                Name = "A Manager",
+                EmailAddress = "a.manager@hackney.gov.uk",
+                Decision = BandChangeDecision.Rejected,
+                Reason = "Too many sick days",
+                SalaryBand = 4
+            };
+
+            // Act
+            var (code, response) = await Post<BandChangeResponse>($"/api/v1/band-changes/123456/manager", managerRequest);
+            var manager = response.Manager;
+
+            // Assert
+            Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(manager.Name, Is.EqualTo("A Manager"));
+            Assert.That(manager.EmailAddress, Is.EqualTo("a.manager@hackney.gov.uk"));
+            Assert.That(manager.Decision, Is.EqualTo(BandChangeDecision.Rejected));
+            Assert.That(manager.Reason, Is.EqualTo("Too many sick days"));
+            Assert.That(manager.SalaryBand, Is.EqualTo(4));
+            Assert.That(response.FinalBand, Is.EqualTo(4));
         }
 
         private async Task SeedBonusPeriods()
@@ -411,7 +481,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
 
         private async Task SeedBandChanges()
         {
-             var trade = new Trade
+            var trade = new Trade
             {
                 Id = "EL",
                 Description = "Electrician"

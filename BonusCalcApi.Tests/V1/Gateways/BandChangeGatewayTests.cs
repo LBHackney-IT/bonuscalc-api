@@ -32,7 +32,26 @@ namespace BonusCalcApi.Tests.V1.Gateways
             result.Should().BeEquivalentTo(bandChanges);
         }
 
+        [Test]
+        public async Task RetrievesBandChangeFromDb()
+        {
+            // Arrange
+            var bandChange = await SeedBandChange();
+
+            // Act
+            var result = await _classUnderTest.GetBandChangeAsync("2021-08-02", "123456");
+
+            // Assert
+            result.Should().BeEquivalentTo(bandChange);
+        }
+
         private async Task<IEnumerable<BandChange>> SeedBandChanges()
+        {
+            var bandChange = await SeedBandChange();
+            return new List<BandChange> { bandChange };
+        }
+
+        private async Task<BandChange> SeedBandChange()
         {
             var trade = new Trade
             {
@@ -88,42 +107,39 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 ClosedAt = null
             };
 
-            var bandChanges = new List<BandChange>
+            var bandChange = new BandChange
             {
-                new BandChange
+                Id = "123456/2021-08-02",
+                BonusPeriodId = "2021-08-02",
+                OperativeId = "123456",
+                Trade = "Electrician (EL)",
+                Scheme = "Reactive",
+                BandValue = 50544.0M,
+                MaxValue = 62868.0M,
+                SickDuration = 0.0M,
+                TotalValue = 51140.9748M,
+                Utilisation = 1.0M,
+                FixedBand = false,
+                SalaryBand = 7,
+                ProjectedBand = 6,
+                Supervisor = new BandChangeApprover
                 {
-                    Id = "123456/2021-08-02",
-                    BonusPeriodId = "2021-08-02",
-                    OperativeId = "123456",
-                    Trade = "Electrician (EL)",
-                    Scheme = "Reactive",
-                    BandValue = 50544.0M,
-                    MaxValue = 62868.0M,
-                    SickDuration = 0.0M,
-                    TotalValue = 51140.9748M,
-                    Utilisation = 1.0M,
-                    FixedBand = false,
-                    SalaryBand = 7,
-                    ProjectedBand = 6,
-                    Supervisor = new BandChangeApprover
-                    {
-                        Name = "A Supervisor",
-                        EmailAddress = "a.supervisor@hackney.gov.uk"
-                    },
-                    Manager = new BandChangeApprover
-                    {
-                        Name = "A Manager",
-                        EmailAddress = "a.manager@hackney.gov.uk"
-                    }
+                    Name = "A Supervisor",
+                    EmailAddress = "a.supervisor@hackney.gov.uk"
+                },
+                Manager = new BandChangeApprover
+                {
+                    Name = "A Manager",
+                    EmailAddress = "a.manager@hackney.gov.uk"
                 }
             };
 
             await BonusCalcContext.BonusPeriods.AddAsync(bonusPeriod);
             await BonusCalcContext.Operatives.AddAsync(operative);
-            await BonusCalcContext.BandChanges.AddRangeAsync(bandChanges);
+            await BonusCalcContext.BandChanges.AddAsync(bandChange);
             await BonusCalcContext.SaveChangesAsync();
 
-            return bandChanges;
+            return bandChange;
         }
     }
 }

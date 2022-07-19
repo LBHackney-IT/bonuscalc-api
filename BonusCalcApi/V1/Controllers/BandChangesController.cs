@@ -5,8 +5,10 @@ using BonusCalcApi.V1.UseCase.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Boundary.Request;
 
 namespace BonusCalcApi.V1.Controllers
 {
@@ -20,18 +22,24 @@ namespace BonusCalcApi.V1.Controllers
         private readonly IGetProjectedChangesUseCase _getProjectedChangesUseCase;
         private readonly IStartBandChangeProcessUseCase _startBandChangeProcessUseCase;
         private readonly IGetBandChangesUseCase _getBandChangesUseCase;
+        private readonly ISupervisorBandDecisionUseCase _supervisorBandDecisionUseCase;
+        private readonly IManagerBandDecisionUseCase _managerBandDecisionUseCase;
 
         public BandChangesController(
             IGetBonusPeriodForChangesUseCase getBonusPeriodForChangesUseCase,
             IGetProjectedChangesUseCase getProjectedChangesUseCase,
             IStartBandChangeProcessUseCase startBandChangeProcessUseCase,
-            IGetBandChangesUseCase getBandChangesUseCase
+            IGetBandChangesUseCase getBandChangesUseCase,
+            ISupervisorBandDecisionUseCase supervisorBandDecisionUseCase,
+            IManagerBandDecisionUseCase managerBandDecisionUseCase
         )
         {
             _getBonusPeriodForChangesUseCase = getBonusPeriodForChangesUseCase;
             _getProjectedChangesUseCase = getProjectedChangesUseCase;
             _startBandChangeProcessUseCase = startBandChangeProcessUseCase;
             _getBandChangesUseCase = getBandChangesUseCase;
+            _supervisorBandDecisionUseCase = supervisorBandDecisionUseCase;
+            _managerBandDecisionUseCase = managerBandDecisionUseCase;
         }
 
         [HttpGet]
@@ -41,7 +49,8 @@ namespace BonusCalcApi.V1.Controllers
         [Route("period")]
         public async Task<IActionResult> GetBonusPeriod()
         {
-            try {
+            try
+            {
                 var bonusPeriod = await _getBonusPeriodForChangesUseCase.ExecuteAsync();
                 return Ok(bonusPeriod.ToResponse());
             }
@@ -125,6 +134,68 @@ namespace BonusCalcApi.V1.Controllers
                     "There is no open bonus period",
                     $"/api/v1/band-changes",
                     StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(BandChangeResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Route("{operativeId}/supervisor")]
+        public async Task<IActionResult> SupervisorBandDecision([FromRoute][Required] string operativeId, [FromBody] BandChangeRequest request)
+        {
+            try
+            {
+                var bandChange = await _supervisorBandDecisionUseCase.ExecuteAsync(operativeId, request);
+                return Ok(bandChange.ToResponse());
+            }
+            catch (ResourceNotFoundException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/band-changes/{operativeId}/supervisor",
+                    StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+            catch (ResourceNotProcessableException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/band-changes/{operativeId}/supervisor",
+                    StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity"
+                );
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(BandChangeResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Route("{operativeId}/manager")]
+        public async Task<IActionResult> ManagerBandDecision([FromRoute][Required] string operativeId, [FromBody] BandChangeRequest request)
+        {
+            try
+            {
+                var bandChange = await _managerBandDecisionUseCase.ExecuteAsync(operativeId, request);
+                return Ok(bandChange.ToResponse());
+            }
+            catch (ResourceNotFoundException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/band-changes/{operativeId}/manager",
+                    StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+            catch (ResourceNotProcessableException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/band-changes/{operativeId}/manager",
+                    StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity"
                 );
             }
         }

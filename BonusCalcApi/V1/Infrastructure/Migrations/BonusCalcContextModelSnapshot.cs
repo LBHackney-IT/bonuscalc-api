@@ -1108,7 +1108,7 @@ namespace V1.Infrastructure.Migrations
                                 .HasColumnType("character varying(17)")
                                 .HasColumnName("id");
 
-                            b1.Property<BandChangeDecision>("Decision")
+                            b1.Property<BandChangeDecision?>("Decision")
                                 .HasColumnType("band_change_decision")
                                 .HasColumnName("manager_decision");
 
@@ -1126,7 +1126,7 @@ namespace V1.Infrastructure.Migrations
                                 .HasColumnType("text")
                                 .HasColumnName("manager_reason");
 
-                            b1.Property<int>("SalaryBand")
+                            b1.Property<int?>("SalaryBand")
                                 .HasColumnType("integer")
                                 .HasColumnName("manager_salary_band");
 
@@ -1145,7 +1145,7 @@ namespace V1.Infrastructure.Migrations
                                 .HasColumnType("character varying(17)")
                                 .HasColumnName("id");
 
-                            b1.Property<BandChangeDecision>("Decision")
+                            b1.Property<BandChangeDecision?>("Decision")
                                 .HasColumnType("band_change_decision")
                                 .HasColumnName("supervisor_decision");
 
@@ -1163,7 +1163,7 @@ namespace V1.Infrastructure.Migrations
                                 .HasColumnType("text")
                                 .HasColumnName("supervisor_reason");
 
-                            b1.Property<int>("SalaryBand")
+                            b1.Property<int?>("SalaryBand")
                                 .HasColumnType("integer")
                                 .HasColumnName("supervisor_salary_band");
 
@@ -1178,11 +1178,13 @@ namespace V1.Infrastructure.Migrations
 
                     b.Navigation("BonusPeriod");
 
-                    b.Navigation("Manager");
+                    b.Navigation("Manager")
+                        .IsRequired();
 
                     b.Navigation("Operative");
 
-                    b.Navigation("Supervisor");
+                    b.Navigation("Supervisor")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Operative", b =>

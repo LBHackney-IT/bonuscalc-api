@@ -31,12 +31,12 @@ namespace BonusCalcApi.V1.Controllers
             JsonConvert.DefaultSettings = () =>
             {
                 var settings = new JsonSerializerSettings
-                    {
-                        Formatting = Formatting.Indented,
-                        ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                        DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                        DateFormatHandling = DateFormatHandling.IsoDateFormat
-                    };
+                {
+                    Formatting = Formatting.Indented,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                    DateFormatHandling = DateFormatHandling.IsoDateFormat
+                };
 
                 settings.Converters.Add(new StringEnumConverter());
 

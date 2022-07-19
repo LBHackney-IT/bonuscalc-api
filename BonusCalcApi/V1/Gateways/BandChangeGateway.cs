@@ -24,5 +24,14 @@ namespace BonusCalcApi.V1.Gateways
                 .OrderBy(bc => bc.OperativeId)
                 .ToListAsync();
         }
+
+        public async Task<BandChange> GetBandChangeAsync(string bonusPeriodId, string operativeId)
+        {
+            return await _context.BandChanges
+                .Include(bc => bc.Operative)
+                .Where(bc => bc.BonusPeriodId == bonusPeriodId)
+                .Where(bc => bc.OperativeId == operativeId)
+                .SingleOrDefaultAsync();
+        }
     }
 }

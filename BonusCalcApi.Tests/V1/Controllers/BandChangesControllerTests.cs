@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Boundary.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BonusCalcApi.Tests.V1.Controllers
@@ -25,6 +26,8 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private Mock<IGetProjectedChangesUseCase> _getProjectedChangesUseCaseMock;
         private Mock<IStartBandChangeProcessUseCase> _startBandChangeProcessUseCaseMock;
         private Mock<IGetBandChangesUseCase> _getBandChangesUseCaseMock;
+        private Mock<ISupervisorBandDecisionUseCase> _supervisorBandDecisionUseCaseMock;
+        private Mock<IManagerBandDecisionUseCase> _managerBandDecisionUseCaseMock;
 
         private BandChangesController _classUnderTest;
 
@@ -36,12 +39,16 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _getProjectedChangesUseCaseMock = new Mock<IGetProjectedChangesUseCase>();
             _startBandChangeProcessUseCaseMock = new Mock<IStartBandChangeProcessUseCase>();
             _getBandChangesUseCaseMock = new Mock<IGetBandChangesUseCase>();
+            _supervisorBandDecisionUseCaseMock = new Mock<ISupervisorBandDecisionUseCase>();
+            _managerBandDecisionUseCaseMock = new Mock<IManagerBandDecisionUseCase>();
 
             _classUnderTest = new BandChangesController(
                 _getBonusPeriodForChangesUseCaseMock.Object,
                 _getProjectedChangesUseCaseMock.Object,
                 _startBandChangeProcessUseCaseMock.Object,
-                _getBandChangesUseCaseMock.Object
+                _getBandChangesUseCaseMock.Object,
+                _supervisorBandDecisionUseCaseMock.Object,
+                _managerBandDecisionUseCaseMock.Object
             );
         }
 
@@ -217,6 +224,130 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.NotFound);
             result.Status.Should().Be((int) HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task SupervisorBandDecision()
+        {
+            // Arrange
+            var request = _fixture.Create<BandChangeRequest>();
+            var bandChange = _fixture.Create<BandChange>();
+
+            _supervisorBandDecisionUseCaseMock
+                .Setup(x => x.ExecuteAsync("123456", request))
+                .ReturnsAsync(bandChange);
+
+            // Act
+            var objectResult = await _classUnderTest.SupervisorBandDecision("123456", request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<BandChangeResponse>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Id.Should().Be(bandChange.Id);
+        }
+
+        [Test]
+        public async Task SupervisorBandDecisionReturnsNotFoundIfBonusPeriodNotOpen()
+        {
+            // Arrange
+            var request = _fixture.Create<BandChangeRequest>();
+
+            _supervisorBandDecisionUseCaseMock
+                .Setup(x => x.ExecuteAsync("123456", request))
+                .ThrowsAsync(new ResourceNotFoundException("Open bonus period not found"));
+
+            // Act
+            var objectResult = await _classUnderTest.SupervisorBandDecision("123456", request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            result.Status.Should().Be((int) HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task SupervisorBandDecisionReturnsUnprocessableEntityIfRequestInvalid()
+        {
+            // Arrange
+            var request = _fixture.Create<BandChangeRequest>();
+
+            _supervisorBandDecisionUseCaseMock
+                .Setup(x => x.ExecuteAsync("123456", request))
+                .ThrowsAsync(new ResourceNotProcessableException("Bonus period has already been closed"));
+
+            // Act
+            var objectResult = await _classUnderTest.SupervisorBandDecision("123456", request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.UnprocessableEntity);
+            result.Status.Should().Be((int) HttpStatusCode.UnprocessableEntity);
+            result.Detail.Should().Be("Bonus period has already been closed");
+        }
+
+        [Test]
+        public async Task ManagerBandDecision()
+        {
+            // Arrange
+            var request = _fixture.Create<BandChangeRequest>();
+            var bandChange = _fixture.Create<BandChange>();
+
+            _managerBandDecisionUseCaseMock
+                .Setup(x => x.ExecuteAsync("123456", request))
+                .ReturnsAsync(bandChange);
+
+            // Act
+            var objectResult = await _classUnderTest.ManagerBandDecision("123456", request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<BandChangeResponse>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Id.Should().Be(bandChange.Id);
+        }
+
+        [Test]
+        public async Task ManagerBandDecisionReturnsNotFoundIfBonusPeriodNotOpen()
+        {
+            // Arrange
+            var request = _fixture.Create<BandChangeRequest>();
+
+            _managerBandDecisionUseCaseMock
+                .Setup(x => x.ExecuteAsync("123456", request))
+                .ThrowsAsync(new ResourceNotFoundException("Open bonus period not found"));
+
+            // Act
+            var objectResult = await _classUnderTest.ManagerBandDecision("123456", request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            result.Status.Should().Be((int) HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task ManagerBandDecisionReturnsUnprocessableEntityIfRequestInvalid()
+        {
+            // Arrange
+            var request = _fixture.Create<BandChangeRequest>();
+
+            _managerBandDecisionUseCaseMock
+                .Setup(x => x.ExecuteAsync("123456", request))
+                .ThrowsAsync(new ResourceNotProcessableException("Bonus period has already been closed"));
+
+            // Act
+            var objectResult = await _classUnderTest.ManagerBandDecision("123456", request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.UnprocessableEntity);
+            result.Status.Should().Be((int) HttpStatusCode.UnprocessableEntity);
+            result.Detail.Should().Be("Bonus period has already been closed");
         }
     }
 }
