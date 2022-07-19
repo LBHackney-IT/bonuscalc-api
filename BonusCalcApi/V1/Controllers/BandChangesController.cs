@@ -66,7 +66,7 @@ namespace BonusCalcApi.V1.Controllers
             {
                 return Problem(
                     "There is no open bonus period",
-                    $"/api/v1/band-changes/period",
+                    $"/api/v1/band-changes/projected",
                     StatusCodes.Status404NotFound, "Not Found"
                 );
             }
