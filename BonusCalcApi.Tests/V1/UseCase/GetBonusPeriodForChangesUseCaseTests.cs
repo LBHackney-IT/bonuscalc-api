@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using BonusCalcApi.Tests.V1.Helpers;
+using BonusCalcApi.V1.Exceptions;
 using BonusCalcApi.V1.Gateways.Interfaces;
 using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase;
@@ -42,6 +44,21 @@ namespace BonusCalcApi.Tests.V1.UseCase
 
             // Assert
             result.Should().BeEquivalentTo(expectedBonusPeriod);
+        }
+
+        [Test]
+        public async Task ThrowsWhenNoOpenBonusPeriod()
+        {
+            // Arrange
+            _mockBonusPeriodGateway
+                .Setup(x => x.GetEarliestOpenBonusPeriod())
+                .ReturnsAsync(null as BonusPeriod);
+
+            // Act
+            Func<Task> act = async () => await _classUnderTest.ExecuteAsync();
+
+            // Assert
+            await act.Should().ThrowAsync<ResourceNotFoundException>();
         }
     }
 }

@@ -9,7 +9,6 @@ using BonusCalcApi.V1.UseCase.Interfaces;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -68,7 +67,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Arrange
             _getBonusPeriodForChangesUseCaseMock
                 .Setup(x => x.ExecuteAsync())
-                .ReturnsAsync(null as BonusPeriod);
+                .ThrowsAsync(new ResourceNotFoundException("Open bonus period not found"));
 
             // Act
             var objectResult = await _classUnderTest.GetBonusPeriod();

@@ -1,7 +1,7 @@
+using System;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Exceptions;
 using BonusCalcApi.V1.Factories;
-using BonusCalcApi.V1.Infrastructure;
 using BonusCalcApi.V1.UseCase.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,9 +36,11 @@ namespace BonusCalcApi.V1.Controllers
         [Route("period")]
         public async Task<IActionResult> GetBonusPeriod()
         {
+            try {
             var bonusPeriod = await _getBonusPeriodForChangesUseCase.ExecuteAsync();
-
-            if (bonusPeriod is null)
+                return Ok(bonusPeriod.ToResponse());
+            }
+            catch (ResourceNotFoundException)
             {
                 return Problem(
                     "There is no open bonus period",
@@ -46,8 +48,6 @@ namespace BonusCalcApi.V1.Controllers
                     StatusCodes.Status404NotFound, "Not Found"
                 );
             }
-
-            return Ok(bonusPeriod.ToResponse());
         }
 
         [HttpGet]
