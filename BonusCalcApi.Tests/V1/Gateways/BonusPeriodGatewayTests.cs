@@ -22,6 +22,48 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
+        public async Task RetrievesBonusPeriodsFromDb()
+        {
+            // Arrange
+            var bonusPeriods = new List<BonusPeriod>()
+            {
+                new BonusPeriod
+                {
+                    Id = "2021-11-01",
+                    StartAt = new DateTime(2021, 11, 1, 0, 0, 0, DateTimeKind.Utc),
+                    Year = 2021,
+                    Number = 4,
+                    ClosedAt = new DateTime(2022, 02, 11, 17, 0, 0, DateTimeKind.Utc)
+                },
+                new BonusPeriod
+                {
+                    Id = "2022-01-31",
+                    StartAt = new DateTime(2022, 1, 31, 0, 0, 0, DateTimeKind.Utc),
+                    Year = 2022,
+                    Number = 1,
+                    ClosedAt = null
+                },
+                new BonusPeriod
+                {
+                    Id = "2022-05-02",
+                    StartAt = new DateTime(2022, 5, 1, 23, 0, 0, DateTimeKind.Utc),
+                    Year = 2022,
+                    Number = 2,
+                    ClosedAt = null
+                }
+            };
+
+            await BonusCalcContext.BonusPeriods.AddRangeAsync(bonusPeriods);
+            await BonusCalcContext.SaveChangesAsync();
+
+            // Act
+            var result = await _classUnderTest.GetBonusPeriodsAsync();
+
+            // Assert
+            result.Should().BeEquivalentTo(bonusPeriods);
+        }
+
+        [Test]
         public async Task RetrievesCurrentBonusPeriodsFromDb()
         {
             // Arrange

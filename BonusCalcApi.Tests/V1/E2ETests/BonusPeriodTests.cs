@@ -29,6 +29,37 @@ namespace BonusCalcApi.Tests.V1.E2ETests
         }
 
         [Test]
+        public async Task CanGetBonusPeriods()
+        {
+            // Arrange
+            await SeedBonusPeriods();
+
+            var closedBonusPeriod = new BonusPeriodResponse()
+            {
+                Id = "2021-08-02"
+            };
+
+            var currentBonusPeriod = new BonusPeriodResponse()
+            {
+                Id = "2021-11-01"
+            };
+
+            var futureBonusPeriod = new BonusPeriodResponse()
+            {
+                Id = "2022-01-31"
+            };
+
+            // Act
+            var (code, response) = await Get<List<BonusPeriodResponse>>($"/api/v1/periods");
+
+            // Assert
+            Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response[0].Id, Is.EqualTo("2021-08-02"));
+            Assert.That(response[1].Id, Is.EqualTo("2021-11-01"));
+            Assert.That(response[2].Id, Is.EqualTo("2022-01-31"));
+        }
+
+        [Test]
         public async Task CanGetCurrentBonusPeriods()
         {
             // Arrange

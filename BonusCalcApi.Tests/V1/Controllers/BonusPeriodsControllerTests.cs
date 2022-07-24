@@ -17,6 +17,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
     [TestFixture]
     public class BonusPeriodsControllerTests : ControllerTests
     {
+        private Mock<IGetBonusPeriodsUseCase> _getBonusPeriodsUseCaseMock;
         private Mock<IGetCurrentBonusPeriodsUseCase> _getCurrentBonusPeriodsUseCaseMock;
         private DateTime _currentDate;
 
@@ -25,10 +26,32 @@ namespace BonusCalcApi.Tests.V1.Controllers
         [SetUp]
         public void SetUp()
         {
+            _getBonusPeriodsUseCaseMock = new Mock<IGetBonusPeriodsUseCase>();
             _getCurrentBonusPeriodsUseCaseMock = new Mock<IGetCurrentBonusPeriodsUseCase>();
             _currentDate = new DateTime(2021, 12, 5, 16, 0, 0, DateTimeKind.Utc);
 
-            _classUnderTest = new BonusPeriodsController(_getCurrentBonusPeriodsUseCaseMock.Object);
+            _classUnderTest = new BonusPeriodsController(
+                _getBonusPeriodsUseCaseMock.Object,
+                _getCurrentBonusPeriodsUseCaseMock.Object
+            );
+        }
+
+        [Test]
+        public async Task GetBonusPeriods()
+        {
+            // Arrange
+            var expectedBonusPeriods = FixtureHelpers.CreateBonusPeriods();
+            _getBonusPeriodsUseCaseMock.Setup(x => x.ExecuteAsync())
+                .ReturnsAsync(expectedBonusPeriods);
+
+            // Act
+            var objectResult = await _classUnderTest.GetBonusPeriods();
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<List<BonusPeriodResponse>>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Should().BeEquivalentTo(expectedBonusPeriods.Select(bp => bp.ToResponse()).ToList());
         }
 
         [Test]

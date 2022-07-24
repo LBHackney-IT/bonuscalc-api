@@ -17,6 +17,13 @@ namespace BonusCalcApi.V1.Gateways
             _context = context;
         }
 
+        public async Task<IEnumerable<BonusPeriod>> GetBonusPeriodsAsync()
+        {
+            return await _context.BonusPeriods
+                .OrderBy(bp => bp.StartAt)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<BonusPeriod>> GetCurrentBonusPeriodsAsync(DateTime currentDate)
         {
             return await _context.BonusPeriods

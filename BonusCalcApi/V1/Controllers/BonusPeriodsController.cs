@@ -16,11 +16,25 @@ namespace BonusCalcApi.V1.Controllers
     [ApiVersion("1.0")]
     public class BonusPeriodsController : BaseController
     {
+        private readonly IGetBonusPeriodsUseCase _getBonusPeriodsUseCase;
         private readonly IGetCurrentBonusPeriodsUseCase _getCurrentBonusPeriodsUseCase;
 
-        public BonusPeriodsController(IGetCurrentBonusPeriodsUseCase getCurrentBonusPeriodsUseCase)
+        public BonusPeriodsController(
+            IGetBonusPeriodsUseCase getBonusPeriodsUseCase,
+            IGetCurrentBonusPeriodsUseCase getCurrentBonusPeriodsUseCase
+        )
         {
+            _getBonusPeriodsUseCase = getBonusPeriodsUseCase;
             _getCurrentBonusPeriodsUseCase = getCurrentBonusPeriodsUseCase;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<BonusPeriodResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetBonusPeriods()
+        {
+            var bonusPeriods = await _getBonusPeriodsUseCase.ExecuteAsync();
+            return Ok(bonusPeriods.Select(bp => bp.ToResponse()).ToList());
         }
 
         [HttpGet]
