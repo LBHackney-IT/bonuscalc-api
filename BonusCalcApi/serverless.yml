@@ -32,6 +32,7 @@ functions:
     environment:
       CONNECTION_STRING: Host=${ssm:/bonuscalc-api/${self:provider.stage}/postgres-hostname};Port=${ssm:/bonuscalc-api/${self:provider.stage}/postgres-port};Database=${ssm:/bonuscalc-api/${self:provider.stage}/postgres-database};Username=${ssm:/bonuscalc-api/${self:provider.stage}/postgres-username};Password=${ssm:/bonuscalc-api/${self:provider.stage}/postgres-password}
       PGTZ: UTC
+      FIRST_BONUS_PERIOD: '2021-11-01'
       OperativeGatewayOptions__RepairsHubBaseAddr: ${ssm:/bonuscalc-api/${self:provider.stage}/repairs-hub-base-api}
       OperativeGatewayOptions__RepairsHubApiKey: ${ssm:/bonuscalc-api/${self:provider.stage}/repairs-hub-api-key}
       SENTRY_DSN: ${ssm:/bonuscalc-api/${self:provider.stage}/sentry-dsn}

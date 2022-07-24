@@ -17,6 +17,27 @@ namespace BonusCalcApi.V1.Gateways
             _context = context;
         }
 
+        public async Task<BonusPeriod> CreateBonusPeriodAsync(string id)
+        {
+            return await _context.BonusPeriods
+                .FromSqlRaw("SELECT * FROM create_bonus_period({0})", id)
+                .SingleAsync();
+        }
+
+        public async Task<BonusPeriod> GetBonusPeriodAsync(string id)
+        {
+            return await _context.BonusPeriods
+                .SingleOrDefaultAsync(bp => bp.Id == id);
+        }
+
+        public async Task<BonusPeriod> GetLastBonusPeriodAsync()
+        {
+            return await _context.BonusPeriods
+                .OrderByDescending(bp => bp.StartAt)
+                .Take(1)
+                .SingleAsync();
+        }
+
         public async Task<IEnumerable<BonusPeriod>> GetBonusPeriodsAsync()
         {
             return await _context.BonusPeriods

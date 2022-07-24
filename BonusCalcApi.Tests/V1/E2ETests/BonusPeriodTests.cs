@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Boundary.Request;
 using BonusCalcApi.V1.Boundary.Response;
 using BonusCalcApi.V1.Infrastructure;
 using NUnit.Framework;
@@ -26,6 +27,25 @@ namespace BonusCalcApi.Tests.V1.E2ETests
         [SetUp]
         public void Setup()
         {
+        }
+
+        [Test]
+        public async Task CanCreateBonusPeriod()
+        {
+            // Arrange
+            await SeedBonusPeriods();
+            var request = new BonusPeriodRequest { Id = "2022-05-02" };
+
+            // Act
+            var (code, response) = await Post<BonusPeriodResponse>($"/api/v1/periods", request);
+
+            // Assert
+            Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.Id, Is.EqualTo("2022-05-02"));
+            Assert.That(response.StartAt, Is.EqualTo(new DateTime(2022, 5, 1, 23, 0, 0, 0, DateTimeKind.Utc)));
+            Assert.That(response.Year, Is.EqualTo(2022));
+            Assert.That(response.Number, Is.EqualTo(2));
+            Assert.That(response.ClosedAt, Is.Null);
         }
 
         [Test]
