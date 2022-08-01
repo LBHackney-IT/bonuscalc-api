@@ -43,7 +43,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
         }
 
         [Test]
-        public async Task SavesSupervisorBandDecision()
+        public async Task SavesSupervisorApprovalDecision()
         {
             // Arrange
             var request = new BandChangeRequest
@@ -67,6 +67,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
 
             var bandChange = _fixture.Build<BandChange>()
                 .Without(bc => bc.FinalBand)
+                .With(bc => bc.ProjectedBand, 6)
                 .With(bc => bc.Supervisor, new BandChangeApprover())
                 .With(bc => bc.Manager, new BandChangeApprover())
                 .Create();
@@ -90,6 +91,110 @@ namespace BonusCalcApi.Tests.V1.UseCase
             supervisor.Reason.Should().BeNull();
             supervisor.SalaryBand.Should().Be(6);
             response.FinalBand.Should().Be(6);
+            InMemoryDb.DbSaver.VerifySaveCalled();
+        }
+
+        [Test]
+        public async Task SavesSupervisorRejectionDownwardsDecision()
+        {
+            // Arrange
+            var request = new BandChangeRequest
+            {
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk",
+                Decision = BandChangeDecision.Rejected,
+                Reason = "Some reasons",
+                SalaryBand = 5
+            };
+
+            var closedWeek = _fixture.Build<Week>()
+                .With(w => w.ClosedAt, DateTime.UtcNow)
+                .With(w => w.ClosedBy, "a.week.manager@hackney.gov.uk")
+                .Create();
+
+            var bonusPeriod = _fixture.Build<BonusPeriod>()
+                .Without(bp => bp.ClosedAt)
+                .With(bp => bp.Weeks, new List<Week>() { closedWeek })
+                .Create();
+
+            var bandChange = _fixture.Build<BandChange>()
+                .Without(bc => bc.FinalBand)
+                .With(bc => bc.ProjectedBand, 6)
+                .With(bc => bc.Supervisor, new BandChangeApprover())
+                .With(bc => bc.Manager, new BandChangeApprover())
+                .Create();
+
+            _bonusPeriodGatewayMock
+                .Setup(x => x.GetEarliestOpenBonusPeriodAsync())
+                .ReturnsAsync(bonusPeriod);
+
+            _bandChangeGatewayMock
+                .Setup(x => x.GetBandChangeAsync(bonusPeriod.Id, "123456"))
+                .ReturnsAsync(bandChange);
+
+            // Act
+            var response = await _classUnderTest.ExecuteAsync("123456", request);
+            var supervisor = response.Supervisor;
+
+            // Assert
+            supervisor.Name.Should().Be("A Supervisor");
+            supervisor.EmailAddress.Should().Be("a.supervisor@hackney.gov.uk");
+            supervisor.Decision.Should().Be(BandChangeDecision.Rejected);
+            supervisor.Reason.Should().Be("Some reasons");
+            supervisor.SalaryBand.Should().Be(5);
+            response.FinalBand.Should().Be(5);
+            InMemoryDb.DbSaver.VerifySaveCalled();
+        }
+
+        [Test]
+        public async Task SavesSupervisorRejectionUpwardsDecision()
+        {
+            // Arrange
+            var request = new BandChangeRequest
+            {
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk",
+                Decision = BandChangeDecision.Rejected,
+                Reason = "Some reasons",
+                SalaryBand = 7
+            };
+
+            var closedWeek = _fixture.Build<Week>()
+                .With(w => w.ClosedAt, DateTime.UtcNow)
+                .With(w => w.ClosedBy, "a.week.manager@hackney.gov.uk")
+                .Create();
+
+            var bonusPeriod = _fixture.Build<BonusPeriod>()
+                .Without(bp => bp.ClosedAt)
+                .With(bp => bp.Weeks, new List<Week>() { closedWeek })
+                .Create();
+
+            var bandChange = _fixture.Build<BandChange>()
+                .Without(bc => bc.FinalBand)
+                .With(bc => bc.ProjectedBand, 6)
+                .With(bc => bc.Supervisor, new BandChangeApprover())
+                .With(bc => bc.Manager, new BandChangeApprover())
+                .Create();
+
+            _bonusPeriodGatewayMock
+                .Setup(x => x.GetEarliestOpenBonusPeriodAsync())
+                .ReturnsAsync(bonusPeriod);
+
+            _bandChangeGatewayMock
+                .Setup(x => x.GetBandChangeAsync(bonusPeriod.Id, "123456"))
+                .ReturnsAsync(bandChange);
+
+            // Act
+            var response = await _classUnderTest.ExecuteAsync("123456", request);
+            var supervisor = response.Supervisor;
+
+            // Assert
+            supervisor.Name.Should().Be("A Supervisor");
+            supervisor.EmailAddress.Should().Be("a.supervisor@hackney.gov.uk");
+            supervisor.Decision.Should().Be(BandChangeDecision.Rejected);
+            supervisor.Reason.Should().Be("Some reasons");
+            supervisor.SalaryBand.Should().Be(7);
+            response.FinalBand.Should().BeNull();
             InMemoryDb.DbSaver.VerifySaveCalled();
         }
 

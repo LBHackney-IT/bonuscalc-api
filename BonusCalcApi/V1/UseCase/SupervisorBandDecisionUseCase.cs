@@ -48,14 +48,28 @@ namespace BonusCalcApi.V1.UseCase
                 SalaryBand = request.SalaryBand
             };
 
-            if (request.Decision == BandChangeDecision.Approved)
+            if (IsFinalDecision(bandChange, request))
             {
-                bandChange.FinalBand = request.SalaryBand;
+                if (request.Decision == BandChangeDecision.Approved)
+                {
+                    bandChange.FinalBand = bandChange.ProjectedBand;
+                }
+                else
+                {
+                    bandChange.FinalBand = request.SalaryBand;
+                }
             }
 
             await _dbSaver.SaveChangesAsync();
 
             return bandChange;
+        }
+
+        private static bool IsFinalDecision(BandChange bandChange, BandChangeRequest request)
+        {
+            return request.Decision == BandChangeDecision.Approved ||
+                request.Decision == BandChangeDecision.Rejected &&
+                request.SalaryBand <= bandChange.ProjectedBand;
         }
     }
 }
