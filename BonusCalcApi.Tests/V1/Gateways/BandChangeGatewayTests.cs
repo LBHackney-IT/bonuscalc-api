@@ -33,6 +33,77 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
+        public async Task DoesNotReturnApprovalsAsAuthorisationsFromDb()
+        {
+            // Arrange
+            var bandChange = await SeedBandChange();
+
+            bandChange.Supervisor = new BandChangeApprover
+            {
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk",
+                Decision = BandChangeDecision.Approved
+            };
+
+            await BonusCalcContext.SaveChangesAsync();
+
+            // Act
+            var result = await _classUnderTest.GetBandChangeAuthorisationsAsync("2021-08-02");
+
+            // Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        public async Task DoesNotReturnDownwardRejectionsAsAuthorisationsFromDb()
+        {
+            // Arrange
+            var bandChange = await SeedBandChange();
+
+            bandChange.Supervisor = new BandChangeApprover
+            {
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk",
+                Decision = BandChangeDecision.Rejected,
+                Reason = "Some reason",
+                SalaryBand = 5
+            };
+
+            await BonusCalcContext.SaveChangesAsync();
+
+            // Act
+            var result = await _classUnderTest.GetBandChangeAuthorisationsAsync("2021-08-02");
+
+            // Assert
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        public async Task ReturnsUpwardsRejectionsAsAuthorisationsFromDb()
+        {
+            // Arrange
+            var bandChange = await SeedBandChange();
+            var bandChanges = new List<BandChange> { bandChange };
+
+            bandChange.Supervisor = new BandChangeApprover
+            {
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk",
+                Decision = BandChangeDecision.Rejected,
+                Reason = "Some reason",                
+                SalaryBand = 7
+            };
+
+            await BonusCalcContext.SaveChangesAsync();
+
+            // Act
+            var result = await _classUnderTest.GetBandChangeAuthorisationsAsync("2021-08-02");
+
+            // Assert
+            result.Should().BeEquivalentTo(bandChanges);
+        }
+
+        [Test]
         public async Task RetrievesBandChangeFromDb()
         {
             // Arrange

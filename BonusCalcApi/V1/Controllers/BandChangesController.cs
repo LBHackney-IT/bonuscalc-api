@@ -22,6 +22,7 @@ namespace BonusCalcApi.V1.Controllers
         private readonly IGetProjectedChangesUseCase _getProjectedChangesUseCase;
         private readonly IStartBandChangeProcessUseCase _startBandChangeProcessUseCase;
         private readonly IGetBandChangesUseCase _getBandChangesUseCase;
+        private readonly IGetBandChangeAuthorisationsUseCase _getBandChangeAuthorisationsUseCase;
         private readonly ISupervisorBandDecisionUseCase _supervisorBandDecisionUseCase;
         private readonly IManagerBandDecisionUseCase _managerBandDecisionUseCase;
 
@@ -30,6 +31,7 @@ namespace BonusCalcApi.V1.Controllers
             IGetProjectedChangesUseCase getProjectedChangesUseCase,
             IStartBandChangeProcessUseCase startBandChangeProcessUseCase,
             IGetBandChangesUseCase getBandChangesUseCase,
+            IGetBandChangeAuthorisationsUseCase getBandChangeAuthorisationsUseCase,
             ISupervisorBandDecisionUseCase supervisorBandDecisionUseCase,
             IManagerBandDecisionUseCase managerBandDecisionUseCase
         )
@@ -38,6 +40,7 @@ namespace BonusCalcApi.V1.Controllers
             _getProjectedChangesUseCase = getProjectedChangesUseCase;
             _startBandChangeProcessUseCase = startBandChangeProcessUseCase;
             _getBandChangesUseCase = getBandChangesUseCase;
+            _getBandChangeAuthorisationsUseCase = getBandChangeAuthorisationsUseCase;
             _supervisorBandDecisionUseCase = supervisorBandDecisionUseCase;
             _managerBandDecisionUseCase = managerBandDecisionUseCase;
         }
@@ -113,6 +116,28 @@ namespace BonusCalcApi.V1.Controllers
                     e.Message,
                     $"/api/v1/band-changes/start",
                     StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity"
+                );
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<BandChangeResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Route("authorisations")]
+        public async Task<IActionResult> GetBandChangeAuthorisations()
+        {
+            try
+            {
+                var bandChanges = await _getBandChangeAuthorisationsUseCase.ExecuteAsync();
+                return Ok(bandChanges.Select(bandChanges => bandChanges.ToResponse()).ToList());
+            }
+            catch (ResourceNotFoundException)
+            {
+                return Problem(
+                    "There is no open bonus period",
+                    $"/api/v1/band-changes/authorisations",
+                    StatusCodes.Status404NotFound, "Not Found"
                 );
             }
         }
