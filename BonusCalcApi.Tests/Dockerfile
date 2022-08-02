@@ -5,6 +5,11 @@ ENV DOTNET_CLI_TELEMETRY_OPTOUT='true'
 
 WORKDIR /app
 
+# Install nodejs for SonarCloud
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
+    && apt-get update \
+    && apt-get install nodejs -yq
+
 # Install dotnet-ef tool to run migrations
 RUN dotnet tool install --global dotnet-ef --version 6.0.6
 
