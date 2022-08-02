@@ -112,6 +112,31 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             Assert.That(response, Does.Not.Contain(futureBonusPeriod).Using(comparer));
         }
 
+        [Test]
+        public async Task CanCloseBonusPeriod()
+        {
+            // Arrange
+            await SeedBonusPeriods();
+
+            var closedAt = new DateTime(2022, 5, 9, 16, 0, 0, DateTimeKind.Utc);
+            var closedBy = "a.manager@hackney.gov.uk";
+
+            var request = new BonusPeriodUpdate
+            {
+                ClosedAt = closedAt,
+                ClosedBy = closedBy
+            };
+
+            // Act
+            var (code, response) = await Post<BonusPeriodResponse>($"/api/v1/periods/2021-11-01", request);
+
+            // Assert
+            Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.Id, Is.EqualTo("2021-11-01"));
+            Assert.That(response.ClosedAt, Is.EqualTo(closedAt));
+            Assert.That(response.ClosedBy, Is.EqualTo(closedBy));
+        }
+
         private async Task SeedBonusPeriods()
         {
             var bonusPeriods = new List<BonusPeriod>()

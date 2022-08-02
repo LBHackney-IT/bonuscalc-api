@@ -1,3 +1,4 @@
+using AutoFixture;
 using BonusCalcApi.Tests.V1.Helpers;
 using BonusCalcApi.V1.Boundary.Request;
 using BonusCalcApi.V1.Boundary.Response;
@@ -23,6 +24,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private Mock<ICreateBonusPeriodUseCase> _createBonusPeriodUseCaseMock;
         private Mock<IGetBonusPeriodsUseCase> _getBonusPeriodsUseCaseMock;
         private Mock<IGetCurrentBonusPeriodsUseCase> _getCurrentBonusPeriodsUseCaseMock;
+        private Mock<ICloseBonusPeriodUseCase> _closeBonusPeriodUseCaseMock;
         private DateTime _currentDate;
 
         private BonusPeriodsController _classUnderTest;
@@ -33,12 +35,14 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _createBonusPeriodUseCaseMock = new Mock<ICreateBonusPeriodUseCase>();
             _getBonusPeriodsUseCaseMock = new Mock<IGetBonusPeriodsUseCase>();
             _getCurrentBonusPeriodsUseCaseMock = new Mock<IGetCurrentBonusPeriodsUseCase>();
+            _closeBonusPeriodUseCaseMock = new Mock<ICloseBonusPeriodUseCase>();
             _currentDate = new DateTime(2021, 12, 5, 16, 0, 0, DateTimeKind.Utc);
 
             _classUnderTest = new BonusPeriodsController(
                 _createBonusPeriodUseCaseMock.Object,
                 _getBonusPeriodsUseCaseMock.Object,
-                _getCurrentBonusPeriodsUseCaseMock.Object
+                _getCurrentBonusPeriodsUseCaseMock.Object,
+                _closeBonusPeriodUseCaseMock.Object
             );
         }
 
@@ -114,6 +118,110 @@ namespace BonusCalcApi.Tests.V1.Controllers
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.OK);
             result.Should().BeEquivalentTo(expectedBonusPeriods.Select(bp => bp.ToResponse()).ToList());
+        }
+
+        [Test]
+        public async Task UpdateBonusPeriod()
+        {
+            // Arrange
+            var expectedBonusPeriod = FixtureHelpers.CreateBonusPeriod();
+
+            var request = new BonusPeriodUpdate
+            {
+                ClosedAt = DateTime.UtcNow,
+                ClosedBy = "a.manager@hackney.gov.uk"
+            };
+
+            _closeBonusPeriodUseCaseMock
+                .Setup(x => x.ExecuteAsync(expectedBonusPeriod.Id, request))
+                .ReturnsAsync(expectedBonusPeriod);
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateBonusPeriod(expectedBonusPeriod.Id, request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<BonusPeriodResponse>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Should().BeEquivalentTo(expectedBonusPeriod.ToResponse());
+        }
+
+        [Test]
+        public async Task UpdateBonusPeriodReturnsBadRequestIfInvalid()
+        {
+            // Arrange
+            var bonusPeriodId = "2022-01-31";
+            var request = new BonusPeriodUpdate
+            {
+                ClosedAt = DateTime.UtcNow,
+                ClosedBy = "a.manager@hackney.gov.uk"
+            };
+
+            _closeBonusPeriodUseCaseMock
+                .Setup(x => x.ExecuteAsync(bonusPeriodId, request))
+                .ThrowsAsync(new BadRequestException("Bonus period is invalid - it should be YYYY-MM-DD"));
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateBonusPeriod(bonusPeriodId, request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            result.Status.Should().Be((int) HttpStatusCode.BadRequest);
+            result.Detail.Should().Be("Bonus period is invalid - it should be YYYY-MM-DD");
+        }
+
+        [Test]
+        public async Task UpdateBonusPeriodReturnsNotFoundIfDoesNotExist()
+        {
+            // Arrange
+            var bonusPeriodId = "2022-01-31";
+            var request = new BonusPeriodUpdate
+            {
+                ClosedAt = DateTime.UtcNow,
+                ClosedBy = "a.manager@hackney.gov.uk"
+            };
+
+            _closeBonusPeriodUseCaseMock
+                .Setup(x => x.ExecuteAsync(bonusPeriodId, request))
+                .ThrowsAsync(new ResourceNotFoundException("Bonus period not found"));
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateBonusPeriod(bonusPeriodId, request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            result.Status.Should().Be((int) HttpStatusCode.NotFound);
+            result.Detail.Should().Be("Bonus period not found");
+        }
+
+        [Test]
+        public async Task UpdateBonusPeriodReturnsUnprocessableEntityIfAlreadyClosed()
+        {
+            // Arrange
+            var bonusPeriodId = "2022-01-31";
+            var request = new BonusPeriodUpdate
+            {
+                ClosedAt = DateTime.UtcNow,
+                ClosedBy = "a.manager@hackney.gov.uk"
+            };
+
+            _closeBonusPeriodUseCaseMock
+                .Setup(x => x.ExecuteAsync(bonusPeriodId, request))
+                .ThrowsAsync(new ResourceNotProcessableException("Bonus period is already closed"));
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateBonusPeriod(bonusPeriodId, request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.UnprocessableEntity);
+            result.Status.Should().Be((int) HttpStatusCode.UnprocessableEntity);
+            result.Detail.Should().Be("Bonus period is already closed");
         }
     }
 }

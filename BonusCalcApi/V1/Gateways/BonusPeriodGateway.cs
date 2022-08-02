@@ -17,6 +17,20 @@ namespace BonusCalcApi.V1.Gateways
             _context = context;
         }
 
+        public async Task<BonusPeriod> CloseBonusPeriodAsync(string id, int payElementTypeId, DateTime closedAt, string closedBy)
+        {
+            // At this point the use case has a tracked copy of the bonus period we're
+            // closing using the database function. This means that it will not see the
+            // changes returned by this query below. Since this DbContext object is about
+            // to be destroyed when the request ends we clear all the tracked entities so
+            // that the response includes the correct closed_at and closed_by values.
+            _context.ChangeTracker.Clear();
+
+            return await _context.BonusPeriods
+                .FromSqlRaw("SELECT * FROM close_bonus_period({0}, {1}, {2}, {3})", id, payElementTypeId, closedAt, closedBy)
+                .SingleAsync();
+        }
+
         public async Task<BonusPeriod> CreateBonusPeriodAsync(string id)
         {
             return await _context.BonusPeriods

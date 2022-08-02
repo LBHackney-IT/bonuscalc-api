@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Boundary.Request;
 using BonusCalcApi.V1.Controllers.Helpers;

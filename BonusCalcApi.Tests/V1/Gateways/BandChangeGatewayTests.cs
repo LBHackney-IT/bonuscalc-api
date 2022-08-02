@@ -90,7 +90,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 Name = "A Supervisor",
                 EmailAddress = "a.supervisor@hackney.gov.uk",
                 Decision = BandChangeDecision.Rejected,
-                Reason = "Some reason",                
+                Reason = "Some reason",
                 SalaryBand = 7
             };
 
@@ -101,6 +101,45 @@ namespace BonusCalcApi.Tests.V1.Gateways
 
             // Assert
             result.Should().BeEquivalentTo(bandChanges);
+        }
+
+        [Test]
+        public async Task RetrievesCountOfRemainingBandChangesFromDb()
+        {
+            // Arrange
+            var bandChanges = await SeedBandChanges();
+
+            // Act
+            var result = await _classUnderTest.CountRemainingBandChangesAsync("2021-08-02");
+
+            // Assert
+            result.Should().Be(1);
+        }
+
+        [Test]
+        public async Task RetrievesCountOfRemainingBandChangesAsZeroFromDb()
+        {
+            // Arrange
+            var bandChange = await SeedBandChange();
+
+            bandChange.Supervisor = new BandChangeApprover
+            {
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk",
+                Decision = BandChangeDecision.Approved,
+                Reason = null,
+                SalaryBand = 6
+            };
+
+            bandChange.FinalBand = 6;
+
+            await BonusCalcContext.SaveChangesAsync();
+
+            // Act
+            var result = await _classUnderTest.CountRemainingBandChangesAsync("2021-08-02");
+
+            // Assert
+            result.Should().Be(0);
         }
 
         [Test]

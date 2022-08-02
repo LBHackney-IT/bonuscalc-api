@@ -22,6 +22,186 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
+        public async Task ClosesBonusPeriodInDb()
+        {
+            // Arrange
+            var closedAt = new DateTime(2022, 5, 9, 16, 0, 0, DateTimeKind.Utc);
+            var closedBy = "a.manager@hackney.gov.uk";
+
+            var bonusPeriods = new List<BonusPeriod>
+            {
+                new BonusPeriod
+                {
+                    Id = "2022-01-31",
+                    StartAt = new DateTime(2022, 1, 31, 0, 0, 0, DateTimeKind.Utc),
+                    Year = 2022,
+                    Number = 1,
+                    ClosedAt = null,
+                    Weeks = new List<Week>
+                    {
+                        new Week {
+                            Id = "2022-01-31",
+                            StartAt = new DateTime(2022, 1, 31, 0, 0, 0, DateTimeKind.Utc),
+                            ClosedAt = new DateTime(2022, 2, 9, 16, 0, 0, DateTimeKind.Utc),
+                            Number = 1
+                        }
+                    }
+                },
+                new BonusPeriod
+                {
+                    Id = "2022-05-02",
+                    StartAt = new DateTime(2022, 5, 1, 23, 0, 0, DateTimeKind.Utc),
+                    Year = 2022,
+                    Number = 2,
+                    ClosedAt = null,
+                    Weeks = new List<Week>
+                    {
+                        new Week {
+                            Id = "2022-05-02",
+                            StartAt = new DateTime(2022, 5, 1, 23, 0, 0, DateTimeKind.Utc),
+                            Number = 1
+                        }
+                    }
+                }
+            };
+
+            var payElementTypes = new List<PayElementType>
+            {
+                new PayElementType
+                {
+                    Id = 102,
+                    Description = "Annual Leave",
+                    PayAtBand = true,
+                    Paid = true,
+                    NonProductive = true
+                },
+                new PayElementType
+                {
+                    Id = 202,
+                    Description = "Balance Brought Forward",
+                    Adjustment = true,
+                    Productive = true
+                }
+            };
+
+            var operative = new Operative
+            {
+                Id = "123456",
+                Name = "Alex Cable",
+                Section = "H3009",
+                SalaryBand = 6,
+                Trade = new Trade
+                {
+                    Id = "EL",
+                    Description = "Electrician"
+                },
+                Scheme = new Scheme
+                {
+                    Id = 1,
+                    Type = "SMV",
+                    Description = "Planned",
+                    PayBands = new List<PayBand>
+                    {
+                        new PayBand { Id = 11, Band = 1, Value = 2160 },
+                        new PayBand { Id = 12, Band = 2, Value = 2700 },
+                        new PayBand { Id = 13, Band = 3, Value = 3132 },
+                        new PayBand { Id = 14, Band = 4, Value = 3348 },
+                        new PayBand { Id = 15, Band = 5, Value = 3564 },
+                        new PayBand { Id = 16, Band = 6, Value = 3780 },
+                        new PayBand { Id = 17, Band = 7, Value = 3996 },
+                        new PayBand { Id = 18, Band = 8, Value = 4320 },
+                        new PayBand { Id = 19, Band = 9, Value = 4644 }
+                    }
+                }
+            };
+
+            var timesheet = new Timesheet
+            {
+                Id = "123456/2022-05-02",
+                WeekId = "2022-05-02",
+                OperativeId = "123456",
+                Utilisation = 1.0m
+            };
+
+            var payElement = new PayElement
+            {
+                TimesheetId = "123456/2022-05-02",
+                PayElementTypeId = 102,
+                Duration = 36.0m,
+                Value = 3780.0m,
+                Monday = 7.25m,
+                Tuesday = 7.25m,
+                Wednesday = 7.25m,
+                Thursday = 7.25m,
+                Friday = 7.0m,
+                Saturday = 0.0m,
+                Sunday = 0.0m
+            };
+
+            var bandChange = new BandChange
+            {
+                Id = "123456/2022-01-31",
+                OperativeId = "123456",
+                BonusPeriodId = "2022-01-31",
+                Trade = "Electrician (EL)",
+                Scheme = "Planned",
+                BandValue = 51948.0m,
+                MaxValue = 60372.0m,
+                SickDuration = 0.0m,
+                TotalValue = 52948.0m,
+                Utilisation = 1.0m,
+                FixedBand = false,
+                SalaryBand = 6,
+                ProjectedBand = 7,
+                Supervisor = new BandChangeApprover
+                {
+                    Name = "A Supervisor",
+                    EmailAddress = "a.supervisor@hackney.gov.uk",
+                    Decision = BandChangeDecision.Approved,
+                    Reason = null,
+                    SalaryBand = 7
+                },
+                FinalBand = 7
+            };
+
+            await BonusCalcContext.AddRangeAsync(bonusPeriods);
+            await BonusCalcContext.AddRangeAsync(payElementTypes);
+
+            await BonusCalcContext.AddAsync(operative);
+            await BonusCalcContext.AddAsync(timesheet);
+            await BonusCalcContext.AddAsync(payElement);
+            await BonusCalcContext.AddAsync(bandChange);
+
+            await BonusCalcContext.SaveChangesAsync();
+
+            BonusCalcContext.ChangeTracker.Clear();
+
+            // Act
+            var result = await _classUnderTest.CloseBonusPeriodAsync("2022-01-31", 202, closedAt, closedBy);
+
+            // Assert bonus period has been closed
+            result.ClosedAt.Should().Be(closedAt);
+            result.ClosedBy.Should().Be(closedBy);
+
+            // Assert that it recalculates non-productive elements
+            BonusCalcContext.PayElements.Should().ContainSingle(pe =>
+                pe.PayElementTypeId == 102 &&
+                pe.TimesheetId == "123456/2022-05-02" &&
+                pe.Value == 3996.0m);
+
+            // Assert that it adds any carried-over SMVs
+            BonusCalcContext.PayElements.Should().ContainSingle(pe =>
+                pe.PayElementTypeId == 202 &&
+                pe.TimesheetId == "123456/2022-05-02" &&
+                pe.Value == 1000.0m);
+
+            // Assert that it updates the operative's salary band
+            BonusCalcContext.Operatives.Should().ContainSingle(o =>
+                o.Id == "123456" &&
+                o.SalaryBand == 7);
+        }
+
+        [Test]
         public async Task CreatesBonusPeriodInDb()
         {
             // Arrange

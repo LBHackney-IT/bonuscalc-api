@@ -192,6 +192,7 @@ namespace BonusCalcApi.V1.Factories
                 Number = bonusPeriod.Number,
                 Year = bonusPeriod.Year,
                 ClosedAt = bonusPeriod.ClosedAt,
+                ClosedBy = bonusPeriod.ClosedBy,
                 StartAt = bonusPeriod.StartAt,
                 Weeks = bonusPeriod.Weeks?.Select(w => w.ToResponse()).ToList()
             };

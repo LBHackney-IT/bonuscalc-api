@@ -21,16 +21,19 @@ namespace BonusCalcApi.V1.Controllers
         private readonly ICreateBonusPeriodUseCase _createBonusPeriodUseCase;
         private readonly IGetBonusPeriodsUseCase _getBonusPeriodsUseCase;
         private readonly IGetCurrentBonusPeriodsUseCase _getCurrentBonusPeriodsUseCase;
+        private readonly ICloseBonusPeriodUseCase _closeBonusPeriodUseCase;
 
         public BonusPeriodsController(
             ICreateBonusPeriodUseCase createBonusPeriodUseCase,
             IGetBonusPeriodsUseCase getBonusPeriodsUseCase,
-            IGetCurrentBonusPeriodsUseCase getCurrentBonusPeriodsUseCase
+            IGetCurrentBonusPeriodsUseCase getCurrentBonusPeriodsUseCase,
+            ICloseBonusPeriodUseCase closeBonusPeriodUseCase
         )
         {
             _createBonusPeriodUseCase = createBonusPeriodUseCase;
             _getBonusPeriodsUseCase = getBonusPeriodsUseCase;
             _getCurrentBonusPeriodsUseCase = getCurrentBonusPeriodsUseCase;
+            _closeBonusPeriodUseCase = closeBonusPeriodUseCase;
         }
 
         [HttpPost]
@@ -72,6 +75,46 @@ namespace BonusCalcApi.V1.Controllers
         {
             var bonusPeriods = await _getCurrentBonusPeriodsUseCase.ExecuteAsync(EnsureValidDate(date));
             return Ok(bonusPeriods.Select(bp => bp.ToResponse()).ToList());
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(List<BonusPeriodResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateBonusPeriod([FromRoute] string id, [FromBody] BonusPeriodUpdate request)
+        {
+            try
+            {
+                var bonusPeriod = await _closeBonusPeriodUseCase.ExecuteAsync(id, request);
+                return Ok(bonusPeriod.ToResponse());
+            }
+            catch (BadRequestException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/periods/{id}",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+            }
+            catch (ResourceNotFoundException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/periods/{id}",
+                    StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+            catch (ResourceNotProcessableException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/periods/{id}",
+                    StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity"
+                );
+            }
         }
 
         private static DateTime EnsureValidDate(DateTime? date)

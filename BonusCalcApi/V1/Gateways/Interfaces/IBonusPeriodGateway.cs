@@ -7,6 +7,7 @@ namespace BonusCalcApi.V1.Gateways.Interfaces
 {
     public interface IBonusPeriodGateway
     {
+        public Task<BonusPeriod> CloseBonusPeriodAsync(string id, int payElementTypeId, DateTime closedAt, string closedBy);
         public Task<BonusPeriod> CreateBonusPeriodAsync(string id);
         public Task<BonusPeriod> GetBonusPeriodAsync(string id);
         public Task<BonusPeriod> GetLastBonusPeriodAsync();

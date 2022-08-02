@@ -36,6 +36,14 @@ namespace BonusCalcApi.V1.Gateways
                 .ToListAsync();
         }
 
+        public async Task<int> CountRemainingBandChangesAsync(string bonusPeriodId)
+        {
+            return await _context.BandChanges
+                .Where(bc => bc.BonusPeriodId == bonusPeriodId)
+                .Where(bc => bc.FinalBand == null)
+                .CountAsync();
+        }
+
         public async Task<BandChange> GetBandChangeAsync(string bonusPeriodId, string operativeId)
         {
             return await _context.BandChanges
