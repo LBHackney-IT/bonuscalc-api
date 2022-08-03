@@ -170,7 +170,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
                 .Create();
 
             var bandChange = _fixture.Build<BandChange>()
-                .Without(bc => bc.FinalBand)
+                .With(bc => bc.FinalBand, 6)
                 .With(bc => bc.ProjectedBand, 6)
                 .With(bc => bc.Supervisor, new BandChangeApprover())
                 .With(bc => bc.Manager, new BandChangeApprover())

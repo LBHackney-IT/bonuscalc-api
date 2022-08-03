@@ -59,6 +59,10 @@ namespace BonusCalcApi.V1.UseCase
                     bandChange.FinalBand = request.SalaryBand;
                 }
             }
+            else
+            {
+                bandChange.FinalBand = null;
+            }
 
             await _dbSaver.SaveChangesAsync();
 
