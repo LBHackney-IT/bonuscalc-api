@@ -168,6 +168,7 @@ namespace BonusCalcApi.V1.Factories
                 Id = bandChange.Id,
                 OperativeId = bandChange.Operative?.Id,
                 OperativeName = bandChange.Operative?.Name,
+                EmailAddress = bandChange.Operative?.EmailAddress,
                 Trade = bandChange.Trade,
                 Scheme = bandChange.Scheme,
                 BandValue = bandChange.BandValue,

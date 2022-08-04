@@ -8,6 +8,8 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public string OperativeName { get; set; }
 
+        public string EmailAddress { get; set; }
+
         public string Trade { get; set; }
 
         public string Scheme { get; set; }

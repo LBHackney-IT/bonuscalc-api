@@ -47,6 +47,7 @@ namespace BonusCalcApi.Tests.V1.Factories
             response.Id.Should().Be(bandChange.Id);
             response.OperativeId.Should().Be(bandChange.Operative.Id);
             response.OperativeName.Should().Be(bandChange.Operative.Name);
+            response.EmailAddress.Should().Be(bandChange.Operative.EmailAddress);
             response.Trade.Should().Be(bandChange.Trade);
             response.Scheme.Should().Be(bandChange.Scheme);
             response.BandValue.Should().Be(bandChange.BandValue);
