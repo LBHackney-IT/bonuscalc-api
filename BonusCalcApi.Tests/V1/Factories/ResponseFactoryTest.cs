@@ -61,6 +61,7 @@ namespace BonusCalcApi.Tests.V1.Factories
             response.Supervisor.Should().BeEquivalentTo(bandChange.Supervisor);
             response.Manager.Should().BeEquivalentTo(bandChange.Manager);
             response.FinalBand.Should().Be(bandChange.FinalBand);
+            response.ReportSentAt.Should().Be(bandChange.ReportSentAt);
         }
 
         [Test]

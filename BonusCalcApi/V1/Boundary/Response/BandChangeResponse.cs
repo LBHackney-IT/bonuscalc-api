@@ -1,3 +1,5 @@
+using System;
+
 namespace BonusCalcApi.V1.Boundary.Response
 {
     public class BandChangeResponse
@@ -35,5 +37,7 @@ namespace BonusCalcApi.V1.Boundary.Response
         public BandChangeApproverResponse Manager { get; set; }
 
         public int? FinalBand { get; set; }
+
+        public DateTime? ReportSentAt { get; set; }
     }
 }

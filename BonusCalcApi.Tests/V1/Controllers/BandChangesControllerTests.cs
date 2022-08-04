@@ -29,6 +29,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private Mock<IGetBandChangeAuthorisationsUseCase> _getBandChangeAuthorisationsUseCaseMock;
         private Mock<ISupervisorBandDecisionUseCase> _supervisorBandDecisionUseCaseMock;
         private Mock<IManagerBandDecisionUseCase> _managerBandDecisionUseCaseMock;
+        private Mock<IUpdateBandChangeReportSentAtUseCase> _updateBandChangeReportSentAtUseCaseMock;
 
         private BandChangesController _classUnderTest;
 
@@ -43,6 +44,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _getBandChangeAuthorisationsUseCaseMock = new Mock<IGetBandChangeAuthorisationsUseCase>();
             _supervisorBandDecisionUseCaseMock = new Mock<ISupervisorBandDecisionUseCase>();
             _managerBandDecisionUseCaseMock = new Mock<IManagerBandDecisionUseCase>();
+            _updateBandChangeReportSentAtUseCaseMock = new Mock<IUpdateBandChangeReportSentAtUseCase>();
 
             _classUnderTest = new BandChangesController(
                 _getBonusPeriodForChangesUseCaseMock.Object,
@@ -51,7 +53,8 @@ namespace BonusCalcApi.Tests.V1.Controllers
                 _getBandChangesUseCaseMock.Object,
                 _getBandChangeAuthorisationsUseCaseMock.Object,
                 _supervisorBandDecisionUseCaseMock.Object,
-                _managerBandDecisionUseCaseMock.Object
+                _managerBandDecisionUseCaseMock.Object,
+                _updateBandChangeReportSentAtUseCaseMock.Object
             );
         }
 
@@ -383,6 +386,77 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Act
             var objectResult = await _classUnderTest.ManagerBandDecision("123456", request);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.UnprocessableEntity);
+            result.Status.Should().Be((int) HttpStatusCode.UnprocessableEntity);
+            result.Detail.Should().Be("Bonus period has already been closed");
+        }
+
+        [Test]
+        public async Task UpdateReportSentAtReturnsOk()
+        {
+            // Arrange
+            _updateBandChangeReportSentAtUseCaseMock
+                .Setup(x => x.ExecuteAsync("123456"))
+                .Returns(Task.CompletedTask);
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateReportSentAt("123456");
+            var statusCode = GetStatusCode(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+        }
+
+        [Test]
+        public async Task UpdateReportSentAtReturnsBadRequestIfOperativePrnInvalid()
+        {
+            // Arrange
+            _updateBandChangeReportSentAtUseCaseMock
+                .Setup(x => x.ExecuteAsync("1234"))
+                .ThrowsAsync(new BadRequestException("Operative payroll number is invalid"));
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateReportSentAt("1234");
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            result.Status.Should().Be((int) HttpStatusCode.BadRequest);
+        }
+
+        [Test]
+        public async Task UpdateReportSentAtReturnsNotFoundIfBonusPeriodNotOpen()
+        {
+            // Arrange
+            _updateBandChangeReportSentAtUseCaseMock
+                .Setup(x => x.ExecuteAsync("123456"))
+                .ThrowsAsync(new ResourceNotFoundException("Open bonus period not found"));
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateReportSentAt("123456");
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            result.Status.Should().Be((int) HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task UpdateReportSentAtReturnsUnprocessableEntityIfRequestInvalid()
+        {
+            // Arrange
+            _updateBandChangeReportSentAtUseCaseMock
+                .Setup(x => x.ExecuteAsync("123456"))
+                .ThrowsAsync(new ResourceNotProcessableException("Bonus period has already been closed"));
+
+            // Act
+            var objectResult = await _classUnderTest.UpdateReportSentAt("123456");
             var statusCode = GetStatusCode(objectResult);
             var result = GetResultData<ProblemDetails>(objectResult);
 

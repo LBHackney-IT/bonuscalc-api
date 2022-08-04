@@ -25,6 +25,7 @@ namespace BonusCalcApi.V1.Controllers
         private readonly IGetBandChangeAuthorisationsUseCase _getBandChangeAuthorisationsUseCase;
         private readonly ISupervisorBandDecisionUseCase _supervisorBandDecisionUseCase;
         private readonly IManagerBandDecisionUseCase _managerBandDecisionUseCase;
+        private readonly IUpdateBandChangeReportSentAtUseCase _updateBandChangeReportSentAtUseCase;
 
         public BandChangesController(
             IGetBonusPeriodForChangesUseCase getBonusPeriodForChangesUseCase,
@@ -33,7 +34,8 @@ namespace BonusCalcApi.V1.Controllers
             IGetBandChangesUseCase getBandChangesUseCase,
             IGetBandChangeAuthorisationsUseCase getBandChangeAuthorisationsUseCase,
             ISupervisorBandDecisionUseCase supervisorBandDecisionUseCase,
-            IManagerBandDecisionUseCase managerBandDecisionUseCase
+            IManagerBandDecisionUseCase managerBandDecisionUseCase,
+            IUpdateBandChangeReportSentAtUseCase updateBandChangeReportSentAtUseCase
         )
         {
             _getBonusPeriodForChangesUseCase = getBonusPeriodForChangesUseCase;
@@ -43,6 +45,7 @@ namespace BonusCalcApi.V1.Controllers
             _getBandChangeAuthorisationsUseCase = getBandChangeAuthorisationsUseCase;
             _supervisorBandDecisionUseCase = supervisorBandDecisionUseCase;
             _managerBandDecisionUseCase = managerBandDecisionUseCase;
+            _updateBandChangeReportSentAtUseCase = updateBandChangeReportSentAtUseCase;
         }
 
         [HttpGet]
@@ -220,6 +223,41 @@ namespace BonusCalcApi.V1.Controllers
                 return Problem(
                     e.Message,
                     $"/api/v1/band-changes/{operativeId}/manager",
+                    StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity"
+                );
+            }
+        }
+
+        [HttpPost]
+        [Route("{operativeId}/report")]
+        public async Task<IActionResult> UpdateReportSentAt([FromRoute][Required] string operativeId)
+        {
+            try
+            {
+                await _updateBandChangeReportSentAtUseCase.ExecuteAsync(operativeId);
+                return Ok();
+            }
+            catch (BadRequestException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/band-changes/{operativeId}/report",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+            }
+            catch (ResourceNotFoundException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/band-changes/{operativeId}/report",
+                    StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+            catch (ResourceNotProcessableException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/band-changes/{operativeId}/report",
                     StatusCodes.Status422UnprocessableEntity, "Unprocessable Entity"
                 );
             }

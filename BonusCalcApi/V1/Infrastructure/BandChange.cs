@@ -1,7 +1,8 @@
+using System;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.ComponentModel.DataAnnotations;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
@@ -114,5 +115,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public decimal BalanceDuration { get; set; }
 
         public decimal BalanceValue { get; set; }
+
+        public DateTime? ReportSentAt { get; set; }
     }
 }

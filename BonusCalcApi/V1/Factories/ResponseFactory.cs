@@ -181,7 +181,8 @@ namespace BonusCalcApi.V1.Factories
                 ProjectedBand = bandChange.ProjectedBand,
                 Supervisor = bandChange.Supervisor.ToResponse(),
                 Manager = bandChange.Manager.ToResponse(),
-                FinalBand = bandChange.FinalBand
+                FinalBand = bandChange.FinalBand,
+                ReportSentAt = bandChange.ReportSentAt
             };
         }
 

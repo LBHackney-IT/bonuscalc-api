@@ -199,6 +199,7 @@ namespace BonusCalcApi
             services.AddTransient<IGetWeekUseCase, GetWeekUseCase>();
             services.AddTransient<IGetWorkElementsUseCase, GetWorkElementsUseCase>();
             services.AddTransient<IStartBandChangeProcessUseCase, StartBandChangeProcessUseCase>();
+            services.AddTransient<IUpdateBandChangeReportSentAtUseCase, UpdateBandChangeReportSentAtUseCase>();
             services.AddTransient<IUpdateOperativeReportSentAtUseCase, UpdateOperativeReportSentAtUseCase>();
             services.AddTransient<IUpdateWeekReportsSentAtUseCase, UpdateWeekReportsSentAtUseCase>();
             services.AddTransient<IUpdateTimesheetUseCase, UpdateTimesheetUseCase>();
