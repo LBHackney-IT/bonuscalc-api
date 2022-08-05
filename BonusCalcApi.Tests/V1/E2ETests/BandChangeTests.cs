@@ -87,6 +87,20 @@ namespace BonusCalcApi.Tests.V1.E2ETests
         }
 
         [Test]
+        public async Task CanGetBandChange()
+        {
+            // Arrange
+            await SeedBandChanges();
+
+            // Act
+            var (code, response) = await Get<BandChangeResponse>($"/api/v1/band-changes/123456");
+
+            // Assert
+            Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.OperativeId, Is.EqualTo("123456"));
+        }
+
+        [Test]
         public async Task SupervisorCanApproveBandChange()
         {
             // Arrange

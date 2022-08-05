@@ -169,6 +169,15 @@ namespace BonusCalcApi.V1.Factories
                 OperativeId = bandChange.Operative?.Id,
                 OperativeName = bandChange.Operative?.Name,
                 EmailAddress = bandChange.Operative?.EmailAddress,
+                BonusPeriod = new BonusPeriodResponse
+                {
+                    Id = bandChange.BonusPeriod.Id,
+                    StartAt = bandChange.BonusPeriod.StartAt,
+                    Year = bandChange.BonusPeriod.Year,
+                    Number = bandChange.BonusPeriod.Number,
+                    ClosedAt = bandChange.BonusPeriod.ClosedAt,
+                    ClosedBy = bandChange.BonusPeriod.ClosedBy
+                },
                 Trade = bandChange.Trade,
                 Scheme = bandChange.Scheme,
                 BandValue = bandChange.BandValue,
@@ -182,7 +191,8 @@ namespace BonusCalcApi.V1.Factories
                 Supervisor = bandChange.Supervisor.ToResponse(),
                 Manager = bandChange.Manager.ToResponse(),
                 FinalBand = bandChange.FinalBand,
-                ReportSentAt = bandChange.ReportSentAt
+                ReportSentAt = bandChange.ReportSentAt,
+                WeeklySummaries = bandChange.WeeklySummaries?.Select(ws => ws.ToResponse()).ToList()
             };
         }
 

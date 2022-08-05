@@ -26,6 +26,7 @@ namespace BonusCalcApi.V1.Controllers
         private readonly ISupervisorBandDecisionUseCase _supervisorBandDecisionUseCase;
         private readonly IManagerBandDecisionUseCase _managerBandDecisionUseCase;
         private readonly IUpdateBandChangeReportSentAtUseCase _updateBandChangeReportSentAtUseCase;
+        private readonly IGetBandChangeUseCase _getBandChangeUseCase;
 
         public BandChangesController(
             IGetBonusPeriodForChangesUseCase getBonusPeriodForChangesUseCase,
@@ -35,7 +36,8 @@ namespace BonusCalcApi.V1.Controllers
             IGetBandChangeAuthorisationsUseCase getBandChangeAuthorisationsUseCase,
             ISupervisorBandDecisionUseCase supervisorBandDecisionUseCase,
             IManagerBandDecisionUseCase managerBandDecisionUseCase,
-            IUpdateBandChangeReportSentAtUseCase updateBandChangeReportSentAtUseCase
+            IUpdateBandChangeReportSentAtUseCase updateBandChangeReportSentAtUseCase,
+            IGetBandChangeUseCase getBandChangeUseCase
         )
         {
             _getBonusPeriodForChangesUseCase = getBonusPeriodForChangesUseCase;
@@ -46,6 +48,7 @@ namespace BonusCalcApi.V1.Controllers
             _supervisorBandDecisionUseCase = supervisorBandDecisionUseCase;
             _managerBandDecisionUseCase = managerBandDecisionUseCase;
             _updateBandChangeReportSentAtUseCase = updateBandChangeReportSentAtUseCase;
+            _getBandChangeUseCase = getBandChangeUseCase;
         }
 
         [HttpGet]
@@ -161,6 +164,28 @@ namespace BonusCalcApi.V1.Controllers
                 return Problem(
                     "There is no open bonus period",
                     $"/api/v1/band-changes",
+                    StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(BandChangeResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Route("{operativeId}")]
+        public async Task<IActionResult> GetBandChange([FromRoute][Required] string operativeId)
+        {
+            try
+            {
+                var bandChange = await _getBandChangeUseCase.ExecuteAsync(operativeId);
+                return Ok(bandChange.ToResponse());
+            }
+            catch (ResourceNotFoundException e)
+            {
+                return Problem(
+                    e.Message,
+                    $"/api/v1/band-changes/{operativeId}",
                     StatusCodes.Status404NotFound, "Not Found"
                 );
             }

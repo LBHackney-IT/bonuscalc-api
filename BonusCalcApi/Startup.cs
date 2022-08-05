@@ -182,6 +182,7 @@ namespace BonusCalcApi
             services.AddTransient<ICloseBonusPeriodUseCase, CloseBonusPeriodUseCase>();
             services.AddTransient<IGetBonusPeriodsUseCase, GetBonusPeriodsUseCase>();
             services.AddTransient<IGetCurrentBonusPeriodsUseCase, GetCurrentBonusPeriodsUseCase>();
+            services.AddTransient<IGetBandChangeUseCase, GetBandChangeUseCase>();
             services.AddTransient<IGetBandChangesUseCase, GetBandChangesUseCase>();
             services.AddTransient<IGetBandChangeAuthorisationsUseCase, GetBandChangeAuthorisationsUseCase>();
             services.AddTransient<ISupervisorBandDecisionUseCase, SupervisorBandDecisionUseCase>();

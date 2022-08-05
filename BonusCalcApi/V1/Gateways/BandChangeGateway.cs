@@ -20,6 +20,7 @@ namespace BonusCalcApi.V1.Gateways
         {
             return await _context.BandChanges
                 .Include(bc => bc.Operative)
+                .Include(bc => bc.BonusPeriod)
                 .Where(bc => bc.BonusPeriodId == bonusPeriodId)
                 .OrderBy(bc => bc.OperativeId)
                 .ToListAsync();
@@ -29,6 +30,7 @@ namespace BonusCalcApi.V1.Gateways
         {
             return await _context.BandChanges
                 .Include(bc => bc.Operative)
+                .Include(bc => bc.BonusPeriod)
                 .Where(bc => bc.BonusPeriodId == bonusPeriodId)
                 .Where(bc => bc.Supervisor.Decision == BandChangeDecision.Rejected)
                 .Where(bc => bc.Supervisor.SalaryBand > bc.ProjectedBand)
@@ -48,6 +50,8 @@ namespace BonusCalcApi.V1.Gateways
         {
             return await _context.BandChanges
                 .Include(bc => bc.Operative)
+                .Include(bc => bc.BonusPeriod)
+                .Include(bc => bc.WeeklySummaries.OrderBy(ws => ws.Number))
                 .Where(bc => bc.BonusPeriodId == bonusPeriodId)
                 .Where(bc => bc.OperativeId == operativeId)
                 .SingleOrDefaultAsync();

@@ -30,6 +30,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         private Mock<ISupervisorBandDecisionUseCase> _supervisorBandDecisionUseCaseMock;
         private Mock<IManagerBandDecisionUseCase> _managerBandDecisionUseCaseMock;
         private Mock<IUpdateBandChangeReportSentAtUseCase> _updateBandChangeReportSentAtUseCaseMock;
+        private Mock<IGetBandChangeUseCase> _getBandChangeUseCaseMock;
 
         private BandChangesController _classUnderTest;
 
@@ -45,6 +46,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
             _supervisorBandDecisionUseCaseMock = new Mock<ISupervisorBandDecisionUseCase>();
             _managerBandDecisionUseCaseMock = new Mock<IManagerBandDecisionUseCase>();
             _updateBandChangeReportSentAtUseCaseMock = new Mock<IUpdateBandChangeReportSentAtUseCase>();
+            _getBandChangeUseCaseMock = new Mock<IGetBandChangeUseCase>();
 
             _classUnderTest = new BandChangesController(
                 _getBonusPeriodForChangesUseCaseMock.Object,
@@ -54,7 +56,8 @@ namespace BonusCalcApi.Tests.V1.Controllers
                 _getBandChangeAuthorisationsUseCaseMock.Object,
                 _supervisorBandDecisionUseCaseMock.Object,
                 _managerBandDecisionUseCaseMock.Object,
-                _updateBandChangeReportSentAtUseCaseMock.Object
+                _updateBandChangeReportSentAtUseCaseMock.Object,
+                _getBandChangeUseCaseMock.Object
             );
         }
 
@@ -263,6 +266,44 @@ namespace BonusCalcApi.Tests.V1.Controllers
 
             // Act
             var objectResult = await _classUnderTest.GetBandChanges();
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            result.Status.Should().Be((int) HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task GetBandChange()
+        {
+            // Arrange
+            var expectedBandChange = _fixture.Create<BandChange>();
+
+            _getBandChangeUseCaseMock
+                .Setup(x => x.ExecuteAsync(expectedBandChange.OperativeId))
+                .ReturnsAsync(expectedBandChange);
+
+            // Act
+            var objectResult = await _classUnderTest.GetBandChange(expectedBandChange.OperativeId);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<BandChangeResponse>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Should().BeEquivalentTo(expectedBandChange.ToResponse());
+        }
+
+        [Test]
+        public async Task GetBandChangeReturnsNotFoundIfBonusPeriodNotOpen()
+        {
+            // Arrange
+            _getBandChangeUseCaseMock
+                .Setup(x => x.ExecuteAsync("123456"))
+                .ThrowsAsync(new ResourceNotFoundException("Open bonus period not found"));
+
+            // Act
+            var objectResult = await _classUnderTest.GetBandChange("123456");
             var statusCode = GetStatusCode(objectResult);
             var result = GetResultData<ProblemDetails>(objectResult);
 

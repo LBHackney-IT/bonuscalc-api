@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace BonusCalcApi.V1.Boundary.Response
 {
@@ -11,6 +12,8 @@ namespace BonusCalcApi.V1.Boundary.Response
         public string OperativeName { get; set; }
 
         public string EmailAddress { get; set; }
+
+        public BonusPeriodResponse BonusPeriod { get; set; }
 
         public string Trade { get; set; }
 
@@ -39,5 +42,11 @@ namespace BonusCalcApi.V1.Boundary.Response
         public int? FinalBand { get; set; }
 
         public DateTime? ReportSentAt { get; set; }
+
+        public List<WeeklySummaryResponse> WeeklySummaries { get; set; }
+
+        public bool ShouldSerializeBonusPeriod() => BonusPeriod != null;
+
+        public bool ShouldSerializeWeeklySummaries() => WeeklySummaries != null;
     }
 }

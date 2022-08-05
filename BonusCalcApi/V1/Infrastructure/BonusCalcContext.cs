@@ -68,14 +68,19 @@ namespace BonusCalcApi.V1.Infrastructure
                 .OwnsOne(bc => bc.Manager);
 
             modelBuilder.Entity<BandChange>()
-                .Property(pb => pb.BalanceDuration)
+                .Property(bc => bc.BalanceDuration)
                 .HasPrecision(10, 4)
                 .HasComputedColumnSql(@"ROUND(GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0) / 60, 4)", stored: true);
 
             modelBuilder.Entity<BandChange>()
-                .Property(pb => pb.BalanceValue)
+                .Property(bc => bc.BalanceValue)
                 .HasPrecision(10, 4)
                 .HasComputedColumnSql(@"GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0)", stored: true);
+
+            modelBuilder.Entity<BandChange>()
+                .HasMany(bc => bc.WeeklySummaries)
+                .WithOne()
+                .HasForeignKey("SummaryId");
 
             modelBuilder.Entity<BonusPeriod>()
                 .HasIndex(bp => bp.StartAt)
@@ -285,6 +290,11 @@ namespace BonusCalcApi.V1.Infrastructure
                 .Property(s => s.MaxValue)
                 .HasPrecision(10, 4)
                 .HasDefaultValue(0.0);
+
+            modelBuilder.Entity<Summary>()
+                .HasMany(s => s.WeeklySummaries)
+                .WithOne()
+                .HasForeignKey("SummaryId");
 
             modelBuilder.Entity<Timesheet>()
                 .Property(t => t.Id)

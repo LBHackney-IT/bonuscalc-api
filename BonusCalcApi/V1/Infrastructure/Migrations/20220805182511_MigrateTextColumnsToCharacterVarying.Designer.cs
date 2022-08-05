@@ -3,6 +3,7 @@ using System;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,10 @@ using NpgsqlTypes;
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20220805182511_MigrateTextColumnsToCharacterVarying")]
+    partial class MigrateTextColumnsToCharacterVarying
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -268,8 +270,7 @@ namespace V1.Infrastructure.Migrations
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OperativeProjection", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(17)
-                        .HasColumnType("character varying(17)")
+                        .HasColumnType("text")
                         .HasColumnName("id");
 
                     b.Property<decimal>("BandValue")
@@ -277,7 +278,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnName("band_value");
 
                     b.Property<string>("BonusPeriodId")
-                        .HasMaxLength(10)
                         .HasColumnType("character varying(10)")
                         .HasColumnName("bonus_period_id");
 
@@ -298,7 +298,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnName("max_value");
 
                     b.Property<string>("OperativeId")
-                        .HasMaxLength(6)
                         .HasColumnType("character varying(6)")
                         .HasColumnName("operative_id");
 
@@ -355,12 +354,10 @@ namespace V1.Infrastructure.Migrations
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.OperativeSummary", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(6)
-                        .HasColumnType("character varying(6)")
+                        .HasColumnType("text")
                         .HasColumnName("id");
 
                     b.Property<string>("WeekId")
-                        .HasMaxLength(10)
                         .HasColumnType("character varying(10)")
                         .HasColumnName("week_id");
 
@@ -409,8 +406,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnName("trade_description");
 
                     b.Property<string>("TradeId")
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)")
+                        .HasColumnType("text")
                         .HasColumnName("trade_id");
 
                     b.Property<decimal>("Utilisation")
@@ -833,18 +829,15 @@ namespace V1.Infrastructure.Migrations
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Summary", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(17)
-                        .HasColumnType("character varying(17)")
+                        .HasColumnType("text")
                         .HasColumnName("id");
 
                     b.Property<string>("BonusPeriodId")
-                        .HasMaxLength(10)
                         .HasColumnType("character varying(10)")
                         .HasColumnName("bonus_period_id");
 
                     b.Property<string>("OperativeId")
-                        .HasMaxLength(6)
-                        .HasColumnType("character varying(6)")
+                        .HasColumnType("text")
                         .HasColumnName("operative_id");
 
                     b.HasKey("Id")
@@ -971,8 +964,7 @@ namespace V1.Infrastructure.Migrations
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.WeeklySummary", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(28)
-                        .HasColumnType("character varying(28)")
+                        .HasColumnType("text")
                         .HasColumnName("id");
 
                     b.Property<decimal>("AverageUtilisation")
@@ -996,7 +988,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnName("number");
 
                     b.Property<string>("OperativeId")
-                        .HasMaxLength(6)
                         .HasColumnType("character varying(6)")
                         .HasColumnName("operative_id");
 
@@ -1017,8 +1008,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnName("start_at");
 
                     b.Property<string>("SummaryId")
-                        .HasMaxLength(17)
-                        .HasColumnType("character varying(17)")
+                        .HasColumnType("text")
                         .HasColumnName("summary_id");
 
                     b.Property<decimal>("TotalValue")
@@ -1030,8 +1020,7 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnName("utilisation");
 
                     b.Property<string>("WeekId")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
+                        .HasColumnType("text")
                         .HasColumnName("week_id");
 
                     b.HasKey("Id")
@@ -1350,11 +1339,6 @@ namespace V1.Infrastructure.Migrations
                         .HasForeignKey("OperativeId")
                         .HasConstraintName("fk_weekly_summaries_operatives_operative_id");
 
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.BandChange", null)
-                        .WithMany("WeeklySummaries")
-                        .HasForeignKey("SummaryId")
-                        .HasConstraintName("fk_weekly_summaries_band_changes_band_change_id");
-
                     b.HasOne("BonusCalcApi.V1.Infrastructure.Summary", null)
                         .WithMany("WeeklySummaries")
                         .HasForeignKey("SummaryId")
@@ -1378,11 +1362,6 @@ namespace V1.Infrastructure.Migrations
                     b.Navigation("PayElementType");
 
                     b.Navigation("Week");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BandChange", b =>
-                {
-                    b.Navigation("WeeklySummaries");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.BonusPeriod", b =>

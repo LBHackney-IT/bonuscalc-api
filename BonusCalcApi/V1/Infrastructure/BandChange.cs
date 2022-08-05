@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -117,5 +118,7 @@ namespace BonusCalcApi.V1.Infrastructure
         public decimal BalanceValue { get; set; }
 
         public DateTime? ReportSentAt { get; set; }
+
+        public List<WeeklySummary> WeeklySummaries { get; set; }
     }
 }
