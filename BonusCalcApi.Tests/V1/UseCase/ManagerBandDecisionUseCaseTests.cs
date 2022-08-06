@@ -45,6 +45,8 @@ namespace BonusCalcApi.Tests.V1.UseCase
         public async Task SavesManagerBandDecision()
         {
             // Arrange
+            var now = DateTime.UtcNow;
+
             var request = new BandChangeRequest
             {
                 Name = "A Manager",
@@ -97,6 +99,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             manager.Decision.Should().Be(BandChangeDecision.Rejected);
             manager.Reason.Should().Be("Too many sick days");
             manager.SalaryBand.Should().Be(5);
+            manager.UpdatedAt.Should().BeOnOrAfter(now);
             response.FinalBand.Should().Be(5);
             InMemoryDb.DbSaver.VerifySaveCalled();
         }

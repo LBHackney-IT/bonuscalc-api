@@ -32,6 +32,7 @@ namespace BonusCalcApi.Tests.V1.Factories
             response.Decision.Should().Be(approver.Decision);
             response.Reason.Should().Be(approver.Reason);
             response.SalaryBand.Should().Be(approver.SalaryBand);
+            response.UpdatedAt.Should().Be(approver.UpdatedAt);
         }
 
         [Test]

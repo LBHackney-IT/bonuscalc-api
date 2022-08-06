@@ -28,6 +28,8 @@ namespace BonusCalcApi.V1.Infrastructure
         public string Reason { get; set; }
 
         public int? SalaryBand { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
     }
 
     public class BandChange
@@ -56,14 +58,16 @@ namespace BonusCalcApi.V1.Infrastructure
                 Name = projection.SupervisorName,
                 EmailAddress = projection.SupervisorEmailAddress,
                 Decision = null,
-                SalaryBand = null
+                SalaryBand = null,
+                UpdatedAt = null
             };
             Manager = new BandChangeApprover
             {
                 Name = projection.ManagerName,
                 EmailAddress = projection.ManagerEmailAddress,
                 Decision = null,
-                SalaryBand = null
+                SalaryBand = null,
+                UpdatedAt = null
             };
         }
 

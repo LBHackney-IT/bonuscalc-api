@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Boundary.Request;
 using BonusCalcApi.V1.Exceptions;
@@ -45,7 +46,8 @@ namespace BonusCalcApi.V1.UseCase
                 EmailAddress = request.EmailAddress,
                 Decision = request.Decision,
                 Reason = request.Reason,
-                SalaryBand = request.SalaryBand
+                SalaryBand = request.SalaryBand,
+                UpdatedAt = DateTime.UtcNow
             };
 
             if (IsFinalDecision(bandChange, request))

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using BonusCalcApi.Tests.V1.Helpers;
@@ -46,6 +45,8 @@ namespace BonusCalcApi.Tests.V1.UseCase
         public async Task SavesSupervisorApprovalDecision()
         {
             // Arrange
+            var now = DateTime.UtcNow;
+
             var request = new BandChangeRequest
             {
                 Name = "A Supervisor",
@@ -90,6 +91,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             supervisor.Decision.Should().Be(BandChangeDecision.Approved);
             supervisor.Reason.Should().BeNull();
             supervisor.SalaryBand.Should().Be(6);
+            supervisor.UpdatedAt.Should().BeOnOrAfter(now);
             response.FinalBand.Should().Be(6);
             InMemoryDb.DbSaver.VerifySaveCalled();
         }
@@ -98,6 +100,8 @@ namespace BonusCalcApi.Tests.V1.UseCase
         public async Task SavesSupervisorRejectionDownwardsDecision()
         {
             // Arrange
+            var now = DateTime.UtcNow;
+
             var request = new BandChangeRequest
             {
                 Name = "A Supervisor",
@@ -142,6 +146,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             supervisor.Decision.Should().Be(BandChangeDecision.Rejected);
             supervisor.Reason.Should().Be("Some reasons");
             supervisor.SalaryBand.Should().Be(5);
+            supervisor.UpdatedAt.Should().BeOnOrAfter(now);
             response.FinalBand.Should().Be(5);
             InMemoryDb.DbSaver.VerifySaveCalled();
         }
@@ -150,6 +155,8 @@ namespace BonusCalcApi.Tests.V1.UseCase
         public async Task SavesSupervisorRejectionUpwardsDecision()
         {
             // Arrange
+            var now = DateTime.UtcNow;
+
             var request = new BandChangeRequest
             {
                 Name = "A Supervisor",
@@ -194,6 +201,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             supervisor.Decision.Should().Be(BandChangeDecision.Rejected);
             supervisor.Reason.Should().Be("Some reasons");
             supervisor.SalaryBand.Should().Be(7);
+            supervisor.UpdatedAt.Should().BeOnOrAfter(now);
             response.FinalBand.Should().BeNull();
             InMemoryDb.DbSaver.VerifySaveCalled();
         }

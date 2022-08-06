@@ -157,7 +157,8 @@ namespace BonusCalcApi.V1.Factories
                 EmailAddress = approver.EmailAddress,
                 Decision = approver.Decision,
                 Reason = approver.Reason,
-                SalaryBand = approver.SalaryBand
+                SalaryBand = approver.SalaryBand,
+                UpdatedAt = approver.UpdatedAt
             };
         }
 

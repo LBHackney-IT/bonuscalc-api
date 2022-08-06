@@ -1,3 +1,4 @@
+using System;
 using BonusCalcApi.V1.Infrastructure;
 
 namespace BonusCalcApi.V1.Boundary.Response
@@ -13,5 +14,7 @@ namespace BonusCalcApi.V1.Boundary.Response
         public string Reason { get; set; }
 
         public int? SalaryBand { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
     }
 }
