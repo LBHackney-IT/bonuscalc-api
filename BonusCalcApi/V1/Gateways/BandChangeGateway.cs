@@ -33,7 +33,6 @@ namespace BonusCalcApi.V1.Gateways
                 .Include(bc => bc.BonusPeriod)
                 .Where(bc => bc.BonusPeriodId == bonusPeriodId)
                 .Where(bc => bc.Supervisor.Decision == BandChangeDecision.Rejected)
-                .Where(bc => bc.Supervisor.SalaryBand > bc.ProjectedBand)
                 .OrderBy(bc => bc.OperativeId)
                 .ToListAsync();
         }

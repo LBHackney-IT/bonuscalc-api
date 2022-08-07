@@ -50,16 +50,9 @@ namespace BonusCalcApi.V1.UseCase
                 UpdatedAt = DateTime.UtcNow
             };
 
-            if (IsFinalDecision(bandChange, request))
+            if (request.Decision == BandChangeDecision.Approved)
             {
-                if (request.Decision == BandChangeDecision.Approved)
-                {
-                    bandChange.FinalBand = bandChange.ProjectedBand;
-                }
-                else
-                {
-                    bandChange.FinalBand = request.SalaryBand;
-                }
+                bandChange.FinalBand = bandChange.ProjectedBand;
             }
             else
             {
@@ -69,13 +62,6 @@ namespace BonusCalcApi.V1.UseCase
             await _dbSaver.SaveChangesAsync();
 
             return bandChange;
-        }
-
-        private static bool IsFinalDecision(BandChange bandChange, BandChangeRequest request)
-        {
-            return request.Decision == BandChangeDecision.Approved ||
-                request.Decision == BandChangeDecision.Rejected &&
-                request.SalaryBand <= bandChange.ProjectedBand;
         }
     }
 }

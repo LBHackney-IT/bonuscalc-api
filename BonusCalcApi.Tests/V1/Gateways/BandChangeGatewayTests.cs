@@ -55,7 +55,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
         }
 
         [Test]
-        public async Task DoesNotReturnDownwardRejectionsAsAuthorisationsFromDb()
+        public async Task ReturnsDownwardRejectionsAsAuthorisationsFromDb()
         {
             // Arrange
             var bandChange = await SeedBandChange();
@@ -75,7 +75,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
             var result = await _classUnderTest.GetBandChangeAuthorisationsAsync("2021-08-02");
 
             // Assert
-            result.Should().BeEmpty();
+            result.Should().Contain(bandChange);
         }
 
         [Test]
@@ -83,7 +83,6 @@ namespace BonusCalcApi.Tests.V1.Gateways
         {
             // Arrange
             var bandChange = await SeedBandChange();
-            var bandChanges = new List<BandChange> { bandChange };
 
             bandChange.Supervisor = new BandChangeApprover
             {
@@ -100,7 +99,7 @@ namespace BonusCalcApi.Tests.V1.Gateways
             var result = await _classUnderTest.GetBandChangeAuthorisationsAsync("2021-08-02");
 
             // Assert
-            result.Should().BeEquivalentTo(bandChanges);
+            result.Should().Contain(bandChange);
         }
 
         [Test]

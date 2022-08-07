@@ -147,7 +147,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             supervisor.Reason.Should().Be("Some reasons");
             supervisor.SalaryBand.Should().Be(5);
             supervisor.UpdatedAt.Should().BeOnOrAfter(now);
-            response.FinalBand.Should().Be(5);
+            response.FinalBand.Should().BeNull();
             InMemoryDb.DbSaver.VerifySaveCalled();
         }
 
