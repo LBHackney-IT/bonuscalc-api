@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
@@ -39,6 +40,43 @@ namespace BonusCalcApi.Tests.V1.Gateways
 
             // Assert
             result.Should().BeNull();
+        }
+
+        [Test]
+        public async Task RetrievesCountOfOpenWeeksFromDb()
+        {
+            // Arrange
+            var bonusPeriod = new BonusPeriod
+            {
+                Id = "2022-05-02",
+                StartAt = new DateTime(2022, 5, 1, 23, 0, 0, DateTimeKind.Utc),
+                Year = 2022,
+                Number = 2,
+                ClosedAt = null,
+                Weeks = new List<Week>
+                {
+                    new Week {
+                        Id = "2022-05-02",
+                        StartAt = new DateTime(2022, 5, 1, 23, 0, 0, DateTimeKind.Utc),
+                        Number = 1,
+                        ClosedAt = new DateTime(2022, 5, 11, 16, 0, 0, DateTimeKind.Utc)
+                    },
+                    new Week {
+                        Id = "2022-05-09",
+                        StartAt = new DateTime(2022, 5, 8, 23, 0, 0, DateTimeKind.Utc),
+                        Number = 2
+                    }
+                }
+            };
+
+            await BonusCalcContext.AddAsync(bonusPeriod);
+            await BonusCalcContext.SaveChangesAsync();
+
+            // Act
+            var result = await _classUnderTest.CountOpenWeeksAsync("2022-05-02");
+
+            // Assert
+            result.Should().Be(1);
         }
 
         private async Task<Week> AddWeek()

@@ -106,13 +106,15 @@ namespace BonusCalcApi
                     });
                 }
 
-                c.CustomSchemaIds(x => x.FullName);
+                c.CustomSchemaIds(x => x.Name);
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 if (File.Exists(xmlPath))
                     c.IncludeXmlComments(xmlPath);
             });
+
+            services.AddSwaggerGenNewtonsoftSupport();
 
             ConfigureLogging(services, Configuration);
 
@@ -160,6 +162,7 @@ namespace BonusCalcApi
 
         private static void RegisterGateways(IServiceCollection services)
         {
+            services.AddScoped<IBandChangeGateway, BandChangeGateway>();
             services.AddScoped<IBonusPeriodGateway, BonusPeriodGateway>();
             services.AddScoped<IOperativeGateway, OperativeGateway>();
             services.AddScoped<IOperativeProjectionGateway, OperativeProjectionGateway>();
@@ -175,7 +178,15 @@ namespace BonusCalcApi
 
         private static void RegisterUseCases(IServiceCollection services)
         {
+            services.AddTransient<ICreateBonusPeriodUseCase, CreateBonusPeriodUseCase>();
+            services.AddTransient<ICloseBonusPeriodUseCase, CloseBonusPeriodUseCase>();
+            services.AddTransient<IGetBonusPeriodsUseCase, GetBonusPeriodsUseCase>();
             services.AddTransient<IGetCurrentBonusPeriodsUseCase, GetCurrentBonusPeriodsUseCase>();
+            services.AddTransient<IGetBandChangeUseCase, GetBandChangeUseCase>();
+            services.AddTransient<IGetBandChangesUseCase, GetBandChangesUseCase>();
+            services.AddTransient<IGetBandChangeAuthorisationsUseCase, GetBandChangeAuthorisationsUseCase>();
+            services.AddTransient<ISupervisorBandDecisionUseCase, SupervisorBandDecisionUseCase>();
+            services.AddTransient<IManagerBandDecisionUseCase, ManagerBandDecisionUseCase>();
             services.AddTransient<IGetBonusPeriodForChangesUseCase, GetBonusPeriodForChangesUseCase>();
             services.AddTransient<IGetOperativeUseCase, GetOperativeUseCase>();
             services.AddTransient<IGetOperativesUseCase, GetOperativesUseCase>();
@@ -188,6 +199,8 @@ namespace BonusCalcApi
             services.AddTransient<IGetSchemesUseCase, GetSchemesUseCase>();
             services.AddTransient<IGetWeekUseCase, GetWeekUseCase>();
             services.AddTransient<IGetWorkElementsUseCase, GetWorkElementsUseCase>();
+            services.AddTransient<IStartBandChangeProcessUseCase, StartBandChangeProcessUseCase>();
+            services.AddTransient<IUpdateBandChangeReportSentAtUseCase, UpdateBandChangeReportSentAtUseCase>();
             services.AddTransient<IUpdateOperativeReportSentAtUseCase, UpdateOperativeReportSentAtUseCase>();
             services.AddTransient<IUpdateWeekReportsSentAtUseCase, UpdateWeekReportsSentAtUseCase>();
             services.AddTransient<IUpdateTimesheetUseCase, UpdateTimesheetUseCase>();

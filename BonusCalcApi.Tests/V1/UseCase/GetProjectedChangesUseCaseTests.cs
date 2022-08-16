@@ -41,7 +41,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             var expectedProjections = _fixture.CreateMany<OperativeProjection>();
 
             _mockBonusPeriodGateway
-                .Setup(x => x.GetEarliestOpenBonusPeriod())
+                .Setup(x => x.GetEarliestOpenBonusPeriodAsync())
                 .ReturnsAsync(bonusPeriod);
 
             _mockOperativeProjectionGateway
@@ -60,7 +60,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
         {
             // Arrange
             _mockBonusPeriodGateway
-                .Setup(x => x.GetEarliestOpenBonusPeriod())
+                .Setup(x => x.GetEarliestOpenBonusPeriodAsync())
                 .ReturnsAsync(null as BonusPeriod);
 
             // Act

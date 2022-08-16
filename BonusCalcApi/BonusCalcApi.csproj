@@ -33,6 +33,7 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
     <PackageReference Include="Sentry.AspNetCore" Version="3.18.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.4.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.4.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.4.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.4.1" />
@@ -46,5 +47,9 @@
     <SonarQubeSetting Include="sonar.cpd.exclusions">
       <Value>**/V1/Infrastructure/Migrations/*,**/V1/Boundary/Request/*,**/V1/Boundary/Response/*</Value>
     </SonarQubeSetting>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="V1\UseCase\Helpers" />
   </ItemGroup>
 </Project>

@@ -149,6 +149,54 @@ namespace BonusCalcApi.V1.Factories
             };
         }
 
+        public static BandChangeApproverResponse ToResponse(this BandChangeApprover approver)
+        {
+            return new BandChangeApproverResponse
+            {
+                Name = approver.Name,
+                EmailAddress = approver.EmailAddress,
+                Decision = approver.Decision,
+                Reason = approver.Reason,
+                SalaryBand = approver.SalaryBand,
+                UpdatedAt = approver.UpdatedAt
+            };
+        }
+
+        public static BandChangeResponse ToResponse(this BandChange bandChange)
+        {
+            return new BandChangeResponse
+            {
+                Id = bandChange.Id,
+                OperativeId = bandChange.Operative?.Id,
+                OperativeName = bandChange.Operative?.Name,
+                EmailAddress = bandChange.Operative?.EmailAddress,
+                BonusPeriod = new BonusPeriodResponse
+                {
+                    Id = bandChange.BonusPeriod.Id,
+                    StartAt = bandChange.BonusPeriod.StartAt,
+                    Year = bandChange.BonusPeriod.Year,
+                    Number = bandChange.BonusPeriod.Number,
+                    ClosedAt = bandChange.BonusPeriod.ClosedAt,
+                    ClosedBy = bandChange.BonusPeriod.ClosedBy
+                },
+                Trade = bandChange.Trade,
+                Scheme = bandChange.Scheme,
+                BandValue = bandChange.BandValue,
+                MaxValue = bandChange.MaxValue,
+                SickDuration = bandChange.SickDuration,
+                TotalValue = bandChange.TotalValue,
+                Utilisation = bandChange.Utilisation,
+                FixedBand = bandChange.FixedBand,
+                SalaryBand = bandChange.SalaryBand,
+                ProjectedBand = bandChange.ProjectedBand,
+                Supervisor = bandChange.Supervisor.ToResponse(),
+                Manager = bandChange.Manager.ToResponse(),
+                FinalBand = bandChange.FinalBand,
+                ReportSentAt = bandChange.ReportSentAt,
+                WeeklySummaries = bandChange.WeeklySummaries?.Select(ws => ws.ToResponse()).ToList()
+            };
+        }
+
         public static BonusPeriodResponse ToResponse(this BonusPeriod bonusPeriod)
         {
             return new BonusPeriodResponse
@@ -157,6 +205,7 @@ namespace BonusCalcApi.V1.Factories
                 Number = bonusPeriod.Number,
                 Year = bonusPeriod.Year,
                 ClosedAt = bonusPeriod.ClosedAt,
+                ClosedBy = bonusPeriod.ClosedBy,
                 StartAt = bonusPeriod.StartAt,
                 Weeks = bonusPeriod.Weeks?.Select(w => w.ToResponse()).ToList()
             };

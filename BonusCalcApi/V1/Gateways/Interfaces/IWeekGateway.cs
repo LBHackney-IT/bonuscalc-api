@@ -6,5 +6,6 @@ namespace BonusCalcApi.V1.Gateways.Interfaces
     public interface IWeekGateway
     {
         public Task<Week> GetWeekAsync(string weekId);
+        public Task<int> CountOpenWeeksAsync(string bonusPeriodId);
     }
 }

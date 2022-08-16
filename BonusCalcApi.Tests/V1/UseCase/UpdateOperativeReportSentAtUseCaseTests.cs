@@ -35,7 +35,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
         }
 
         [Test]
-        public async Task ReportSentAtIsUpdateWhenNull()
+        public async Task ReportSentAtIsUpdatedWhenNull()
         {
             // Arrange
             var now = DateTime.UtcNow;

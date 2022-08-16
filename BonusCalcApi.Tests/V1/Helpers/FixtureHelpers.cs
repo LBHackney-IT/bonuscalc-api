@@ -37,6 +37,7 @@ namespace BonusCalcApi.Tests.V1.Helpers
             var fixture = new Fixture();
             fixture.Behaviors.Add(new OmitOnRecursionBehavior());
             fixture.Customizations.Add(new UtcRandomDateTimeSequenceGenerator());
+            fixture.Customize<BonusPeriod>(c => c.Without(bp => bp.BandChanges));
             return fixture;
         }
 
@@ -88,6 +89,7 @@ namespace BonusCalcApi.Tests.V1.Helpers
         {
             return Fixture.Build<BonusPeriod>()
                 .With(w => w.Id, CreateIsoDateId())
+                .With(bp => bp.BandChanges, new List<BandChange>())
                 .Without(bp => bp.Weeks);
         }
 

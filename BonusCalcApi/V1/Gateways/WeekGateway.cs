@@ -22,5 +22,13 @@ namespace BonusCalcApi.V1.Gateways
                 .Include(w => w.OperativeSummaries.OrderBy(os => os.Id))
                 .SingleOrDefaultAsync(w => w.Id == weekId);
         }
+
+        public async Task<int> CountOpenWeeksAsync(string bonusPeriodId)
+        {
+            return await _context.Weeks
+                .Where(w => w.BonusPeriodId == bonusPeriodId)
+                .Where(w => w.ClosedAt == null)
+                .CountAsync();
+        }
     }
 }

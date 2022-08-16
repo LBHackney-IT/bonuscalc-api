@@ -1,8 +1,13 @@
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum BandChangeDecision
     {
         Approved,
@@ -18,15 +23,54 @@ namespace BonusCalcApi.V1.Infrastructure
         [StringLength(100)]
         public string EmailAddress { get; set; }
 
-        public BandChangeDecision Decision { get; set; }
+        public BandChangeDecision? Decision { get; set; }
 
         public string Reason { get; set; }
 
-        public int SalaryBand { get; set; }
+        public int? SalaryBand { get; set; }
+
+        public DateTime? UpdatedAt { get; set; }
     }
 
     public class BandChange
     {
+        public BandChange()
+        {
+        }
+
+        public BandChange(OperativeProjection projection)
+        {
+            Id = projection.Id;
+            BonusPeriodId = projection.BonusPeriodId;
+            OperativeId = projection.OperativeId;
+            Trade = projection.Trade;
+            Scheme = projection.Scheme;
+            BandValue = projection.BandValue;
+            MaxValue = projection.MaxValue;
+            SickDuration = projection.SickDuration;
+            TotalValue = projection.TotalValue;
+            Utilisation = projection.Utilisation;
+            FixedBand = projection.FixedBand;
+            SalaryBand = projection.SalaryBand;
+            ProjectedBand = projection.ProjectedBand;
+            Supervisor = new BandChangeApprover
+            {
+                Name = projection.SupervisorName,
+                EmailAddress = projection.SupervisorEmailAddress,
+                Decision = null,
+                SalaryBand = null,
+                UpdatedAt = null
+            };
+            Manager = new BandChangeApprover
+            {
+                Name = projection.ManagerName,
+                EmailAddress = projection.ManagerEmailAddress,
+                Decision = null,
+                SalaryBand = null,
+                UpdatedAt = null
+            };
+        }
+
         [Key]
         [StringLength(17)]
         public string Id { get; set; }
@@ -65,8 +109,10 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public int ProjectedBand { get; set; }
 
+        [Required]
         public BandChangeApprover Supervisor { get; set; }
 
+        [Required]
         public BandChangeApprover Manager { get; set; }
 
         public int? FinalBand { get; set; }
@@ -74,5 +120,9 @@ namespace BonusCalcApi.V1.Infrastructure
         public decimal BalanceDuration { get; set; }
 
         public decimal BalanceValue { get; set; }
+
+        public DateTime? ReportSentAt { get; set; }
+
+        public List<WeeklySummary> WeeklySummaries { get; set; }
     }
 }

@@ -1,15 +1,19 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
     public class OperativeSummary
     {
+        [StringLength(6)]
         public string Id { get; set; }
 
         public string Name { get; set; }
 
+        [StringLength(10)]
         public string WeekId { get; set; }
 
+        [StringLength(3)]
         public string TradeId { get; set; }
 
         public string TradeDescription { get; set; }
