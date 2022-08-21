@@ -35,6 +35,8 @@ namespace BonusCalcApi.V1.Gateways
             int pageSize = Math.Clamp((size ?? 25), 1, 50);
 
             return await _context.Operatives
+                .Include(o => o.Manager)
+                .Include(o => o.Supervisor)
                 .Include(o => o.Trade)
                 .Include(o => o.Scheme)
                 .ThenInclude(s => s.PayBands)

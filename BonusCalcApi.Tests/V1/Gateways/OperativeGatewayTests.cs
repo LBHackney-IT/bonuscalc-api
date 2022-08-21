@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
@@ -28,6 +29,19 @@ namespace BonusCalcApi.Tests.V1.Gateways
 
             // Assert
             result.Should().BeEquivalentTo(operative);
+        }
+
+        [Test]
+        public async Task RetrievesOperativesFromDb()
+        {
+            // Arrange
+            var operatives = await AddOperatives();
+
+            // Act
+            var results = await _classUnderTest.GetOperativesAsync("123456", null, null);
+
+            // Assert
+            results.Should().BeEquivalentTo(operatives);
         }
 
         [Test]
@@ -111,6 +125,11 @@ namespace BonusCalcApi.Tests.V1.Gateways
             BonusCalcContext.ChangeTracker.Clear();
 
             return operative;
+        }
+
+        private async Task<List<Operative>> AddOperatives()
+        {
+            return new List<Operative>() { await AddOperative() };
         }
     }
 }
