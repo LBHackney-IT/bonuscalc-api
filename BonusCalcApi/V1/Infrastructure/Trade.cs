@@ -12,7 +12,5 @@ namespace BonusCalcApi.V1.Infrastructure
         [Required]
         [StringLength(100)]
         public string Description { get; set; }
-
-        public List<Operative> Operatives { get; set; }
     }
 }

@@ -54,7 +54,19 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 Type = "SMV",
                 Description = "Reactive",
                 ConversionFactor = 1.0M,
-                MaxValue = 62868.0M
+                MaxValue = 62868.0M,
+                PayBands = new List<PayBand>
+                {
+                    new PayBand { Id = 11, Band = 1, Value = 2160 },
+                    new PayBand { Id = 12, Band = 2, Value = 2772 },
+                    new PayBand { Id = 13, Band = 3, Value = 3132 },
+                    new PayBand { Id = 14, Band = 4, Value = 3366 },
+                    new PayBand { Id = 15, Band = 5, Value = 3618 },
+                    new PayBand { Id = 16, Band = 6, Value = 3888 },
+                    new PayBand { Id = 17, Band = 7, Value = 4182 },
+                    new PayBand { Id = 18, Band = 8, Value = 4494 },
+                    new PayBand { Id = 19, Band = 9, Value = 4836 }
+                }
             };
 
             var manager = new Person
@@ -91,8 +103,12 @@ namespace BonusCalcApi.Tests.V1.Gateways
             await BonusCalcContext.People.AddAsync(supervisor);
             await BonusCalcContext.Trades.AddAsync(trade);
             await BonusCalcContext.Schemes.AddAsync(scheme);
+            await BonusCalcContext.SaveChangesAsync();
+
             await BonusCalcContext.Operatives.AddAsync(operative);
             await BonusCalcContext.SaveChangesAsync();
+
+            BonusCalcContext.ChangeTracker.Clear();
 
             return operative;
         }

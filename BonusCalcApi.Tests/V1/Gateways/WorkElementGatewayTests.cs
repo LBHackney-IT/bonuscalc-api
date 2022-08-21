@@ -85,48 +85,68 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 CostCode = null
             };
 
+            var scheme = new Scheme
+            {
+                Id = 1,
+                Type = "SMV",
+                Description = "Reactive",
+                ConversionFactor = 1.0M,
+                MaxValue = 62868.0M,
+                PayBands = new List<PayBand>
+                {
+                    new PayBand { Id = 11, Band = 1, Value = 2160 },
+                    new PayBand { Id = 12, Band = 2, Value = 2772 },
+                    new PayBand { Id = 13, Band = 3, Value = 3132 },
+                    new PayBand { Id = 14, Band = 4, Value = 3366 },
+                    new PayBand { Id = 15, Band = 5, Value = 3618 },
+                    new PayBand { Id = 16, Band = 6, Value = 3888 },
+                    new PayBand { Id = 17, Band = 7, Value = 4182 },
+                    new PayBand { Id = 18, Band = 8, Value = 4494 },
+                    new PayBand { Id = 19, Band = 9, Value = 4836 }
+                }
+            };
+
+            var trade = new Trade
+            {
+                Id = "EL",
+                Description = "Electrician"
+            };
+
+            var operative = new Operative
+            {
+                Id = "123456",
+                Name = "An Operative",
+                EmailAddress = "an.operative@hackney.gov.uk",
+                TradeId = "EL",
+                SchemeId = 1,
+                Section = "H3007",
+                SalaryBand = 5,
+                Utilisation = 1.0M,
+                FixedBand = false,
+                IsArchived = false
+            };
+
+            var week = new Week
+            {
+                Id = "2021-10-18",
+                BonusPeriod = new BonusPeriod
+                {
+                    Id = "2021-08-02",
+                    StartAt = new DateTime(2021, 8, 1, 23, 0, 0, DateTimeKind.Utc),
+                    Year = 2020,
+                    Number = 3,
+                    ClosedAt = null
+                },
+                StartAt = new DateTime(2021, 10, 17, 23, 0, 0, DateTimeKind.Utc),
+                Number = 12,
+                ClosedAt = null
+            };
+
             var timesheet = new Timesheet
             {
                 Id = "123456/2021-10-18",
-                Week = new Week
-                {
-                    Id = "2021-10-18",
-                    BonusPeriod = new BonusPeriod
-                    {
-                        Id = "2021-08-02",
-                        StartAt = new DateTime(2021, 8, 1, 23, 0, 0, DateTimeKind.Utc),
-                        Year = 2020,
-                        Number = 3,
-                        ClosedAt = null
-                    },
-                    StartAt = new DateTime(2021, 10, 17, 23, 0, 0, DateTimeKind.Utc),
-                    Number = 12,
-                    ClosedAt = null
-                },
-                Operative = new Operative
-                {
-                    Id = "123456",
-                    Name = "An Operative",
-                    EmailAddress = "an.operative@hackney.gov.uk",
-                    Trade = new Trade
-                    {
-                        Id = "EL",
-                        Description = "Electrician"
-                    },
-                    Scheme = new Scheme
-                    {
-                        Id = 1,
-                        Type = "SMV",
-                        Description = "Reactive",
-                        ConversionFactor = 1.0M,
-                        MaxValue = 62868.0M
-                    },
-                    Section = "H3007",
-                    SalaryBand = 5,
-                    Utilisation = 1.0M,
-                    FixedBand = false,
-                    IsArchived = false
-                }
+                WeekId = "2021-10-18",
+                OperativeId = "123456"
             };
 
             var payElements = new List<PayElement>()
@@ -155,10 +175,23 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 }
             };
 
+
             await BonusCalcContext.PayElementTypes.AddAsync(payElementType);
+            await BonusCalcContext.Weeks.AddAsync(week);
+            await BonusCalcContext.Trades.AddAsync(trade);
+            await BonusCalcContext.Schemes.AddAsync(scheme);
+            await BonusCalcContext.SaveChangesAsync();
+
+            await BonusCalcContext.Operatives.AddAsync(operative);
+            await BonusCalcContext.SaveChangesAsync();
+
             await BonusCalcContext.Timesheets.AddAsync(timesheet);
+            await BonusCalcContext.SaveChangesAsync();
+
             await BonusCalcContext.PayElements.AddRangeAsync(payElements);
             await BonusCalcContext.SaveChangesAsync();
+
+            BonusCalcContext.ChangeTracker.Clear();
         }
     }
 }
