@@ -42,5 +42,8 @@ namespace BonusCalcApi.V1.Infrastructure
         public string ManagerName { get; set; }
 
         public string ManagerEmailAddress { get; set; }
+
+        [StringLength(3)]
+        public string RateCode { get; set; }
     }
 }

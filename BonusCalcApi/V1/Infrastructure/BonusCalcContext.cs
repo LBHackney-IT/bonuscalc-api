@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
@@ -14,6 +15,7 @@ namespace BonusCalcApi.V1.Infrastructure
 
         public DbSet<BandChange> BandChanges { get; set; }
         public DbSet<BonusPeriod> BonusPeriods { get; set; }
+        public DbSet<BonusRate> BonusRates { get; set; }
         public DbSet<Operative> Operatives { get; set; }
         public DbSet<OperativeProjection> OperativeProjections { get; set; }
         public DbSet<OperativeSummary> OperativeSummaries { get; set; }
@@ -78,6 +80,10 @@ namespace BonusCalcApi.V1.Infrastructure
                 .HasComputedColumnSql(@"GREATEST(LEAST(max_value * utilisation, total_value * (NOT fixed_band)::int) -  band_value * utilisation, 0)", stored: true);
 
             modelBuilder.Entity<BandChange>()
+                .Property(bc => bc.BonusRate)
+                .HasPrecision(8, 2);
+
+            modelBuilder.Entity<BandChange>()
                 .HasMany(bc => bc.WeeklySummaries)
                 .WithOne()
                 .HasForeignKey("SummaryId");
@@ -89,6 +95,11 @@ namespace BonusCalcApi.V1.Infrastructure
             modelBuilder.Entity<BonusPeriod>()
                 .HasIndex(bp => new { bp.Year, bp.Number })
                 .IsUnique();
+
+            modelBuilder.Entity<BonusRate>()
+                .Property(br => br.Rates)
+                .HasPrecision(8, 2)
+                .HasDefaultValueSql("ARRAY[]::numeric(8,2)[]");
 
             modelBuilder.Entity<Operative>()
                 .HasIndex(o => o.TradeId);
@@ -325,6 +336,11 @@ namespace BonusCalcApi.V1.Infrastructure
             modelBuilder.Entity<Trade>()
                 .HasIndex(t => t.Description)
                 .IsUnique();
+
+            modelBuilder.Entity<Trade>()
+                .HasOne(t => t.BonusRate)
+                .WithMany()
+                .HasForeignKey(t => t.RateCode);
 
             modelBuilder.Entity<Week>()
                 .HasIndex(w => new { w.BonusPeriodId, w.Number })

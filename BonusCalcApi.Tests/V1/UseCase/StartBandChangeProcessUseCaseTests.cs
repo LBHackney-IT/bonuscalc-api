@@ -88,6 +88,7 @@ namespace BonusCalcApi.Tests.V1.UseCase
             bandChange.Supervisor.EmailAddress.Should().Be(operativeProjection.SupervisorEmailAddress);
             bandChange.Manager.Name.Should().Be(operativeProjection.ManagerName);
             bandChange.Manager.EmailAddress.Should().Be(operativeProjection.ManagerEmailAddress);
+            bandChange.RateCode.Should().Be(operativeProjection.RateCode);
             InMemoryDb.DbSaver.VerifySaveCalled();
         }
 

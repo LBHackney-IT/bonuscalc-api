@@ -3,18 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BonusCalcApi.V1.Infrastructure
 {
-    public class Trade
+    public class BonusRate
     {
         [Key]
         [StringLength(3)]
         public string Id { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public string Description { get; set; }
-
-        [StringLength(3)]
-        public string RateCode { get; set; }
-        public BonusRate BonusRate { get; set; }
+        public List<decimal> Rates { get; set; }
     }
 }

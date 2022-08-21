@@ -26,7 +26,8 @@ namespace BonusCalcApi.V1.Factories
                 SupervisorName = projection.SupervisorName,
                 SupervisorEmailAddress = projection.SupervisorEmailAddress,
                 ManagerName = projection.ManagerName,
-                ManagerEmailAddress = projection.ManagerEmailAddress
+                ManagerEmailAddress = projection.ManagerEmailAddress,
+                RateCode = projection.RateCode
             };
         }
 
@@ -191,6 +192,8 @@ namespace BonusCalcApi.V1.Factories
                 Supervisor = bandChange.Supervisor.ToResponse(),
                 Manager = bandChange.Manager.ToResponse(),
                 FinalBand = bandChange.FinalBand,
+                RateCode = bandChange.RateCode,
+                BonusRate = bandChange.BonusRate,
                 ReportSentAt = bandChange.ReportSentAt,
                 WeeklySummaries = bandChange.WeeklySummaries?.Select(ws => ws.ToResponse()).ToList()
             };

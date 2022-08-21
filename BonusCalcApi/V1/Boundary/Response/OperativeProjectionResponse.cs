@@ -38,5 +38,7 @@ namespace BonusCalcApi.V1.Boundary.Response
         public string ManagerName { get; set; }
 
         public string ManagerEmailAddress { get; set; }
+
+        public string RateCode { get; set; }
     }
 }

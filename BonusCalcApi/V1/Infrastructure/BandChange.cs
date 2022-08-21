@@ -69,6 +69,7 @@ namespace BonusCalcApi.V1.Infrastructure
                 SalaryBand = null,
                 UpdatedAt = null
             };
+            RateCode = projection.RateCode;
         }
 
         [Key]
@@ -122,6 +123,11 @@ namespace BonusCalcApi.V1.Infrastructure
         public decimal BalanceValue { get; set; }
 
         public DateTime? ReportSentAt { get; set; }
+
+        [StringLength(3)]
+        public string RateCode { get; set; }
+
+        public decimal BonusRate { get; set; }
 
         public List<WeeklySummary> WeeklySummaries { get; set; }
     }

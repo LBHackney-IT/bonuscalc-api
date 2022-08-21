@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,10 @@ using NpgsqlTypes;
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20220821180142_AddRateCodeToOperativeProjections")]
+    partial class AddRateCodeToOperativeProjections
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -337,11 +339,6 @@ namespace V1.Infrastructure.Migrations
                     b.Property<int>("ProjectedBand")
                         .HasColumnType("integer")
                         .HasColumnName("projected_band");
-
-                    b.Property<string>("RateCode")
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)")
-                        .HasColumnName("rate_code");
 
                     b.Property<int>("SalaryBand")
                         .HasColumnType("integer")
