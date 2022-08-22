@@ -41,6 +41,10 @@ namespace BonusCalcApi.V1.Boundary.Response
 
         public int? FinalBand { get; set; }
 
+        public string RateCode { get; set; }
+
+        public decimal BonusRate { get; set; }
+
         public DateTime? ReportSentAt { get; set; }
 
         public List<WeeklySummaryResponse> WeeklySummaries { get; set; }

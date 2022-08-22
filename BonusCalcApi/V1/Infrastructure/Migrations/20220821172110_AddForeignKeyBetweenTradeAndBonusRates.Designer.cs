@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -13,9 +14,10 @@ using NpgsqlTypes;
 namespace V1.Infrastructure.Migrations
 {
     [DbContext(typeof(BonusCalcContext))]
-    partial class BonusCalcContextModelSnapshot : ModelSnapshot
+    [Migration("20220821172110_AddForeignKeyBetweenTradeAndBonusRates")]
+    partial class AddForeignKeyBetweenTradeAndBonusRates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,11 +59,6 @@ namespace V1.Infrastructure.Migrations
                         .HasColumnType("character varying(10)")
                         .HasColumnName("bonus_period_id");
 
-                    b.Property<decimal>("BonusRate")
-                        .HasPrecision(8, 2)
-                        .HasColumnType("numeric(8,2)")
-                        .HasColumnName("bonus_rate");
-
                     b.Property<int?>("FinalBand")
                         .HasColumnType("integer")
                         .HasColumnName("final_band");
@@ -84,11 +81,6 @@ namespace V1.Infrastructure.Migrations
                     b.Property<int>("ProjectedBand")
                         .HasColumnType("integer")
                         .HasColumnName("projected_band");
-
-                    b.Property<string>("RateCode")
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)")
-                        .HasColumnName("rate_code");
 
                     b.Property<DateTime?>("ReportSentAt")
                         .HasColumnType("timestamp with time zone")
@@ -337,11 +329,6 @@ namespace V1.Infrastructure.Migrations
                     b.Property<int>("ProjectedBand")
                         .HasColumnType("integer")
                         .HasColumnName("projected_band");
-
-                    b.Property<string>("RateCode")
-                        .HasMaxLength(3)
-                        .HasColumnType("character varying(3)")
-                        .HasColumnName("rate_code");
 
                     b.Property<int>("SalaryBand")
                         .HasColumnType("integer")
