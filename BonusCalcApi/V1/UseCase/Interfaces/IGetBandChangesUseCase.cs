@@ -6,6 +6,6 @@ namespace BonusCalcApi.V1.UseCase.Interfaces
 {
     public interface IGetBandChangesUseCase
     {
-        public Task<IEnumerable<BandChange>> ExecuteAsync();
+        public Task<IEnumerable<BandChange>> ExecuteAsync(string bonusPeriodId);
     }
 }

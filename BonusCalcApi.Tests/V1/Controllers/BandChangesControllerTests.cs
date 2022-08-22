@@ -243,11 +243,31 @@ namespace BonusCalcApi.Tests.V1.Controllers
             var expectedBandChanges = _fixture.CreateMany<BandChange>();
 
             _getBandChangesUseCaseMock
-                .Setup(x => x.ExecuteAsync())
+                .Setup(x => x.ExecuteAsync(null))
                 .ReturnsAsync(expectedBandChanges);
 
             // Act
-            var objectResult = await _classUnderTest.GetBandChanges();
+            var objectResult = await _classUnderTest.GetBandChanges(null);
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<List<BandChangeResponse>>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.OK);
+            result.Should().BeEquivalentTo(expectedBandChanges.Select(bc => bc.ToResponse()).ToList());
+        }
+
+        [Test]
+        public async Task GetBandChangesForPeriod()
+        {
+            // Arrange
+            var expectedBandChanges = _fixture.CreateMany<BandChange>();
+
+            _getBandChangesUseCaseMock
+                .Setup(x => x.ExecuteAsync("2021-08-02"))
+                .ReturnsAsync(expectedBandChanges);
+
+            // Act
+            var objectResult = await _classUnderTest.GetBandChanges("2021-08-02");
             var statusCode = GetStatusCode(objectResult);
             var result = GetResultData<List<BandChangeResponse>>(objectResult);
 
@@ -261,17 +281,53 @@ namespace BonusCalcApi.Tests.V1.Controllers
         {
             // Arrange
             _getBandChangesUseCaseMock
-                .Setup(x => x.ExecuteAsync())
+                .Setup(x => x.ExecuteAsync(null))
                 .ThrowsAsync(new ResourceNotFoundException("Open bonus period not found"));
 
             // Act
-            var objectResult = await _classUnderTest.GetBandChanges();
+            var objectResult = await _classUnderTest.GetBandChanges(null);
             var statusCode = GetStatusCode(objectResult);
             var result = GetResultData<ProblemDetails>(objectResult);
 
             // Assert
             statusCode.Should().Be((int) HttpStatusCode.NotFound);
             result.Status.Should().Be((int) HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task GetBandChangesReturnsNotFoundIfBonusPeriodNotFound()
+        {
+            // Arrange
+            _getBandChangesUseCaseMock
+                .Setup(x => x.ExecuteAsync("2021-08-02"))
+                .ThrowsAsync(new ResourceNotFoundException("Bonus period not found for 2021-08-02"));
+
+            // Act
+            var objectResult = await _classUnderTest.GetBandChanges("2021-08-02");
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.NotFound);
+            result.Status.Should().Be((int) HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task GetBandChangesReturnsBadRequestIfBonusPeriodIdInvalid()
+        {
+            // Arrange
+            _getBandChangesUseCaseMock
+                .Setup(x => x.ExecuteAsync("20210802"))
+                .ThrowsAsync(new BadRequestException("Bonus period is invalid - it should be YYYY-MM-DD"));
+
+            // Act
+            var objectResult = await _classUnderTest.GetBandChanges("20210802");
+            var statusCode = GetStatusCode(objectResult);
+            var result = GetResultData<ProblemDetails>(objectResult);
+
+            // Assert
+            statusCode.Should().Be((int) HttpStatusCode.BadRequest);
+            result.Status.Should().Be((int) HttpStatusCode.BadRequest);
         }
 
         [Test]
