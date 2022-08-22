@@ -53,7 +53,6 @@ namespace BonusCalcApi.V1.Factories
         {
             return new PersonResponse
             {
-                Id = person.Id,
                 Name = person.Name,
                 EmailAddress = person.EmailAddress
             };

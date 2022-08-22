@@ -95,7 +95,7 @@ namespace BonusCalcApi.V1.Infrastructure
 
             modelBuilder.Entity<Operative>()
                 .HasOne(o => o.Trade)
-                .WithMany(t => t.Operatives)
+                .WithMany()
                 .HasForeignKey(o => o.TradeId);
 
             modelBuilder.Entity<Operative>()
@@ -103,7 +103,7 @@ namespace BonusCalcApi.V1.Infrastructure
 
             modelBuilder.Entity<Operative>()
                 .HasOne(o => o.Scheme)
-                .WithMany(s => s.Operatives)
+                .WithMany()
                 .HasForeignKey(o => o.SchemeId);
 
             modelBuilder.Entity<Operative>()
@@ -144,11 +144,6 @@ namespace BonusCalcApi.V1.Infrastructure
 
             modelBuilder.Entity<PayBand>()
                 .HasIndex(pb => pb.SchemeId);
-
-            modelBuilder.Entity<PayBand>()
-                .HasOne(pb => pb.Scheme)
-                .WithMany(s => s.PayBands)
-                .HasForeignKey(pb => pb.SchemeId);
 
             modelBuilder.Entity<PayBand>()
                 .Property(pb => pb.TotalValue)
@@ -290,6 +285,11 @@ namespace BonusCalcApi.V1.Infrastructure
                 .Property(s => s.MaxValue)
                 .HasPrecision(10, 4)
                 .HasDefaultValue(0.0);
+
+            modelBuilder.Entity<Scheme>()
+                .HasMany(s => s.PayBands)
+                .WithOne()
+                .HasForeignKey(pb => pb.SchemeId);
 
             modelBuilder.Entity<Summary>()
                 .HasMany(s => s.WeeklySummaries)

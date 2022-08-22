@@ -32,6 +32,8 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             var operatives = await SeedOperatives();
             var operativeId = operatives.First().Id;
 
+            Context.ChangeTracker.Clear();
+
             // Act
             var (code, response) = await Get<List<OperativeResponse>>($"/api/v1/operatives?query={operativeId}");
 
@@ -237,9 +239,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
 
         private async Task<IEnumerable<Operative>> SeedOperatives()
         {
-            return new List<Operative>(){
-                await SeedOperative()
-            };
+            return new List<Operative>() { await SeedOperative() };
         }
 
         private async Task<IEnumerable<PayElementType>> SeedPayElementTypes()

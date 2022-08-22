@@ -1225,7 +1225,7 @@ namespace V1.Infrastructure.Migrations
                         .HasConstraintName("fk_operatives_people_manager_id");
 
                     b.HasOne("BonusCalcApi.V1.Infrastructure.Scheme", "Scheme")
-                        .WithMany("Operatives")
+                        .WithMany()
                         .HasForeignKey("SchemeId")
                         .HasConstraintName("fk_operatives_schemes_scheme_id");
 
@@ -1235,7 +1235,7 @@ namespace V1.Infrastructure.Migrations
                         .HasConstraintName("fk_operatives_people_supervisor_id");
 
                     b.HasOne("BonusCalcApi.V1.Infrastructure.Trade", "Trade")
-                        .WithMany("Operatives")
+                        .WithMany()
                         .HasForeignKey("TradeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -1279,12 +1279,10 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayBand", b =>
                 {
-                    b.HasOne("BonusCalcApi.V1.Infrastructure.Scheme", "Scheme")
+                    b.HasOne("BonusCalcApi.V1.Infrastructure.Scheme", null)
                         .WithMany("PayBands")
                         .HasForeignKey("SchemeId")
                         .HasConstraintName("fk_pay_bands_schemes_scheme_id");
-
-                    b.Navigation("Scheme");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.PayElement", b =>
@@ -1414,8 +1412,6 @@ namespace V1.Infrastructure.Migrations
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Scheme", b =>
                 {
-                    b.Navigation("Operatives");
-
                     b.Navigation("PayBands");
                 });
 
@@ -1427,11 +1423,6 @@ namespace V1.Infrastructure.Migrations
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Timesheet", b =>
                 {
                     b.Navigation("PayElements");
-                });
-
-            modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Trade", b =>
-                {
-                    b.Navigation("Operatives");
                 });
 
             modelBuilder.Entity("BonusCalcApi.V1.Infrastructure.Week", b =>
