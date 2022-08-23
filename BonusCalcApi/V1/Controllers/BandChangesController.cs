@@ -150,19 +150,28 @@ namespace BonusCalcApi.V1.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<BandChangeResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetBandChanges()
+        public async Task<IActionResult> GetBandChanges([FromQuery] string date)
         {
             try
             {
-                var bandChanges = await _getBandChangesUseCase.ExecuteAsync();
+                var bandChanges = await _getBandChangesUseCase.ExecuteAsync(date);
                 return Ok(bandChanges.Select(bc => bc.ToResponse()).ToList());
             }
-            catch (ResourceNotFoundException)
+            catch (BadRequestException e)
             {
                 return Problem(
-                    "There is no open bonus period",
+                    e.Message,
+                    $"/api/v1/band-changes",
+                    StatusCodes.Status400BadRequest, "Bad Request"
+                );
+            }
+            catch (ResourceNotFoundException e)
+            {
+                return Problem(
+                    e.Message,
                     $"/api/v1/band-changes",
                     StatusCodes.Status404NotFound, "Not Found"
                 );
