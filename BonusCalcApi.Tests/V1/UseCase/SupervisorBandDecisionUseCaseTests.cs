@@ -97,6 +97,63 @@ namespace BonusCalcApi.Tests.V1.UseCase
         }
 
         [Test]
+        public async Task SavesFixedBandSupervisorApprovalDecision()
+        {
+            // Arrange
+            var now = DateTime.UtcNow;
+
+            var request = new BandChangeRequest
+            {
+                Name = "A Supervisor",
+                EmailAddress = "a.supervisor@hackney.gov.uk",
+                Decision = BandChangeDecision.Approved,
+                Reason = null,
+                SalaryBand = 6
+            };
+
+            var closedWeek = _fixture.Build<Week>()
+                .With(w => w.ClosedAt, DateTime.UtcNow)
+                .With(w => w.ClosedBy, "a.week.manager@hackney.gov.uk")
+                .Create();
+
+            var bonusPeriod = _fixture.Build<BonusPeriod>()
+                .Without(bp => bp.ClosedAt)
+                .With(bp => bp.Weeks, new List<Week>() { closedWeek })
+                .Create();
+
+            var bandChange = _fixture.Build<BandChange>()
+                .Without(bc => bc.FinalBand)
+                .With(bc => bc.FixedBand, true)
+                .With(bc => bc.SalaryBand, 6)
+                .With(bc => bc.ProjectedBand, 2)
+                .With(bc => bc.Supervisor, new BandChangeApprover())
+                .With(bc => bc.Manager, new BandChangeApprover())
+                .Create();
+
+            _bonusPeriodGatewayMock
+                .Setup(x => x.GetEarliestOpenBonusPeriodAsync())
+                .ReturnsAsync(bonusPeriod);
+
+            _bandChangeGatewayMock
+                .Setup(x => x.GetBandChangeAsync(bonusPeriod.Id, "123456"))
+                .ReturnsAsync(bandChange);
+
+            // Act
+            var response = await _classUnderTest.ExecuteAsync("123456", request);
+            var supervisor = response.Supervisor;
+
+            // Assert
+            supervisor.Name.Should().Be("A Supervisor");
+            supervisor.EmailAddress.Should().Be("a.supervisor@hackney.gov.uk");
+            supervisor.Decision.Should().Be(BandChangeDecision.Approved);
+            supervisor.Reason.Should().BeNull();
+            supervisor.SalaryBand.Should().Be(6);
+            supervisor.UpdatedAt.Should().BeOnOrAfter(now);
+            response.FinalBand.Should().Be(6);
+            InMemoryDb.DbSaver.VerifySaveCalled();
+        }
+
+        [Test]
         public async Task SavesSupervisorRejectionDownwardsDecision()
         {
             // Arrange
