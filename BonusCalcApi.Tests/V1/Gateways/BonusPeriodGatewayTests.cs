@@ -257,14 +257,68 @@ namespace BonusCalcApi.Tests.V1.Gateways
                 ClosedAt = new DateTime(2022, 02, 11, 17, 0, 0, DateTimeKind.Utc)
             };
 
+            var week = new Week()
+            {
+                Id = "2021-11-01",
+                BonusPeriodId = "2021-11-01",
+                StartAt = new DateTime(2021, 11, 1, 0, 0, 0, DateTimeKind.Utc),
+                Number = 1,
+                ClosedAt = new DateTime(2022, 02, 11, 17, 0, 0, DateTimeKind.Utc)
+            };
+
             await BonusCalcContext.BonusPeriods.AddAsync(bonusPeriod);
+            await BonusCalcContext.Weeks.AddAsync(week);
             await BonusCalcContext.SaveChangesAsync();
+
+            BonusCalcContext.ChangeTracker.Clear();
 
             // Act
             var result = await _classUnderTest.GetBonusPeriodAsync("2021-11-01");
 
             // Assert
-            result.Should().BeEquivalentTo(bonusPeriod);
+            result.Should().BeEquivalentTo(bonusPeriod,
+                options => options.Excluding(bp => bp.Weeks));
+
+            result.Weeks.Should().BeNull();
+        }
+
+        [Test]
+        public async Task RetrievesBonusPeriodIncludingWeeksFromDb()
+        {
+            // Arrange
+            var bonusPeriod = new BonusPeriod()
+            {
+                Id = "2021-11-01",
+                StartAt = new DateTime(2021, 11, 1, 0, 0, 0, DateTimeKind.Utc),
+                Year = 2021,
+                Number = 4,
+                ClosedAt = new DateTime(2022, 02, 11, 17, 0, 0, DateTimeKind.Utc)
+            };
+
+            var week = new Week()
+            {
+                Id = "2021-11-01",
+                BonusPeriodId = "2021-11-01",
+                StartAt = new DateTime(2021, 11, 1, 0, 0, 0, DateTimeKind.Utc),
+                Number = 1,
+                ClosedAt = new DateTime(2022, 02, 11, 17, 0, 0, DateTimeKind.Utc)
+            };
+
+            await BonusCalcContext.BonusPeriods.AddAsync(bonusPeriod);
+            await BonusCalcContext.Weeks.AddAsync(week);
+            await BonusCalcContext.SaveChangesAsync();
+
+            BonusCalcContext.ChangeTracker.Clear();
+
+            // Act
+            var result = await _classUnderTest.GetBonusPeriodIncludingWeeksAsync("2021-11-01");
+
+            // Assert
+            result.Should().BeEquivalentTo(bonusPeriod,
+                options => options.Excluding(bp => bp.Weeks));
+
+            result.Weeks.Should().ContainEquivalentOf(week,
+                options => options.Excluding(w => w.BonusPeriod));
         }
 
         [Test]
