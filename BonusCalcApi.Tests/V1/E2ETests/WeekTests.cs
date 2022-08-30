@@ -18,7 +18,7 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             return w2.Id == w1.Id
                 && w2.StartAt == w1.StartAt
                 && w2.ClosedAt == w1.ClosedAt
-                && w2.BonusPeriod.Id == w1.BonusPeriod.Id;
+                && w2.BonusPeriod?.Id == w1.BonusPeriod?.Id;
         }
 
         public int GetHashCode(WeekResponse w)

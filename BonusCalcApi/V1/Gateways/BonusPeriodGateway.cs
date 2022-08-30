@@ -44,6 +44,13 @@ namespace BonusCalcApi.V1.Gateways
                 .SingleOrDefaultAsync(bp => bp.Id == id);
         }
 
+        public async Task<BonusPeriod> GetBonusPeriodIncludingWeeksAsync(string id)
+        {
+            return await _context.BonusPeriods
+                .Include(bp => bp.Weeks)
+                .SingleOrDefaultAsync(bp => bp.Id == id);
+        }
+
         public async Task<BonusPeriod> GetLastBonusPeriodAsync()
         {
             return await _context.BonusPeriods

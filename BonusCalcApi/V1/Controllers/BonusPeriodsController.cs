@@ -20,18 +20,21 @@ namespace BonusCalcApi.V1.Controllers
     {
         private readonly ICreateBonusPeriodUseCase _createBonusPeriodUseCase;
         private readonly IGetBonusPeriodsUseCase _getBonusPeriodsUseCase;
+        private readonly IGetBonusPeriodUseCase _getBonusPeriodUseCase;
         private readonly IGetCurrentBonusPeriodsUseCase _getCurrentBonusPeriodsUseCase;
         private readonly ICloseBonusPeriodUseCase _closeBonusPeriodUseCase;
 
         public BonusPeriodsController(
             ICreateBonusPeriodUseCase createBonusPeriodUseCase,
             IGetBonusPeriodsUseCase getBonusPeriodsUseCase,
+            IGetBonusPeriodUseCase getBonusPeriodUseCase,
             IGetCurrentBonusPeriodsUseCase getCurrentBonusPeriodsUseCase,
             ICloseBonusPeriodUseCase closeBonusPeriodUseCase
         )
         {
             _createBonusPeriodUseCase = createBonusPeriodUseCase;
             _getBonusPeriodsUseCase = getBonusPeriodsUseCase;
+            _getBonusPeriodUseCase = getBonusPeriodUseCase;
             _getCurrentBonusPeriodsUseCase = getCurrentBonusPeriodsUseCase;
             _closeBonusPeriodUseCase = closeBonusPeriodUseCase;
         }
@@ -75,6 +78,28 @@ namespace BonusCalcApi.V1.Controllers
         {
             var bonusPeriods = await _getCurrentBonusPeriodsUseCase.ExecuteAsync(EnsureValidDate(date));
             return Ok(bonusPeriods.Select(bp => bp.ToResponse()).ToList());
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<BonusPeriodResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [Route("{id}")]
+        public async Task<IActionResult> GetBonusPeriod([FromRoute] string id)
+        {
+
+            var bonusPeriod = await _getBonusPeriodUseCase.ExecuteAsync(id);
+
+            if (bonusPeriod is null)
+            {
+                return Problem(
+                    "The requested bonus period was not found",
+                    $"/api/v1/periods/{id}",
+                    StatusCodes.Status404NotFound, "Not Found"
+                );
+            }
+
+            return Ok(bonusPeriod.ToResponse());
         }
 
         [HttpPost]

@@ -54,21 +54,6 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             // Arrange
             await SeedBonusPeriods();
 
-            var closedBonusPeriod = new BonusPeriodResponse()
-            {
-                Id = "2021-08-02"
-            };
-
-            var currentBonusPeriod = new BonusPeriodResponse()
-            {
-                Id = "2021-11-01"
-            };
-
-            var futureBonusPeriod = new BonusPeriodResponse()
-            {
-                Id = "2022-01-31"
-            };
-
             // Act
             var (code, response) = await Get<List<BonusPeriodResponse>>($"/api/v1/periods");
 
@@ -77,6 +62,38 @@ namespace BonusCalcApi.Tests.V1.E2ETests
             Assert.That(response[0].Id, Is.EqualTo("2021-08-02"));
             Assert.That(response[1].Id, Is.EqualTo("2021-11-01"));
             Assert.That(response[2].Id, Is.EqualTo("2022-01-31"));
+        }
+
+        [Test]
+        public async Task CanGetBonusPeriod()
+        {
+            // Arrange
+            await SeedBonusPeriods();
+
+            var week = new WeekResponse()
+            {
+                Id = "2021-11-01",
+                BonusPeriod = new BonusPeriodResponse()
+                {
+                    Id = "2021-11-01",
+                    StartAt = new DateTime(2021, 11, 1, 0, 0, 0, DateTimeKind.Utc),
+                    Year = 2021,
+                    Number = 4
+                },
+                StartAt = new DateTime(2021, 11, 1, 0, 0, 0, DateTimeKind.Utc),
+                Number = 1,
+                ClosedAt = new DateTime(2021, 11, 13, 17, 0, 0, DateTimeKind.Utc)
+            };
+
+            var comparer = new WeekResponseComparer();
+
+            // Act
+            var (code, response) = await Get<BonusPeriodResponse>($"/api/v1/periods/2021-11-01");
+
+            // Assert
+            Assert.That(code, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.Id, Is.EqualTo("2021-11-01"));
+            Assert.That(response.Weeks, Contains.Item(week).Using(comparer));
         }
 
         [Test]
@@ -167,8 +184,39 @@ namespace BonusCalcApi.Tests.V1.E2ETests
                 }
             };
 
+            var weeks = new List<Week>()
+            {
+                new Week()
+                {
+                    Id = "2021-08-02",
+                    BonusPeriodId = "2021-08-02",
+                    StartAt = new DateTime(2021, 8, 1, 23, 0, 0, DateTimeKind.Utc),
+                    Number = 1,
+                    ClosedAt = new DateTime(2021, 8, 13, 17, 0, 0, DateTimeKind.Utc)
+                },
+                new Week()
+                {
+                    Id = "2021-11-01",
+                    BonusPeriodId = "2021-11-01",
+                    StartAt = new DateTime(2021, 11, 1, 0, 0, 0, DateTimeKind.Utc),
+                    Number = 1,
+                    ClosedAt = new DateTime(2021, 11, 13, 17, 0, 0, DateTimeKind.Utc)
+                },
+                new Week()
+                {
+                    Id = "2022-01-31",
+                    BonusPeriodId = "2022-01-31",
+                    StartAt = new DateTime(2022, 1, 31, 0, 0, 0, DateTimeKind.Utc),
+                    Number = 1,
+                    ClosedAt = null
+                }
+            };
+
             await Context.BonusPeriods.AddRangeAsync(bonusPeriods);
+            await Context.Weeks.AddRangeAsync(weeks);
             await Context.SaveChangesAsync();
+
+            Context.ChangeTracker.Clear();
         }
     }
 }

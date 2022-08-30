@@ -10,10 +10,10 @@ using NUnit.Framework;
 
 namespace BonusCalcApi.Tests.V1.UseCase
 {
-    public class GetBonusPeriodsUseCaseTests
+    public class GetBonusPeriodUseCaseTests
     {
         private Mock<IBonusPeriodGateway> _mockBonusPeriodGateway;
-        private GetBonusPeriodsUseCase _classUnderTest;
+        private GetBonusPeriodUseCase _classUnderTest;
         private Fixture _fixture;
 
         [SetUp]
@@ -21,23 +21,24 @@ namespace BonusCalcApi.Tests.V1.UseCase
         {
             _fixture = FixtureHelpers.Fixture;
             _mockBonusPeriodGateway = new Mock<IBonusPeriodGateway>();
-            _classUnderTest = new GetBonusPeriodsUseCase(_mockBonusPeriodGateway.Object);
+            _classUnderTest = new GetBonusPeriodUseCase(_mockBonusPeriodGateway.Object);
         }
 
         [Test]
-        public async Task GetBonusPeriods()
+        public async Task GetBonusPeriod()
         {
             // Arrange
-            var expectedBonusPeriods = _fixture.CreateMany<BonusPeriod>();
+            var expectedBonusPeriod = _fixture.Create<BonusPeriod>();
+
             _mockBonusPeriodGateway
-                .Setup(x => x.GetBonusPeriodsAsync())
-                .ReturnsAsync(expectedBonusPeriods);
+                .Setup(x => x.GetBonusPeriodIncludingWeeksAsync("2021-11-01"))
+                .ReturnsAsync(expectedBonusPeriod);
 
             // Act
-            var result = await _classUnderTest.ExecuteAsync();
+            var result = await _classUnderTest.ExecuteAsync("2021-11-01");
 
             // Assert
-            result.Should().BeEquivalentTo(expectedBonusPeriods);
+            result.Should().BeEquivalentTo(expectedBonusPeriod);
         }
     }
 }
