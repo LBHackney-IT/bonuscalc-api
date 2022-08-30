@@ -52,7 +52,14 @@ namespace BonusCalcApi.V1.UseCase
 
             if (request.Decision == BandChangeDecision.Approved)
             {
-                bandChange.FinalBand = bandChange.ProjectedBand;
+                if (bandChange.FixedBand)
+                {
+                    bandChange.FinalBand = bandChange.SalaryBand;
+                }
+                else
+                {
+                    bandChange.FinalBand = bandChange.ProjectedBand;
+                }
             }
             else
             {
