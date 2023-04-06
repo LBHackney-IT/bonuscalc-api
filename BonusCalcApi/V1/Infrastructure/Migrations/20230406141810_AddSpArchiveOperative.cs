@@ -23,7 +23,7 @@ $BODY$;");
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.Sql("DROP PROCEDURE public.sp_archive_operative(text, text)");
         }
     }
 }
