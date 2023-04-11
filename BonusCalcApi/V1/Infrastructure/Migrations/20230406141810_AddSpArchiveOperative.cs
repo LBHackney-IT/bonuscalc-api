@@ -17,7 +17,7 @@ LANGUAGE 'sql'
 AS $BODY$
 UPDATE public.operatives SET is_archived = TRUE,
 ""name"" = name ||' LEFT '||op_leave_year
-WHERE payroll_number  =op_payroll_number
+WHERE id  = op_payroll_number
 $BODY$;");
         }
 
