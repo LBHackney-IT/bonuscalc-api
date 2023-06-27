@@ -25,6 +25,7 @@ services:
 
   bonuscalc-api-test:
     image: bonuscalc-api-test
+    restart: always
     build:
       context: .
       dockerfile: BonusCalcApi.Tests/Dockerfile
@@ -45,6 +46,7 @@ services:
 
   test-database:
     image: postgres:12
+    restart: always
     ports:
       - 5435:5432
     env_file:
