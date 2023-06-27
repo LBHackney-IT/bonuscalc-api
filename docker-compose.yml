@@ -32,7 +32,7 @@ services:
     environment:
       - CONNECTION_STRING=Host=test-database;Port=5432;Database=testdb;Username=postgres;Password=mypassword
       - DB_HOST=test-database
-      - DB_PORT=5432
+      - DB_PORT=5435
       - DB_USERNAME=postgres
       - DB_PASSWORD=mypassword
       - DB_DATABASE=testdb
