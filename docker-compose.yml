@@ -25,6 +25,7 @@ services:
 
   bonuscalc-api-test:
     image: bonuscalc-api-test
+    network_mode: host
     build:
       context: .
       dockerfile: BonusCalcApi.Tests/Dockerfile
