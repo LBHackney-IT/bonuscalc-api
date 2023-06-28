@@ -14,7 +14,7 @@ services:
       - dev-database
 
   dev-database:
-    image: postgres:12
+    image: postgres:12.11
     ports:
       - 5432:5432
     env_file:
@@ -25,7 +25,6 @@ services:
 
   bonuscalc-api-test:
     image: bonuscalc-api-test
-    restart: always
     build:
       context: .
       dockerfile: BonusCalcApi.Tests/Dockerfile
@@ -45,8 +44,7 @@ services:
       - sonarqube:/app/.sonarqube
 
   test-database:
-    image: postgres:12
-    restart: always
+    image: postgres:12.11
     ports:
       - 5435:5432
     env_file:
