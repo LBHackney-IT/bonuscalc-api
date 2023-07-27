@@ -14,7 +14,7 @@ namespace V1.Infrastructure.Migrations
 	op_section text)
 LANGUAGE 'sql'
 AS $BODY$
-UPDATE public.operatives SET SECTION = op_section WHERE id = op_id
+UPDATE public.operatives SET section = op_section WHERE id = op_id
 $BODY$;");
         }
 
