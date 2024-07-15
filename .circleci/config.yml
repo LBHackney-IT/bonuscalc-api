@@ -269,13 +269,26 @@ workflows:
           context:
             - api-assume-role-housing-staging-context
           requires:
-              - build-and-test
+            - build-and-test
           filters:
-             branches:
-               only: master
-      - terraform-init-and-apply-to-staging:
+            branches:
+              only: master
+      - preview-terraform-staging:
           requires:
             - assume-role-staging
+          filters:
+            branches:
+              only: master
+      - permit-staging-terraform-release:
+          type: approval
+          requires:
+            - preview-terraform-staging
+          filters:
+            branches:
+              only: master
+      - terraform-init-and-apply-to-staging:
+          requires:
+            - permit-staging-terraform-release
           filters:
             branches:
               only: master
