@@ -230,7 +230,12 @@ workflows:
   check-development:
     jobs:
       - check-code-formatting
-      - build-and-test
+      - build-and-test:
+          requires:
+            - check-code-formatting
+          filters:
+            branches:
+              ignore: master
       - assume-role-staging:
           context:
             - api-assume-role-housing-staging-context
