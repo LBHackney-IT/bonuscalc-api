@@ -227,7 +227,7 @@ jobs:
           stage: "production"
 
 workflows:
-  check-development:
+  feature-branch-checks:
     jobs:
       - check-code-formatting
       - build-and-test:
