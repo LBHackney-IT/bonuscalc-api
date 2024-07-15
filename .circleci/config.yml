@@ -231,6 +231,29 @@ workflows:
     jobs:
       - check-code-formatting
       - build-and-test
+      - assume-role-staging:
+          context:
+            - api-assume-role-housing-staging-context
+          filters:
+            branches:
+              ignore: master
+      - preview-terraform-staging:
+          requires:
+            - assume-role-staging
+          filters:
+            branches:
+              ignore: master
+      - assume-role-production:
+          context: api-assume-role-housing-production-context
+          filters:
+            branches:
+              ignore: master
+      - preview-terraform-production:
+          requires:
+            - assume-role-production
+          filters:
+            branches:
+              ignore: master
   check-and-deploy-staging-and-production:
       jobs:
       - build-and-test:
