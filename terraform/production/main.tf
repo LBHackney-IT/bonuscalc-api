@@ -75,4 +75,7 @@ module "database" {
   multi_az = local.environment == "production"
   publicly_accessible = false
   project_name = "bonus calc"
+  additional_tags = {
+    BackupPolicy = "Prod"
+  }
 }
