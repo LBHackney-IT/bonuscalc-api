@@ -65,7 +65,7 @@ module "database" {
   db_port = local.db_port
   subnet_ids = data.aws_subnet_ids.private_subnets.ids
   db_engine = "postgres"
-  db_engine_version = "12.14"
+  db_engine_version = "12.17"
   db_instance_class = "db.t3.small"
   db_allocated_storage = 20
   maintenance_window = "sun:04:00-sun:04:30"
@@ -75,4 +75,7 @@ module "database" {
   multi_az = local.environment == "production"
   publicly_accessible = false
   project_name = "bonus calc"
+  additional_tags = {
+    BackupPolicy = "Prod"
+  }
 }
