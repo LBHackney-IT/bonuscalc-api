@@ -292,6 +292,31 @@ workflows:
           filters:
             branches:
               only: master
+      - assume-role-development:
+          context:
+            - api-assume-role-housing-development-context
+          filters:
+            branches:
+              only: master
+      - preview-terraform-development:
+          requires:
+            - assume-role-development
+          filters:
+            branches:
+              only: master
+      - permit-development-terraform-release:
+          type: approval
+          requires:
+            - preview-terraform-development
+          filters:
+            branches:
+              only: master
+      - terraform-init-and-apply-to-development:
+          requires:
+            - permit-development-terraform-release
+          filters:
+            branches:
+              only: master
       - assume-role-staging:
           context:
             - api-assume-role-housing-staging-context
