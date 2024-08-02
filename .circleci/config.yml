@@ -225,21 +225,6 @@ jobs:
     steps:
       - migrate-database:
           stage: "production"
-  assume-role-development:
-    executor: docker-python
-    steps:
-      - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_DEVELOPMENT
-  preview-terraform-development:
-    executor: docker-terraform
-    steps:
-      - preview-terraform:
-          environment: "development"
-  terraform-init-and-apply-to-development:
-    executor: docker-terraform
-    steps:
-      - terraform-init-then-apply:
-          environment: "development"
 
 workflows:
   feature-branch-checks:
