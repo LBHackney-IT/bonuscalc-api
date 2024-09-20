@@ -67,6 +67,7 @@ module "database" {
   db_engine = "postgres"
   db_engine_version = "16.1"
   db_parameter_group_name = "postgres16"
+  db_allow_major_version_upgrade = true
   db_instance_class = "db.t3.micro"
   db_allocated_storage = 20
   maintenance_window = "sun:04:00-sun:04:30"
