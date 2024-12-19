@@ -160,7 +160,7 @@ jobs:
           command: ./dotnet-format-local/dotnet-format --check
   build-and-test:
     machine:
-      image: ubuntu-2004:202104-01
+      image: ubuntu-2004:2024.11.1
       docker_layer_caching: true
     steps:
       - checkout
