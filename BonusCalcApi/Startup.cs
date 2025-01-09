@@ -134,12 +134,12 @@ namespace BonusCalcApi
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
                                 ?? Configuration.GetValue<string>("DatabaseConnectionString");
 
-            services.AddDbContext<BonusCalcContext>(opt =>
+            services.AddDbContext<BonusCalcContext>(options =>
             {
                 var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
                 dataSourceBuilder.MapEnum<BandChangeDecision>();
 
-                opt
+                options
                 .UseNpgsql(dataSourceBuilder.Build())
                 .UseSnakeCaseNamingConvention();
             });

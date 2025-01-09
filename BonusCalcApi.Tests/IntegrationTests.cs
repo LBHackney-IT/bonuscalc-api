@@ -18,12 +18,12 @@ namespace BonusCalcApi.Tests
 
         private MockWebApplicationFactory<TStartup> _factory;
         private IDbContextTransaction _transaction;
-        private DbContextOptionsBuilder _builder;
+        private DbContextOptionsBuilder<BonusCalcContext> _builder;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _builder = new DbContextOptionsBuilder();
+            _builder = new DbContextOptionsBuilder<BonusCalcContext>();
             _builder.UseNpgsql(ConnectionString.TestDatabase())
                 .UseSnakeCaseNamingConvention();
         }
