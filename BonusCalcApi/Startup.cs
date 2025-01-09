@@ -136,12 +136,13 @@ namespace BonusCalcApi
 
             services.AddDbContext<BonusCalcContext>(options =>
             {
-                var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-                dataSourceBuilder.MapEnum<BandChangeDecision>();
-                var dataSource = dataSourceBuilder.Build();
+                //var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+                //dataSourceBuilder.MapEnum<BandChangeDecision>();
+                //var dataSource = dataSourceBuilder.Build();
 
                 options
-                    .UseNpgsql(dataSource)
+                    //.UseNpgsql(dataSource)
+                    .UseNpgsql(connectionString)
                     .UseSnakeCaseNamingConvention();
             });
         }
