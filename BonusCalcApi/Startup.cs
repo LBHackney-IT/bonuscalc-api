@@ -26,6 +26,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Microsoft.Extensions.Options;
+using Npgsql;
 
 namespace BonusCalcApi
 {
@@ -132,11 +134,15 @@ namespace BonusCalcApi
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
                                 ?? Configuration.GetValue<string>("DatabaseConnectionString");
 
-            services.AddDbContext<BonusCalcContext>(
-                opt => opt
-                    .UseNpgsql(connectionString)
-                    .UseSnakeCaseNamingConvention()
-            );
+            services.AddDbContext<BonusCalcContext>(opt =>
+            {
+                var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+                dataSourceBuilder.MapEnum<BandChangeDecision>();
+
+                opt
+                .UseNpgsql(dataSourceBuilder.Build())
+                .UseSnakeCaseNamingConvention();
+            });
         }
 
         [SuppressMessage("SonarCube", "S4792", Justification = "Reviewed configuration")]

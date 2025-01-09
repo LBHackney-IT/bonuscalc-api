@@ -6,9 +6,6 @@ namespace BonusCalcApi.V1.Infrastructure
 {
     public class BonusCalcContext : DbContext
     {
-        static BonusCalcContext()
-            => NpgsqlConnection.GlobalTypeMapper.MapEnum<BandChangeDecision>();
-
         public BonusCalcContext(DbContextOptions options) : base(options)
         {
         }

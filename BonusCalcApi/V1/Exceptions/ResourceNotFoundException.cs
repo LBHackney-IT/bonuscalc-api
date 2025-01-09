@@ -18,7 +18,7 @@ namespace BonusCalcApi.V1.Exceptions
         {
         }
 
-        protected ResourceNotFoundException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected ResourceNotFoundException(SerializationInfo info, StreamingContext context)
         {
         }
     }

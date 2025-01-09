@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net.Http;
 using BonusCalcApi.V1.Controllers;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
@@ -39,7 +40,7 @@ namespace BonusCalcApi.Tests.V1.Controllers
         public void GetCorrelationShouldReturnCorrelationIdWhenExists()
         {
             // Arrange
-            _stubHttpContext.Request.Headers.Add(Constants.CorrelationId, "123");
+            _stubHttpContext.Request.Headers[Constants.CorrelationId] = "123";
 
             // Act
             var result = _sut.GetCorrelationId();
