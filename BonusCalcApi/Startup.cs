@@ -138,10 +138,11 @@ namespace BonusCalcApi
             {
                 var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
                 dataSourceBuilder.MapEnum<BandChangeDecision>();
+                var dataSource = dataSourceBuilder.Build();
 
                 options
-                .UseNpgsql(dataSourceBuilder.Build())
-                .UseSnakeCaseNamingConvention();
+                    .UseNpgsql(dataSource)
+                    .UseSnakeCaseNamingConvention();
             });
         }
 
