@@ -140,9 +140,20 @@ namespace BonusCalcApi
                 //dataSourceBuilder.MapEnum<BandChangeDecision>();
                 //var dataSource = dataSourceBuilder.Build();
 
+                //options
+                //    //.UseNpgsql(dataSource)
+                //    .UseNpgsql(connectionString)
+                //    .UseSnakeCaseNamingConvention();
+
+                var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+                dataSourceBuilder.MapEnum<BandChangeDecision>();
+                var dataSource = dataSourceBuilder.Build();
+
                 options
-                    //.UseNpgsql(dataSource)
-                    .UseNpgsql(connectionString)
+                    .UseNpgsql(dataSource, npgsqlOptions =>
+                    {
+                        npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
+                    })
                     .UseSnakeCaseNamingConvention();
             });
         }
