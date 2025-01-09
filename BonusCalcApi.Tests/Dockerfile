@@ -17,7 +17,7 @@ RUN dotnet tool install --global dotnet-ef --version 8.0.4
 ENV PATH="$PATH:/root/.dotnet/tools"
 
 # Enable sonarcloud
-RUN apt-get update && apt-get install -y openjdk-11-jdk
+RUN apt update && apt install -y openjdk-17-jre
 RUN dotnet tool install -v quiet --global coverlet.console --version 1.7.2
 RUN dotnet tool install -v quiet --global dotnet-sonarscanner --version 5.5.3
 ENV PATH="$PATH:/root/.dotnet/tools"
