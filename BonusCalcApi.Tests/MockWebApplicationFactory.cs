@@ -9,9 +9,9 @@ namespace BonusCalcApi.Tests
     public class MockWebApplicationFactory<TStartup>
         : WebApplicationFactory<TStartup> where TStartup : class
     {
-        private readonly DbContextOptionsBuilder<BonusCalcContext> _builder;
+        private readonly DbContextOptionsBuilder _builder;
 
-        public MockWebApplicationFactory(DbContextOptionsBuilder<BonusCalcContext> builder)
+        public MockWebApplicationFactory(DbContextOptionsBuilder builder)
         {
             _builder = builder;
         }
