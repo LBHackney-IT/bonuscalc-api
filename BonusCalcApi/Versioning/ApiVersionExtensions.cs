@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
 
 namespace BonusCalcApi.Versioning
 {
@@ -6,7 +6,7 @@ namespace BonusCalcApi.Versioning
     {
         public static string GetFormattedApiVersion(this ApiVersion apiVersion)
         {
-            return $"v{apiVersion.ToString()}";
+            return $"v{apiVersion}";
         }
     }
 }
