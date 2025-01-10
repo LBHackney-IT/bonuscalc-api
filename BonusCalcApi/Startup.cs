@@ -132,28 +132,29 @@ namespace BonusCalcApi
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
                                 ?? Configuration.GetValue<string>("DatabaseConnectionString");
 
+            // services.AddDbContext<BonusCalcContext>(options =>
+            // {
+            //     var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+            //     dataSourceBuilder.MapEnum<BandChangeDecision>();
+            //     var dataSource = dataSourceBuilder.Build();
+
+            //     options
+            //         .UseNpgsql(dataSource, npgsqlOptions =>
+            //         {
+            //             npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
+            //         })
+            //         .UseSnakeCaseNamingConvention();
+            // });
+
             services.AddDbContext<BonusCalcContext>(options =>
-            {
-                //var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-                //dataSourceBuilder.MapEnum<BandChangeDecision>();
-                //var dataSource = dataSourceBuilder.Build();
-
-                //options
-                //    //.UseNpgsql(dataSource)
-                //    .UseNpgsql(connectionString)
-                //    .UseSnakeCaseNamingConvention();
-
-                var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-                dataSourceBuilder.MapEnum<BandChangeDecision>();
-                var dataSource = dataSourceBuilder.Build();
-
-                options
-                    .UseNpgsql(dataSource, npgsqlOptions =>
-                    {
-                        npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
-                    })
-                    .UseSnakeCaseNamingConvention();
-            });
+                {
+                    options
+                        .UseNpgsql(connectionString, npgsqlOptions =>
+                        {
+                            npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
+                        })
+                        .UseSnakeCaseNamingConvention();
+                });
         }
 
         [SuppressMessage("SonarCube", "S4792", Justification = "Reviewed configuration")]
