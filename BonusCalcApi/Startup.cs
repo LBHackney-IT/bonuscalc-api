@@ -147,14 +147,18 @@ namespace BonusCalcApi
             // });
 
             services.AddDbContext<BonusCalcContext>(options =>
-                {
-                    options
-                        .UseNpgsql(connectionString, npgsqlOptions =>
-                        {
-                            npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
-                        })
-                        .UseSnakeCaseNamingConvention();
-                });
+            {
+                var builder = new NpgsqlDataSourceBuilder(connectionString);
+                builder.MapEnum<BandChangeDecision>("band_change_decision");  // Specify the exact enum name from DB
+                var dataSource = builder.Build();
+                
+                options
+                    .UseNpgsql(dataSource, npgsqlOptions =>
+                    {
+                        npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
+                    })
+                    .UseSnakeCaseNamingConvention();
+            });
         }
 
         [SuppressMessage("SonarCube", "S4792", Justification = "Reviewed configuration")]
