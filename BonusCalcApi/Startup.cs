@@ -151,7 +151,7 @@ namespace BonusCalcApi
                 var builder = new NpgsqlDataSourceBuilder(connectionString);
                 builder.MapEnum<BandChangeDecision>("band_change_decision");  // Specify the exact enum name from DB
                 var dataSource = builder.Build();
-                
+
                 options
                     .UseNpgsql(dataSource, npgsqlOptions =>
                     {
