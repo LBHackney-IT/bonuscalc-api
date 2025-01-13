@@ -30,11 +30,11 @@ namespace BonusCalcApi.V1.Infrastructure
         public DbSet<WeeklySummary> WeeklySummaries { get; set; }
         public DbSet<WorkElement> WorkElements { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder
-        //        .UseNpgsql(o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder
+                .UseNpgsql(o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery));
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -132,24 +132,10 @@ namespace BonusCalcApi
             var connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING")
                                 ?? Configuration.GetValue<string>("DatabaseConnectionString");
 
-            // services.AddDbContext<BonusCalcContext>(options =>
-            // {
-            //     var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-            //     dataSourceBuilder.MapEnum<BandChangeDecision>();
-            //     var dataSource = dataSourceBuilder.Build();
-
-            //     options
-            //         .UseNpgsql(dataSource, npgsqlOptions =>
-            //         {
-            //             npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
-            //         })
-            //         .UseSnakeCaseNamingConvention();
-            // });
-
             services.AddDbContext<BonusCalcContext>(options =>
             {
                 var builder = new NpgsqlDataSourceBuilder(connectionString);
-                builder.MapEnum<BandChangeDecision>("band_change_decision");  // Specify the exact enum name from DB
+                builder.MapEnum<BandChangeDecision>("band_change_decision");
                 var dataSource = builder.Build();
 
                 options
