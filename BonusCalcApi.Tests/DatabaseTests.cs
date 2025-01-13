@@ -20,7 +20,7 @@ namespace BonusCalcApi.Tests
             var dataSourceBuilder = new NpgsqlDataSourceBuilder(ConnectionString.TestDatabase());
             dataSourceBuilder.MapEnum<BandChangeDecision>();
             var dataSource = dataSourceBuilder.Build();
-            
+
             builder
                 .UseNpgsql(dataSource)
                 .UseSnakeCaseNamingConvention();
