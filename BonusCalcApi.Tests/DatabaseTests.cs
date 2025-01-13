@@ -1,5 +1,6 @@
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql;
 using NUnit.Framework;
@@ -23,7 +24,9 @@ namespace BonusCalcApi.Tests
 
             builder
                 .UseNpgsql(dataSource)
-                .UseSnakeCaseNamingConvention();
+                .UseSnakeCaseNamingConvention()
+                .ConfigureWarnings(warnings => 
+                    warnings.Ignore(CoreEventId.ManyServiceProvidersCreatedWarning));
 
             BonusCalcContext = new BonusCalcContext(builder.Options);
 
