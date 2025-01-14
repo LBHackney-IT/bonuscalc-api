@@ -30,10 +30,7 @@ namespace BonusCalcApi.V1.Gateways
             var dataSource = dataSourceBuilder.Build();
 
             return options
-                .UseNpgsql(dataSource, npgsqlOptions =>
-                {
-                    npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
-                })
+                .UseNpgsql(dataSource)
                 .UseSnakeCaseNamingConvention();
         }
 
