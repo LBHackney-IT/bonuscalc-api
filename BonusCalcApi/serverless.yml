@@ -4,7 +4,7 @@ frameworkVersion: '2'
 
 provider:
   name: aws
-  runtime: dotnet6
+  runtime: dotnet8
   memorySize: 2048
   tracing:
     lambda: true
