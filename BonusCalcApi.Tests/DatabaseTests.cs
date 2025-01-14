@@ -1,7 +1,9 @@
+using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Options;
 using Npgsql;
 using NUnit.Framework;
 
@@ -18,15 +20,8 @@ namespace BonusCalcApi.Tests
         {
             var builder = new DbContextOptionsBuilder<BonusCalcContext>();
 
-            var dataSourceBuilder = new NpgsqlDataSourceBuilder(ConnectionString.TestDatabase());
-            dataSourceBuilder.MapEnum<BandChangeDecision>();
-            var dataSource = dataSourceBuilder.Build();
-
-            builder
-                .UseNpgsql(dataSource)
-                .UseSnakeCaseNamingConvention()
-                .ConfigureWarnings(warnings =>
-                    warnings.Ignore(CoreEventId.ManyServiceProvidersCreatedWarning));
+            builder.ConfigureContext(ConnectionString.TestDatabase())
+                .IgnoreManyServiceProvidersWarning();
 
             BonusCalcContext = new BonusCalcContext(builder.Options);
 

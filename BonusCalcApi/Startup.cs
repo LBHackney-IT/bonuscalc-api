@@ -134,16 +134,7 @@ namespace BonusCalcApi
 
             services.AddDbContext<BonusCalcContext>(options =>
             {
-                var builder = new NpgsqlDataSourceBuilder(connectionString);
-                builder.MapEnum<BandChangeDecision>("band_change_decision");
-                var dataSource = builder.Build();
-
-                options
-                    .UseNpgsql(dataSource, npgsqlOptions =>
-                    {
-                        npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SingleQuery);
-                    })
-                    .UseSnakeCaseNamingConvention();
+                options.ConfigureContext(connectionString);
             });
         }
 

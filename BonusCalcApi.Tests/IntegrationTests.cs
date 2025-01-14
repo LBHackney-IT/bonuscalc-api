@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -25,14 +26,7 @@ namespace BonusCalcApi.Tests
         public void OneTimeSetUp()
         {
             _builder = new DbContextOptionsBuilder<BonusCalcContext>();
-
-            var dataSourceBuilder = new NpgsqlDataSourceBuilder(ConnectionString.TestDatabase());
-            dataSourceBuilder.MapEnum<BandChangeDecision>();
-            var dataSource = dataSourceBuilder.Build();
-
-            _builder
-                .UseNpgsql(dataSource)
-                .UseSnakeCaseNamingConvention();
+            _builder.ConfigureContext(ConnectionString.TestDatabase());
         }
 
         [SetUp]
