@@ -19,9 +19,11 @@ namespace BonusCalcApi.Tests
         public void RunBeforeAnyTests()
         {
             var builder = new DbContextOptionsBuilder<BonusCalcContext>();
+            var dataSource = DatabaseContextConfiguration.BuildDataSource(ConnectionString.TestDatabase());
 
-            builder.ConfigureContext(ConnectionString.TestDatabase())
-                .IgnoreManyServiceProvidersWarning();
+            builder
+                .UseNpgsql(dataSource)
+                .UseSnakeCaseNamingConvention();
 
             BonusCalcContext = new BonusCalcContext(builder.Options);
 
