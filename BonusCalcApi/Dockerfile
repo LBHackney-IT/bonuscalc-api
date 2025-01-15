@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+FROM mcr.microsoft.com/dotnet/sdk:8.0
 
 WORKDIR /app
 
 # Install dotnet-ef tool to run migrations
-RUN dotnet tool install --global dotnet-ef --version 6.0.6
+RUN dotnet tool install --global dotnet-ef --version 8.0.11
 
 # Ensure dotnet tools are in the path
 ENV PATH="$PATH:/root/.dotnet/tools"

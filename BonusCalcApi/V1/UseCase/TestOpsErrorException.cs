@@ -18,7 +18,7 @@ namespace BonusCalcApi.V1.UseCase
         {
         }
 
-        protected TestOpsErrorException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected TestOpsErrorException(SerializationInfo info, StreamingContext context)
         {
         }
     }

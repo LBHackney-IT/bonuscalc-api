@@ -3,10 +3,12 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using BonusCalcApi.V1.Gateways;
 using BonusCalcApi.V1.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Newtonsoft.Json;
+using Npgsql;
 using NUnit.Framework;
 
 namespace BonusCalcApi.Tests
@@ -18,14 +20,13 @@ namespace BonusCalcApi.Tests
 
         private MockWebApplicationFactory<TStartup> _factory;
         private IDbContextTransaction _transaction;
-        private DbContextOptionsBuilder _builder;
+        private DbContextOptionsBuilder<BonusCalcContext> _builder;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _builder = new DbContextOptionsBuilder();
-            _builder.UseNpgsql(ConnectionString.TestDatabase())
-                .UseSnakeCaseNamingConvention();
+            _builder = new DbContextOptionsBuilder<BonusCalcContext>();
+            _builder.ConfigureContext(ConnectionString.TestDatabase());
         }
 
         [SetUp]

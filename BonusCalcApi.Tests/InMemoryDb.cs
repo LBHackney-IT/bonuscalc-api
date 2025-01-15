@@ -16,7 +16,8 @@ namespace BonusCalcApi.Tests
             {
                 if (_context == null)
                 {
-                    DbContextOptionsBuilder<BonusCalcContext> builder = new DbContextOptionsBuilder<BonusCalcContext>();
+                    var builder = new DbContextOptionsBuilder<BonusCalcContext>();
+
                     builder.EnableSensitiveDataLogging();
                     builder.ConfigureWarnings(options =>
                     {

@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0
+FROM mcr.microsoft.com/dotnet/sdk:8.0
 
 # disable microsoft telemetry
 ENV DOTNET_CLI_TELEMETRY_OPTOUT='true'
@@ -11,13 +11,13 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
     && apt-get install nodejs -yq
 
 # Install dotnet-ef tool to run migrations
-RUN dotnet tool install --global dotnet-ef --version 6.0.6
+RUN dotnet tool install --global dotnet-ef --version 8.0.11
 
 # Ensure dotnet tools are in the path
 ENV PATH="$PATH:/root/.dotnet/tools"
 
 # Enable sonarcloud
-RUN apt-get update && apt-get install -y openjdk-11-jdk
+RUN apt update && apt install -y openjdk-17-jre
 RUN dotnet tool install -v quiet --global coverlet.console --version 1.7.2
 RUN dotnet tool install -v quiet --global dotnet-sonarscanner --version 5.5.3
 ENV PATH="$PATH:/root/.dotnet/tools"

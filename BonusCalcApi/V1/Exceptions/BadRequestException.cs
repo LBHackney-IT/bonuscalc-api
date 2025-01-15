@@ -18,7 +18,7 @@ namespace BonusCalcApi.V1.Exceptions
         {
         }
 
-        protected BadRequestException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected BadRequestException(SerializationInfo info, StreamingContext context)
         {
         }
     }
