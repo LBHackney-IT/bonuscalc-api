@@ -23,7 +23,9 @@ namespace BonusCalcApi.Tests
 
             builder
                 .UseNpgsql(dataSource)
-                .UseSnakeCaseNamingConvention();
+                .UseSnakeCaseNamingConvention()
+                .ConfigureWarnings(warnings =>
+                        warnings.Ignore(CoreEventId.ManyServiceProvidersCreatedWarning));
 
             BonusCalcContext = new BonusCalcContext(builder.Options);
 
