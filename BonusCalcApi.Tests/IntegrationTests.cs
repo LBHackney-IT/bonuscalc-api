@@ -26,7 +26,12 @@ namespace BonusCalcApi.Tests
         public void OneTimeSetUp()
         {
             _builder = new DbContextOptionsBuilder<BonusCalcContext>();
-            _builder.ConfigureContext(ConnectionString.TestDatabase());
+
+            var dataSource = DatabaseContextConfiguration.BuildDataSource(ConnectionString.TestDatabase());
+
+            _builder
+                .UseNpgsql(dataSource)
+                .UseSnakeCaseNamingConvention();
         }
 
         [SetUp]
