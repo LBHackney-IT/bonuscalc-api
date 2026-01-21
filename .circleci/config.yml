@@ -159,11 +159,12 @@ workflows:
       - terraform-init-and-apply-to-dr:
           requires:
             - assume-role-dr
-      - migrate-database-dr:
-          requires:
-            - terraform-init-and-apply-to-dr
+      # - migrate-database-dr:
+      #     requires:
+      #       - terraform-init-and-apply-to-dr
       - deploy-to-dr:
           context:
             - "Serverless Framework"
           requires:
-            - migrate-database-dr
+            # - migrate-database-dr
+            - terraform-init-and-apply-to-dr
