@@ -36,7 +36,7 @@ locals {
 
 data "aws_vpc" "default" {
   tags = {
-    Name = "disaster-recovery-vpc"
+    Name = "disaster-recovery-prod"
   }
 }
 
