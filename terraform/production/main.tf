@@ -78,7 +78,7 @@ module "database" {
   publicly_accessible = false
   project_name = "bonus calc"
 
-snapshot_identifier = "awsbackup:job-1e057fb0-0f4a-3d8c-6e34-a3f0e608c478"
+  snapshot_identifier = "awsbackup:copyjob-dfd41b58-ea1c-2e88-0b34-53163122fe43"
 
   additional_tags = {
     BackupPolicy = "Prod"
