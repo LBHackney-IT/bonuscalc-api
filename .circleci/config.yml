@@ -38,21 +38,6 @@ commands:
           root: *workspace_root
           paths:
             - .aws
-  preview-terraform:
-    description: "Previews terraform state changes"
-    parameters:
-      environment:
-        type: string
-    steps:
-      - *attach_workspace
-      - checkout
-      - run:
-          command: |
-            cd ./terraform/<<parameters.environment>>/
-            terraform get -update=true
-            terraform init
-            terraform plan
-          name: get, init, and plan
 
   terraform-init-then-apply:
     description: "Initializes and applies terraform configuration"
@@ -144,211 +129,41 @@ commands:
             cd ./BonusCalcApi/
             CONNECTION_STRING=${CONN_STR} ./../dotnet-ef-local/dotnet-ef database update -c BonusCalcApi.V1.Infrastructure.BonusCalcContext
 jobs:
-  check-code-formatting:
-    executor: docker-dotnet
-    steps:
-      - checkout
-      - run:
-          name: Install dotnet format
-          command: dotnet tool install dotnet-format --tool-path ./dotnet-format-local/
-      - run:
-          name: Run formatter check
-          command: ./dotnet-format-local/dotnet-format --check
-  build-and-test:
-    machine:
-      image: ubuntu-2004:2024.11.1
-      docker_layer_caching: true
-    steps:
-      - checkout
-      - run:
-          name: build
-          command: docker-compose build bonuscalc-api-test
-      - run:
-          name: Migrate database
-          command: docker-compose run bonuscalc-api-test dotnet ef database update -p BonusCalcApi -c BonusCalcApi.V1.Infrastructure.BonusCalcContext
-      - run:
-          name: Run tests
-          command: docker-compose run bonuscalc-api-test
-  assume-role-staging:
+  assume-role-dr:
     executor: docker-python
     steps:
       - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_STAGING
-  assume-role-production:
-    executor: docker-python
-    steps:
-      - assume-role-and-persist-workspace:
-          aws-account: $AWS_ACCOUNT_PRODUCTION
-  preview-terraform-staging:
-    executor: docker-terraform
-    steps:
-      - preview-terraform:
-          environment: "staging"
-  preview-terraform-production:
-    executor: docker-terraform
-    steps:
-      - preview-terraform:
-          environment: "production"
-  terraform-init-and-apply-to-staging:
-    executor: docker-terraform
-    steps:
-      - terraform-init-then-apply:
-          environment: "staging"
-  terraform-init-and-apply-to-production:
+          aws-account: $AWS_ACCOUNT_DISASTER_RECOVERY
+  terraform-init-and-apply-to-dr:
     executor: docker-terraform
     steps:
       - terraform-init-then-apply:
           environment: "production"
-  deploy-to-staging:
-    executor: docker-dotnet
-    steps:
-      - deploy-lambda:
-          stage: "staging"
-          aws-account: $AWS_ACCOUNT_STAGING
-  deploy-to-production:
+  deploy-to-dr:
     executor: docker-dotnet
     steps:
       - deploy-lambda:
           stage: "production"
-          aws-account: $AWS_ACCOUNT_PRODUCTION
-  migrate-database-staging:
-    executor: docker-dotnet
-    steps:
-      - migrate-database:
-          stage: "staging"
-  migrate-database-production:
+          aws-account: $AWS_ACCOUNT_DISASTER_RECOVERY
+  migrate-database-dr:
     executor: docker-dotnet
     steps:
       - migrate-database:
           stage: "production"
 
 workflows:
-  feature-branch-checks:
+  check-and-deploy-dr:
     jobs:
-      - check-code-formatting
-      - build-and-test:
+      - assume-role-dr:
+          context: api-assume-role-disaster-recovery-context
+      - terraform-init-and-apply-to-dr:
           requires:
-            - check-code-formatting
-          filters:
-            branches:
-              ignore: master
-      - assume-role-staging:
-          context:
-            - api-assume-role-housing-staging-context
-          filters:
-            branches:
-              ignore: master
-      - preview-terraform-staging:
+            - assume-role-dr
+      - migrate-database-dr:
           requires:
-            - assume-role-staging
-          filters:
-            branches:
-              ignore: master
-      - assume-role-production:
-          context: api-assume-role-housing-production-context
-          filters:
-            branches:
-              ignore: master
-      - preview-terraform-production:
-          requires:
-            - assume-role-production
-          filters:
-            branches:
-              ignore: master
-  check-and-deploy-staging-and-production:
-      jobs:
-      - build-and-test:
-          filters:
-            branches:
-              only: master
-      - assume-role-staging:
-          context:
-            - api-assume-role-housing-staging-context
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only: master
-      - preview-terraform-staging:
-          requires:
-            - assume-role-staging
-          filters:
-            branches:
-              only: master
-      - permit-staging-terraform-release:
-          type: approval
-          requires:
-            - preview-terraform-staging
-          filters:
-            branches:
-              only: master
-      - terraform-init-and-apply-to-staging:
-          requires:
-            - permit-staging-terraform-release
-          filters:
-            branches:
-              only: master
-      - migrate-database-staging:
-          requires:
-            - terraform-init-and-apply-to-staging
-          filters:
-            branches:
-              only: master
-      - deploy-to-staging:
+            - terraform-init-and-apply-to-dr
+      - deploy-to-dr:
           context:
             - "Serverless Framework"
           requires:
-            - terraform-init-and-apply-to-staging
-            - migrate-database-staging
-          filters:
-            branches:
-              only: master
-      - assume-role-production:
-          context: api-assume-role-housing-production-context
-          requires:
-              - deploy-to-staging
-          filters:
-             branches:
-               only: master
-      - preview-terraform-production:
-          requires:
-            - assume-role-production
-          filters:
-            branches:
-              only: master
-      - permit-production-terraform-release:
-          type: approval
-          requires:
-            - preview-terraform-production
-          filters:
-            branches:
-              only: master
-      - terraform-init-and-apply-to-production:
-          requires:
-            - permit-production-terraform-release
-          filters:
-            branches:
-              only: master
-      - migrate-database-production:
-          requires:
-            - terraform-init-and-apply-to-production
-          filters:
-            branches:
-              only: master
-      - permit-production-release:
-          type: approval
-          requires:
-            - deploy-to-staging
-          filters:
-            branches:
-              only: master
-      - deploy-to-production:
-          context:
-            - "Serverless Framework"
-          requires:
-            - permit-production-release
-            - terraform-init-and-apply-to-production
-            - migrate-database-production
-          filters:
-            branches:
-              only: master
+            - migrate-database-dr
