@@ -9,7 +9,7 @@ terraform {
   required_version = "~> 1.0"
 
   backend "s3" {
-    bucket  = "terraform-state-housing-production"
+    bucket  = "terraform-state-disaster-recovery"
     encrypt = true
     region  = "eu-west-2"
     key     = "services/bonuscalc-api/state"
@@ -36,7 +36,7 @@ locals {
 
 data "aws_vpc" "default" {
   tags = {
-    Name = "housing-prod"
+    Name = "disaster-recovery-vpc"
   }
 }
 
@@ -60,7 +60,7 @@ module "database" {
   source = "github.com/LBHackney-IT/aws-hackney-common-terraform.git//modules/database/postgres"
   environment_name = local.environment
   vpc_id = data.aws_vpc.default.id
-  db_identifier = local.application
+  db_identifier = "bonus-dr"
   db_name = local.db_name
   db_port = local.db_port
   subnet_ids = data.aws_subnet_ids.private_subnets.ids
@@ -77,6 +77,9 @@ module "database" {
   multi_az = local.environment == "production"
   publicly_accessible = false
   project_name = "bonus calc"
+
+snapshot_identifier = "awsbackup:job-1e057fb0-0f4a-3d8c-6e34-a3f0e608c478"
+
   additional_tags = {
     BackupPolicy = "Prod"
   }
