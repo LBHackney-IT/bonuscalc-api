@@ -56,31 +56,31 @@ data "aws_ssm_parameter" "postgres_username" {
   name = "/${local.application}/${local.environment}/postgres-username"
 }
 
-module "database" {
-  source = "github.com/LBHackney-IT/aws-hackney-common-terraform.git//modules/database/postgres"
-  environment_name = local.environment
-  vpc_id = data.aws_vpc.default.id
-  db_identifier = "bonus-dr"
-  db_name = local.db_name
-  db_port = local.db_port
-  subnet_ids = data.aws_subnet_ids.private_subnets.ids
-  db_engine = "postgres"
-  db_engine_version = "16.8"
-  db_parameter_group_name = "postgres16"
-  db_allow_major_version_upgrade = true
-  db_instance_class = "db.t3.small"
-  db_allocated_storage = 20
-  maintenance_window = "sun:04:00-sun:04:30"
-  db_username = data.aws_ssm_parameter.postgres_username.value
-  db_password = data.aws_ssm_parameter.postgres_password.value
-  storage_encrypted = true
-  multi_az = local.environment == "production"
-  publicly_accessible = false
-  project_name = "bonus calc"
+# module "database" {
+#   source = "github.com/LBHackney-IT/aws-hackney-common-terraform.git//modules/database/postgres"
+#   environment_name = local.environment
+#   vpc_id = data.aws_vpc.default.id
+#   db_identifier = "bonus-dr"
+#   db_name = local.db_name
+#   db_port = local.db_port
+#   subnet_ids = data.aws_subnet_ids.private_subnets.ids
+#   db_engine = "postgres"
+#   db_engine_version = "16.8"
+#   db_parameter_group_name = "postgres16"
+#   db_allow_major_version_upgrade = true
+#   db_instance_class = "db.t3.small"
+#   db_allocated_storage = 20
+#   maintenance_window = "sun:04:00-sun:04:30"
+#   db_username = data.aws_ssm_parameter.postgres_username.value
+#   db_password = data.aws_ssm_parameter.postgres_password.value
+#   storage_encrypted = true
+#   multi_az = local.environment == "production"
+#   publicly_accessible = false
+#   project_name = "bonus calc"
 
-  snapshot_identifier = "awsbackup:copyjob-eb1f387a-6eab-43e6-834c-4d271fb57eae"
+#   snapshot_identifier = "awsbackup:copyjob-eb1f387a-6eab-43e6-834c-4d271fb57eae"
 
-  additional_tags = {
-    BackupPolicy = "Prod"
-  }
-}
+#   additional_tags = {
+#     BackupPolicy = "Prod"
+#   }
+# }
