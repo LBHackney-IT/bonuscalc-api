@@ -1,17 +1,12 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0
+FROM mcr.microsoft.com/dotnet/sdk:10.0
 
 # disable microsoft telemetry
 ENV DOTNET_CLI_TELEMETRY_OPTOUT='true'
 
 WORKDIR /app
 
-# Install nodejs for SonarCloud
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
-    && apt-get update \
-    && apt-get install nodejs -yq
-
 # Install dotnet-ef tool to run migrations
-RUN dotnet tool install --global dotnet-ef --version 8.0.11
+RUN dotnet tool install --global dotnet-ef --version 10.0.0
 
 # Ensure dotnet tools are in the path
 ENV PATH="$PATH:/root/.dotnet/tools"
