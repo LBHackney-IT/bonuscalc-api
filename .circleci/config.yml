@@ -303,23 +303,23 @@ workflows:
           # filters:
           #   branches:
           #     only: master
-      - assume-role-production:
-          context: api-assume-role-housing-production-context
-          requires:
-              - deploy-to-staging
-          # filters:
-          #    branches:
-              #  only: master
-      - preview-terraform-production:
-          requires:
-            - assume-role-production
-          # filters:
-          #   branches:
-          #     only: master
-      - permit-production-terraform-release:
-          type: approval
-          requires:
-            - preview-terraform-production
+      # - assume-role-production:
+      #     context: api-assume-role-housing-production-context
+      #     requires:
+      #         - deploy-to-staging
+      #     # filters:
+      #     #    branches:
+      #         #  only: master
+      # - preview-terraform-production:
+      #     requires:
+      #       - assume-role-production
+      #     # filters:
+      #     #   branches:
+      #     #     only: master
+      # - permit-production-terraform-release:
+      #     type: approval
+      #     requires:
+      #       - preview-terraform-production
           # filters:
           #   branches:
           #     only: master
