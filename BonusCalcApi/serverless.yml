@@ -42,7 +42,24 @@ functions:
       - http:
           path: /{proxy+}
           method: ANY
-          private: true
+          authorizer:
+            arn: ${self:custom.authorizerArns.${opt:stage}}
+            type: request
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            managedExternally: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - x-correlation-id
+              - X-Hackney-User
+            allowCredentials: false
       - http:
           path: /swagger/{proxy+}
           method: GET
@@ -102,6 +119,9 @@ resources:
                   Resource: "*"
 
 custom:
+  authorizerArns:
+    staging: arn:aws:lambda:eu-west-2:715003523189:function:api-gateway-lambda-authorizer
+    production: arn:aws:lambda:eu-west-2:153306643385:function:api-gateway-lambda-authorizer
   vpc:
     staging:
       subnetIds:
